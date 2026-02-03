@@ -6,6 +6,7 @@ Business Operations
    :maxdepth: 2
    :caption: Contents
 
+   about
    decision-log
 
 
