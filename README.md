@@ -1,12 +1,16 @@
 # Business Operations Project
 
-## Status - In prepration
+## Status - In preparation
 
 I want to make the current setup public to prepare to create an open source
 project out of it.
 
 The current implementation is working and in use, but the repository contains
 internal data which has to be removed first.
+
+Planning takes place in the
+[business-operations-planning](https://github.com/bo-tech/business-operations-planning)
+repository.
 
 ## About
 
