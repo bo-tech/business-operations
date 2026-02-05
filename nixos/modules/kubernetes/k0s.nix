@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   boot.kernel.sysctl = {
     # Required for k0s/kubernetes - prevents "Too many open files" errors
@@ -13,8 +13,16 @@
     iptables
     k0s
     kmod
+    mount
+    python3
     tcpdump
+    util-linux
   ];
+
+  networking.dhcpcd.enable = lib.mkDefault false;
+
+  # Cilium manages its own iptables rules
+  networking.firewall.enable = lib.mkDefault false;
 
   networking.firewall.allowedTCPPorts = [
     6443  # k0s API
