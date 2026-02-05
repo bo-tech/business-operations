@@ -36,4 +36,5 @@ restore from backup are only two command calls away.
 
 ## Contact
 
-Reach me via [`@jbornhold:matrix.org`](https://matrix.to/#/@jbornhold:matrix.org).
+Reach me via [`@jbornhold:matrix.org`](https://matrix.to/#/@jbornhold:matrix.org)
+or [`@johbo@mastodon.social`](https://mastodon.social/@johbo).
