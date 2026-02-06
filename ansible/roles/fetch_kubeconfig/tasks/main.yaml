@@ -8,19 +8,21 @@
   ansible.builtin.file:
     path: "{{ artifacts_dir }}"
     state: directory
-    mode: "0755"
+    mode: "0700"
   delegate_to: 127.0.0.1
 
 - name: Store the kubeconfig
   ansible.builtin.template:
     src: kubeconfig.j2
     dest: "{{ artifacts_dir }}/kubeconfig.yaml"
+    mode: "0600"
   delegate_to: 127.0.0.1
 
 - name: Prepare an env file for the kubeconfig
   ansible.builtin.template:
     src: env.sh.j2
     dest: "{{ artifacts_dir }}/env.sh"
+    mode: "0600"
   delegate_to: localhost
 
 - name: Message how to use the kubeconfig
