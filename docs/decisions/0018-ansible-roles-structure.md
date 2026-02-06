@@ -39,12 +39,6 @@ nix develop github:bo-tech/business-operations#ansible
 ansible-playbook -i ./inventory.yaml $BO_PLAYBOOKS/re-create-machines.yaml
 ```
 
-**Local development with path reference:**
-
-```bash
-nix develop path:../../../business-operations#ansible
-```
-
 ## Consequences
 
 The long-term role of ansible in this project is not fully clear yet. As the

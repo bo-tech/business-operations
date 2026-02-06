@@ -63,14 +63,6 @@ ansible-playbook -i ./inventory.yaml $BO_PLAYBOOKS/rebuild-machines-local.yaml
 
 ## Development
 
-### Local development of roles
-
-Use the path reference to work with your local business-operations clone:
-
-```sh
-nix develop path:/path/to/business-operations#ansible
-```
-
 ### Faster iteration
 
 To skip the NixOS deployment, run the playbook with:
