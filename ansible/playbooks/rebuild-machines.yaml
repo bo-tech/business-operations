@@ -1,0 +1,6 @@
+---
+- name: Rebuild NixOS on all nodes
+  gather_facts: true
+  hosts: initial_controller:controllers:workers
+  roles:
+    - rebuild_nixos

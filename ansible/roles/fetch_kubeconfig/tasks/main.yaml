@@ -1,0 +1,31 @@
+---
+- name: Gather admin kubeconfig
+  ansible.builtin.command: k0s kubeconfig admin
+  register: admin_kubeconfig
+  changed_when: admin_kubeconfig | length > 0
+
+- name: Ensure artifacts directory exists
+  ansible.builtin.file:
+    path: "{{ artifacts_dir }}"
+    state: directory
+    mode: "0755"
+  delegate_to: 127.0.0.1
+
+- name: Store the kubeconfig
+  ansible.builtin.template:
+    src: kubeconfig.j2
+    dest: "{{ artifacts_dir }}/kubeconfig.yaml"
+  delegate_to: 127.0.0.1
+
+- name: Prepare an env file for the kubeconfig
+  ansible.builtin.template:
+    src: env.sh.j2
+    dest: "{{ artifacts_dir }}/env.sh"
+  delegate_to: localhost
+
+- name: Message how to use the kubeconfig
+  ansible.builtin.debug:
+    msg:
+      - "Connect to the cluster, use one of:"
+      - export KUBECONFIG={{ artifacts_dir }}/kubeconfig.yaml
+      - source {{ artifacts_dir }}/env.sh

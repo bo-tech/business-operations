@@ -1,0 +1,7 @@
+---
+- name: Ensure the flake is updated and not cached
+  ansible.builtin.command: "nix flake prefetch --refresh {{ nixos_registry_name }}"
+
+- name: Run nixos-rebuild switch
+  ansible.builtin.command: >-
+    nixos-rebuild switch --flake {{ nixos_registry_name }}

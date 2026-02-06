@@ -1,0 +1,4 @@
+---
+nixos_flake: "../nixos"
+rebuild_mode: "remote"
+nixos_registry_name: "b-ops"

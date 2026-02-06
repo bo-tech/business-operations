@@ -1,0 +1,8 @@
+---
+- name: Include remote rebuild tasks
+  ansible.builtin.include_tasks: remote.yaml
+  when: rebuild_mode | default('remote') == 'remote'
+
+- name: Include local rebuild tasks
+  ansible.builtin.include_tasks: local.yaml
+  when: rebuild_mode | default('remote') == 'local'

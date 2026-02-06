@@ -1,0 +1,7 @@
+---
+- name: Run nixos-rebuild switch from local to remote
+  ansible.builtin.command: >-
+    nixos-rebuild switch
+    --flake {{ nixos_flake }}#{{ inventory_hostname }}
+    --target-host root@{{ ansible_host }}
+  delegate_to: localhost

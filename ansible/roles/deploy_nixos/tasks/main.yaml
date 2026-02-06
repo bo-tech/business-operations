@@ -1,0 +1,38 @@
+---
+- name: Remove host from known_hosts file
+  ansible.builtin.command: >-
+    ssh-keygen -R {{ hostvars[inventory_hostname]['ansible_host'] }}
+  throttle: 1
+  delegate_to: localhost
+
+- name: Deploy the new machine
+  block:
+    - name: Run nixos-anywhere
+      ansible.builtin.shell: >-
+        nix run {{ nixos_anywhere_flake }} --
+        --flake {{ nixos_flake }}#{{ inventory_hostname }}
+        --kexec-extra-flags "--no-sync"
+        root@{{ hostvars[inventory_hostname]['ansible_host'] }}
+      delegate_to: localhost
+      when: not (skip_nixos_deployment | bool)
+
+    - name: Wait 300 seconds for port 22 to become open and contain OpenSSH
+      ansible.builtin.wait_for:
+        port: 22
+        host: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+        search_regex: OpenSSH
+        delay: 2
+      delegate_to: localhost
+
+  when: not (skip_nixos_deployment | bool)
+
+- name: Add ssh host key to known_hosts
+  ansible.builtin.shell: |
+    ssh-keyscan {{ hostvars[inventory_hostname]['ansible_host'] }} >> ~/.ssh/known_hosts
+  throttle: 1
+  delegate_to: localhost
+
+- name: Fake - Would run nixos-anywhere now
+  ansible.builtin.debug:
+    msg: Skipping the re-installation of NixOS in debugging mode
+  when: skip_nixos_deployment | bool

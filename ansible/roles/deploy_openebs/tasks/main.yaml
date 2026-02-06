@@ -1,0 +1,15 @@
+---
+- name: Install OpenEBS
+  ansible.builtin.shell: |
+    helm upgrade --install openebs {{ openebs_chart_name }} \
+      --create-namespace \
+      --repo {{ openebs_chart_repo }} \
+      --version $(yq -r .spec.chart.spec.version < {{ inventory_dir }}/{{ openebs_helmrelease_path }}) \
+      --namespace {{ openebs_namespace }} \
+      {% for values_file in openebs_values_files %}
+      --values={{ inventory_dir }}/{{ values_file }} \
+      {% endfor %}
+
+  delegate_to: localhost
+  environment:
+    KUBECONFIG: "{{ artifacts_dir }}/kubeconfig.yaml"

@@ -1,0 +1,8 @@
+---
+- name: Deploy cluster extensions on infrastructure level
+  gather_facts: true
+  hosts: initial_controller
+  roles:
+    - deploy_cilium
+    - deploy_openebs
+    - deploy_rook_ceph

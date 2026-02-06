@@ -1,0 +1,5 @@
+---
+k0s_token_path: "/etc/k0s/k0stoken"
+k0s_apiserver_port: 6443
+k0s_apiserver_wait_timeout: 200
+k0s_apiserver_wait_delay: 5

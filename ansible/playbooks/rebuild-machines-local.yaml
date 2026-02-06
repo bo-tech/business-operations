@@ -1,0 +1,8 @@
+---
+- name: Rebuild NixOS from local to remote nodes
+  gather_facts: false
+  hosts: initial_controller:controllers:workers
+  vars:
+    rebuild_mode: local
+  roles:
+    - rebuild_nixos

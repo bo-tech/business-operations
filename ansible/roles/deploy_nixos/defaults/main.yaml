@@ -1,0 +1,4 @@
+---
+nixos_flake: "../nixos"
+skip_nixos_deployment: false
+nixos_anywhere_flake: "github:nix-community/nixos-anywhere"

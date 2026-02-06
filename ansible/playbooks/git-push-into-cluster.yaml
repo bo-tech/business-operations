@@ -1,0 +1,49 @@
+---
+- name: Git push into the cluster
+  hosts: 127.0.0.1
+  gather_facts: true
+  environment:
+    KUBECONFIG: "{{ artifacts_dir }}/kubeconfig.yaml"
+  module_defaults:
+    ansible.builtin.command:
+      chdir: "{{ cluster_path }}"
+    ansible.builtin.shell:
+      chdir: "{{ cluster_path }}"
+  tasks:
+    - name: Verify pre-conditions
+      block:
+        - name: Check if kubeconfig is present
+          ansible.builtin.stat:
+            path: "{{ artifacts_dir }}/kubeconfig.yaml"
+          register: kubeconfig_stat
+
+        - name: Fail if kubeconfig is missing
+          ansible.builtin.fail:
+            msg: "Kubeconfig file {{ artifacts_dir }}/kubeconfig.yaml is missing!"
+          when: not kubeconfig_stat.stat.exists
+
+    - name: Read Gitea bootstrap secret
+      ansible.builtin.shell: >-
+        sops --decrypt ./bootstrap/gitea/secret-bootstrap.sops.yaml
+        | yq .stringData.password -r
+      register: gitea_password_result
+
+    - name: Set Gitea bootstrap secret
+      ansible.builtin.set_fact:
+        gitea_password: "{{ gitea_password_result.stdout }}"
+
+    - name: Push to the internal Gitea instance
+      ansible.builtin.shell: |
+        set -u
+
+        kubectl -n flux-bootstrap port-forward service/gitea-http ${GITEA_PORT}:http &
+        trap 'kill %1' SIGINT SIGTERM EXIT
+        {
+            until echo -n > /dev/tcp/localhost/${GITEA_PORT}; do sleep 1; done
+        } 2>/dev/null
+        git push --force http://${GITEA_USERNAME}:${GITEA_PASSWORD}@localhost:${GITEA_PORT}/bootstrap/{{ git_repo_name | default('b-ops') }}.git HEAD:main
+      environment:
+        GITEA_PORT: "{{ gitea_port | default('3009') }}"
+        GITEA_USERNAME: "{{ gitea_username | default('bootstrap') }}"
+        GITEA_PASSWORD: "{{ gitea_password }}"
+      timeout: 120

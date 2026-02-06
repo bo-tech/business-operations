@@ -1,0 +1,8 @@
+---
+openebs_chart_repo: "https://openebs.github.io/openebs"
+openebs_chart_name: "openebs"
+openebs_namespace: "openebs"
+
+openebs_helmrelease_path: "../../kubernetes/cluster-0/base-apps/openebs/openebs/app/helmrelease.yaml"
+openebs_values_files:
+  - "../../kubernetes/cluster-0/base-apps/openebs/openebs/app/values.yaml"

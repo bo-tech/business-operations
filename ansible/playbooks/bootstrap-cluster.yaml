@@ -1,0 +1,92 @@
+---
+- name: Bootstrap cluster
+  hosts: 127.0.0.1
+  gather_facts: true
+  environment:
+    KUBECONFIG: "{{ artifacts_dir }}/kubeconfig.yaml"
+  module_defaults:
+    ansible.builtin.command:
+      chdir: "{{ cluster_path }}"
+    ansible.builtin.shell:
+      chdir: "{{ cluster_path }}"
+  tasks:
+    - name: Verify pre-conditions
+      block:
+        - name: Check if kubeconfig is present
+          ansible.builtin.stat:
+            path: "{{ artifacts_dir }}/kubeconfig.yaml"
+          register: kubeconfig_stat
+
+        - name: Fail if kubeconfig is missing
+          ansible.builtin.fail:
+            msg: "Kubeconfig file {{ artifacts_dir }}/kubeconfig.yaml is missing!"
+          when: not kubeconfig_stat.stat.exists
+
+    - name: Deploy the bootstrap folder of the cluster
+      ansible.builtin.command: >-
+        kubectl apply --server-side --kustomize ./bootstrap
+      tags:
+        cannot_reapply
+
+    - name: Deploy and prepare secrets
+      block:
+        - name: Deploy cluster Age key as secret
+          ansible.builtin.shell: >-
+            sops --decrypt ./bootstrap/age-key.sops.yaml
+            | kubectl apply -f -
+
+        - name: Deploy Gitea bootstrap secret
+          ansible.builtin.shell: >-
+            sops --decrypt ./bootstrap/gitea/secret-bootstrap.sops.yaml
+            | kubectl apply -f -
+
+        - name: Read Gitea bootstrap secret
+          ansible.builtin.shell: >-
+            sops --decrypt ./bootstrap/gitea/secret-bootstrap.sops.yaml
+            | yq .stringData.password -r
+          register: gitea_password_result
+
+        - name: Set Gitea bootstrap secret
+          ansible.builtin.set_fact:
+            gitea_password: "{{ gitea_password_result.stdout }}"
+
+    - name: Wait for the internal Gitea to become available
+      ansible.builtin.command: >-
+        kubectl -n flux-bootstrap wait --timeout 600s
+        --for condition=Available deployment/gitea
+      timeout: 660
+
+    - name: Wait until the repository is created
+      ansible.builtin.command: >-
+        kubectl -n flux-bootstrap wait --timeout 600s
+        --for condition=Complete job/create-repo-job
+      timeout: 660
+
+    - name: Prepare the internal Gitea instance
+      ansible.builtin.shell: |
+        set -u
+
+        kubectl -n flux-bootstrap port-forward service/gitea-http ${GITEA_PORT}:http &
+        trap 'kill %1' SIGINT SIGTERM EXIT
+        {
+            until echo -n > /dev/tcp/localhost/${GITEA_PORT}; do sleep 1; done
+        } 2>/dev/null
+        git push http://${GITEA_USERNAME}:${GITEA_PASSWORD}@localhost:${GITEA_PORT}/bootstrap/{{ git_repo_name | default('b-ops') }}.git HEAD:main
+      environment:
+        GITEA_PORT: "{{ gitea_port | default('3009') }}"
+        GITEA_USERNAME: "{{ gitea_username | default('bootstrap') }}"
+        GITEA_PASSWORD: "{{ gitea_password }}"
+      timeout: 120
+
+    - name: Deploy the cluster settings
+      ansible.builtin.command: >-
+        kubectl apply -f ./flux/vars/cluster-settings.yaml
+
+    - name: Deploy the secret cluster settings
+      ansible.builtin.shell: >-
+        sops --decrypt ./flux/vars/secret-cluster-settings.sops.yaml
+        | kubectl apply -f -
+
+    - name: Kick off the FluxCD based deployment
+      ansible.builtin.command: >-
+        kubectl apply --server-side --kustomize ./flux/config

@@ -1,0 +1,8 @@
+---
+- name: Wake machines
+  gather_facts: false
+  hosts: initial_controller:controllers:workers
+  tasks:
+    - name: Send WOL package to machine
+      ansible.builtin.command: wakelan {{ mac_address }}
+      delegate_to: localhost

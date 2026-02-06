@@ -1,0 +1,16 @@
+---
+rook_ceph_chart_repo: "https://charts.rook.io/release"
+rook_ceph_operator_chart_name: "rook-ceph"
+rook_ceph_cluster_chart_name: "rook-ceph-cluster"
+rook_ceph_namespace: "rook-ceph"
+
+rook_ceph_operator_helmrelease_path: "../../kubernetes/cluster-0/base-apps/rook-ceph/rook-ceph/operator/helmrelease.yaml"
+rook_ceph_cluster_helmrelease_path: "../../kubernetes/cluster-0/base-apps/rook-ceph/rook-ceph/cluster/helmrelease.yaml"
+
+rook_ceph_operator_values_files:
+  - "../../kubernetes/cluster-0/base-apps/rook-ceph/rook-ceph/operator/values.yaml"
+  - "../../kubernetes/cluster-0/base-apps/rook-ceph/rook-ceph/operator/values-no-dashboards.yaml"
+
+rook_ceph_cluster_values_files:
+  - "../../kubernetes/cluster-0/base-apps/rook-ceph/rook-ceph/cluster/values.yaml"
+  - "../../kubernetes/cluster-0/base-apps/rook-ceph/rook-ceph/cluster/values-no-dashboards.yaml"

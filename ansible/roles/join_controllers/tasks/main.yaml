@@ -1,0 +1,24 @@
+---
+- name: Write controller join token
+  ansible.builtin.template:
+    src: k0stoken.j2
+    dest: "{{ k0s_token_path }}"
+    mode: "0600"
+
+- name: Start the k0scontroller service
+  ansible.builtin.systemd:
+    name: k0scontroller
+    state: restarted
+
+- name: Wait for k8s apiserver
+  ansible.builtin.wait_for:
+    host: localhost
+    port: "{{ k0s_apiserver_port }}"
+    delay: "{{ k0s_apiserver_wait_delay }}"
+    timeout: "{{ k0s_apiserver_wait_timeout }}"
+
+- name: Replace the join token
+  ansible.builtin.template:
+    src: k0stoken_joined.j2
+    dest: "{{ k0s_token_path }}"
+    mode: "0600"

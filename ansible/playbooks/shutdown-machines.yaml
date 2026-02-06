@@ -1,0 +1,7 @@
+---
+- name: Shutdown machines
+  gather_facts: false
+  hosts: initial_controller:controllers:workers
+  tasks:
+    - name: Shutdown machine
+      ansible.builtin.command: systemctl poweroff --force

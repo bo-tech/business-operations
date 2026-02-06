@@ -1,0 +1,46 @@
+---
+- name: Deploy NixOS via nixos-anywhere to all nodes
+  gather_facts: false
+  hosts: initial_controller:controllers:workers
+  roles:
+    - deploy_nixos
+
+- name: Generate k0s tokens
+  gather_facts: true
+  hosts: initial_controller
+  roles:
+    - create_tokens
+
+- name: Join controller nodes into the cluster
+  gather_facts: true
+  hosts: controllers
+  roles:
+    - join_controllers
+
+- name: Join worker nodes into the cluster
+  gather_facts: true
+  hosts: workers
+  roles:
+    - join_workers
+
+- name: Store kubeconfig locally
+  gather_facts: true
+  hosts: initial_controller
+  roles:
+    - fetch_kubeconfig
+
+- name: Deploy cluster extensions on infrastructure level
+  gather_facts: true
+  hosts: initial_controller
+  roles:
+    - deploy_cilium
+    - deploy_openebs
+
+- name: Deploy cluster extension Rook Ceph (if not disabled)
+  gather_facts: true
+  hosts: initial_controller
+  tasks:
+    - name: Include rook ceph deployment
+      include_role:
+        name: deploy_rook_ceph
+      when: not (skip_rook_ceph | default(false) | bool)

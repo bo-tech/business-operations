@@ -1,0 +1,12 @@
+---
+- name: Generate k0s tokens
+  gather_facts: true
+  hosts: initial_controller
+  roles:
+    - create_tokens
+
+- name: Join worker nodes into the cluster
+  gather_facts: true
+  hosts: workers_to_join
+  roles:
+    - join_workers
