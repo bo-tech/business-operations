@@ -34,6 +34,12 @@ of automation. They have been combined so that both bootstrap from scratch and
 restore from backup are only two command calls away.
 
 
+## Next step
+
+High level I focus first on splitting things without yet refactoring or
+improving them. The goal is to extract all code which can be shared first.
+
+
 ## Contact
 
 Reach me via [`@jbornhold:matrix.org`](https://matrix.to/#/@jbornhold:matrix.org)
