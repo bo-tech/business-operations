@@ -1,4 +1,4 @@
 ---
 k0s_token_expiry: "1h"
 k0s_apiserver_port: 6443
-k0s_apiserver_wait_timeout: 200
+k0s_apiserver_wait_timeout: 300
