@@ -19,7 +19,7 @@
     util-linux
   ];
 
-  networking.dhcpcd.enable = lib.mkDefault false;
+  networking.useDHCP = lib.mkDefault false;
 
   # Cilium manages its own iptables rules
   networking.firewall.enable = lib.mkDefault false;
