@@ -5,6 +5,11 @@
     port: "{{ k0s_apiserver_port }}"
     timeout: "{{ k0s_apiserver_wait_timeout }}"
 
+- name: Wait for k0s status socket
+  ansible.builtin.wait_for:
+    path: /run/k0s/status.sock
+    timeout: "{{ k0s_apiserver_wait_timeout }}"
+
 - name: Create worker join token
   ansible.builtin.command: k0s token create --role worker --expiry {{ k0s_token_expiry }}
   register: worker_join_token
