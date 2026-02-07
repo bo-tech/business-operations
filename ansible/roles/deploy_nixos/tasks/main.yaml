@@ -12,6 +12,7 @@
         nix run {{ nixos_anywhere_flake }} --
         --flake {{ nixos_flake }}#{{ inventory_hostname }}
         --kexec-extra-flags "--no-sync"
+        {{ nixos_anywhere_extra_flags }}
         root@{{ hostvars[inventory_hostname]['ansible_host'] }}
       args:
         chdir: "{{ nixos_flake }}"
