@@ -13,6 +13,8 @@
         --flake {{ nixos_flake }}#{{ inventory_hostname }}
         --kexec-extra-flags "--no-sync"
         root@{{ hostvars[inventory_hostname]['ansible_host'] }}
+      args:
+        chdir: "{{ nixos_flake }}"
       delegate_to: localhost
       when: not (skip_nixos_deployment | bool)
 
