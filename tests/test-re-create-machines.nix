@@ -111,9 +111,6 @@ in
     node1.succeed(f"mkdir -p /root/.ssh && echo '{pubkey}' >> /root/.ssh/authorized_keys")
     worker1.succeed(f"mkdir -p /root/.ssh && echo '{pubkey}' >> /root/.ssh/authorized_keys")
 
-    ansible.succeed("ssh -o StrictHostKeyChecking=no root@192.168.1.10 true")
-    ansible.succeed("ssh -o StrictHostKeyChecking=no root@192.168.1.11 true")
-
     ansible.succeed("cp -rL /etc/test-workspace /workspace")
 
     ansible.succeed(

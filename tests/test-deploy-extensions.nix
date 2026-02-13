@@ -80,7 +80,7 @@ in
     controller.succeed('ssh-keygen -t ed25519 -N "" -f /root/.ssh/id_ed25519')
     pubkey = controller.succeed("cat /root/.ssh/id_ed25519.pub").strip()
     node1.succeed(f"mkdir -p /root/.ssh && echo '{pubkey}' >> /root/.ssh/authorized_keys")
-    controller.succeed("ssh -o StrictHostKeyChecking=no root@192.168.1.10 true")
+    controller.succeed("ssh-keyscan 192.168.1.10 >> /root/.ssh/known_hosts")
 
     controller.succeed("cp -rL /etc/test-workspace /workspace")
 
