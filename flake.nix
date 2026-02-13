@@ -46,15 +46,13 @@
           pkgs.openssh
           pkgs.yq
         ];
-        testFiles = builtins.readDir ./tests;
-        testNames = map (name: lib.strings.removeSuffix ".nix" name)
-          (builtins.filter
-            (name: testFiles.${name} == "regular" && lib.hasSuffix ".nix" name)
-            (builtins.attrNames testFiles));
+        testNames = map (name: lib.strings.removePrefix "test-" (lib.strings.removeSuffix ".nix" name))
+          (builtins.filter (lib.hasPrefix "test-")
+            (builtins.attrNames (builtins.readDir ./tests)));
       in {
         checks = lib.genAttrs testNames (test:
           pkgs.testers.runNixOSTest {
-            imports = [ ./tests/${test}.nix ];
+            imports = [ ./tests/test-${test}.nix ];
             defaults = {
               imports = [ k0s-nix.nixosModules.default ];
 
