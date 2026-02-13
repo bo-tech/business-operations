@@ -28,11 +28,6 @@ in
         spec.api.address = "192.168.1.10";
       };
 
-      services.openssh = {
-        enable = true;
-        settings.PermitRootLogin = "yes";
-      };
-
       virtualisation.memorySize = lib.mkForce 4096;
       virtualisation.diskSize = lib.mkForce 8192;
     };
