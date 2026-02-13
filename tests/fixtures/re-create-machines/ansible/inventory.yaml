@@ -1,0 +1,21 @@
+all:
+  vars:
+    ansible_user: root
+    artifacts_dir: "{{ inventory_dir }}/artifacts"
+    cilium_helmrelease_path: ../kubernetes/cluster-0/base-apps/kube-system/cilium/app/helmrelease.yaml
+    cilium_values_files:
+      - ../kubernetes/cluster-0/base-apps/kube-system/cilium/app/values.yaml
+    openebs_helmrelease_path: ../kubernetes/cluster-0/base-apps/openebs/openebs/app/helmrelease.yaml
+    openebs_values_files:
+      - ../kubernetes/cluster-0/base-apps/openebs/openebs/app/values.yaml
+  children:
+    initial_controller:
+      hosts:
+        node1:
+          ansible_host: 192.168.1.10
+    controllers:
+      hosts: {}
+    workers:
+      hosts:
+        worker1:
+          ansible_host: 192.168.1.11
