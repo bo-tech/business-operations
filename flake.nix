@@ -30,6 +30,7 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs { inherit system; };
+        lib = nixpkgs.lib;
         ansiblePackages = [
           pkgs.ansible
           pkgs.sops
@@ -38,7 +39,15 @@
           pkgs.openssh
           pkgs.yq
         ];
+        testNames = map (name: lib.strings.removeSuffix ".nix" name)
+          (builtins.attrNames (builtins.readDir ./tests));
       in {
+        checks = lib.genAttrs testNames (test:
+          pkgs.testers.runNixOSTest {
+            imports = [ ./tests/${test}.nix ];
+          }
+        );
+
         devShells.ansible = pkgs.mkShell {
           packages = ansiblePackages;
           shellHook = ''
