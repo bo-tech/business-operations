@@ -1,4 +1,0 @@
-spec:
-  chart:
-    spec:
-      version: "4.4.0"

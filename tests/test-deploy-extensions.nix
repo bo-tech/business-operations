@@ -1,7 +1,7 @@
 let
   rolesPath = ../ansible/roles;
   playbooksPath = ../ansible/playbooks;
-  fixturesPath = ./fixtures/deploy-extensions;
+  fixturesPath = ./fixtures;
 in
 {
   name = "deploy-extensions";
@@ -68,7 +68,7 @@ in
     controller.succeed("cp -rL /etc/test-workspace /workspace")
 
     controller.succeed(
-        "cd /workspace/ansible && "
+        "cd /workspace/deploy-extensions/ansible && "
         "ANSIBLE_ROLES_PATH=${rolesPath} "
         "ansible-playbook -i inventory.yaml "
         "${playbooksPath}/deploy-extensions.yaml -v"

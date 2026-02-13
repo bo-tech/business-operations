@@ -1,7 +1,7 @@
 let
   rolesPath = ../ansible/roles;
   playbooksPath = ../ansible/playbooks;
-  fixturesPath = ./fixtures/re-create-machines;
+  fixturesPath = ./fixtures;
 in
 {
   name = "re-create-machines";
@@ -86,7 +86,7 @@ in
     ansible.succeed("cp -rL /etc/test-workspace /workspace")
 
     ansible.succeed(
-        "cd /workspace/ansible && "
+        "cd /workspace/re-create-machines/ansible && "
         "ANSIBLE_ROLES_PATH=${rolesPath} "
         "ansible-playbook -i inventory.yaml "
         "${playbooksPath}/re-create-machines.yaml "
