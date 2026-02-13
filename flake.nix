@@ -52,7 +52,23 @@
         checks = lib.genAttrs testNames (test:
           pkgs.testers.runNixOSTest {
             imports = [ ./tests/${test}.nix ];
-            defaults.imports = [ k0s-nix.nixosModules.default ];
+            defaults = {
+              imports = [ k0s-nix.nixosModules.default ];
+
+              # Useful during interactive debugging
+              services.getty.autologinUser = "root";
+
+              # QEMU's slirp interface, needed for network access
+              networking.interfaces.eth0.useDHCP = true;
+
+              virtualisation.diskSize = 4096;
+
+              # TODO: Cilium is not yet installed, use defaults interim
+              services.k0s.spec = {
+                network.kubeProxy.disabled = lib.mkForce false;
+                network.provider = lib.mkForce "kuberouter";
+              };
+            };
           }
         );
 
