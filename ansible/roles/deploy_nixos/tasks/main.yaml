@@ -4,6 +4,7 @@
     ssh-keygen -R {{ hostvars[inventory_hostname]['ansible_host'] }}
   throttle: 1
   delegate_to: localhost
+  when: lookup('file', '~/.ssh/known_hosts', errors='ignore') is not none
 
 - name: Deploy the new machine
   block:
