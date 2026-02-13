@@ -46,8 +46,11 @@
           pkgs.openssh
           pkgs.yq
         ];
+        testFiles = builtins.readDir ./tests;
         testNames = map (name: lib.strings.removeSuffix ".nix" name)
-          (builtins.attrNames (builtins.readDir ./tests));
+          (builtins.filter
+            (name: testFiles.${name} == "regular" && lib.hasSuffix ".nix" name)
+            (builtins.attrNames testFiles));
       in {
         checks = lib.genAttrs testNames (test:
           pkgs.testers.runNixOSTest {
