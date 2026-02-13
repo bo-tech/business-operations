@@ -11,10 +11,7 @@ in
     {
       imports = [ ../nixos/profiles/k0s-node.nix ];
 
-      networking = {
-        useNetworkd = true;
-        useDHCP = false;
-      };
+      networking.useNetworkd = true;
 
       systemd.network.networks."01-eth1" = {
         name = "eth1";
@@ -34,10 +31,7 @@ in
   nodes.controller =
     { pkgs, ... }:
     {
-      networking = {
-        useNetworkd = true;
-        useDHCP = false;
-      };
+      networking.useNetworkd = true;
 
       systemd.network.networks."01-eth1" = {
         name = "eth1";
