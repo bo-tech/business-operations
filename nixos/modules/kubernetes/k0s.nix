@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 {
   boot.kernel.sysctl = {
     # Required for k0s/kubernetes - prevents "Too many open files" errors
@@ -11,7 +11,7 @@
     dnsutils
     ethtool
     iptables
-    k0s
+    config.services.k0s.package
     kmod
     mount
     python3
