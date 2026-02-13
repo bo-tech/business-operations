@@ -19,16 +19,13 @@ in
 
       systemd.network.networks."01-eth1" = {
         name = "eth1";
-        networkConfig.Address = "192.168.1.1/24";
+        networkConfig.Address = "192.168.1.10/24";
       };
 
       services.k0s = {
         role = "controller+worker";
         controller.isLeader = true;
-        spec.api = {
-          address = "192.168.1.1";
-          sans = [ "192.168.1.1" ];
-        };
+        spec.api.address = "192.168.1.10";
       };
 
       services.openssh = {
@@ -51,7 +48,7 @@ in
 
       systemd.network.networks."01-eth1" = {
         name = "eth1";
-        networkConfig.Address = "192.168.1.2/24";
+        networkConfig.Address = "192.168.1.20/24";
       };
 
       environment.systemPackages = with pkgs; [
@@ -83,7 +80,7 @@ in
     controller.succeed('ssh-keygen -t ed25519 -N "" -f /root/.ssh/id_ed25519')
     pubkey = controller.succeed("cat /root/.ssh/id_ed25519.pub").strip()
     node1.succeed(f"mkdir -p /root/.ssh && echo '{pubkey}' >> /root/.ssh/authorized_keys")
-    controller.succeed("ssh -o StrictHostKeyChecking=no root@192.168.1.1 true")
+    controller.succeed("ssh -o StrictHostKeyChecking=no root@192.168.1.10 true")
 
     controller.succeed("cp -rL /etc/test-workspace /workspace")
 

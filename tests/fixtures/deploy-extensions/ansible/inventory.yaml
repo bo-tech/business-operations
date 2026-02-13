@@ -12,4 +12,4 @@ all:
     initial_controller:
       hosts:
         node1:
-          ansible_host: 192.168.1.1
+          ansible_host: 192.168.1.10
