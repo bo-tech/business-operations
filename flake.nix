@@ -33,7 +33,10 @@
     //
     flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ k0s-nix.overlays.default ];
+        };
         lib = nixpkgs.lib;
         ansiblePackages = [
           pkgs.ansible
@@ -49,6 +52,7 @@
         checks = lib.genAttrs testNames (test:
           pkgs.testers.runNixOSTest {
             imports = [ ./tests/${test}.nix ];
+            defaults.imports = [ k0s-nix.nixosModules.default ];
           }
         );
 
