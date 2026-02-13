@@ -11,12 +11,10 @@ in
     {
       imports = [ ../nixos/profiles/k0s-node.nix ];
 
-      networking.useNetworkd = true;
-
-      systemd.network.networks."01-eth1" = {
-        name = "eth1";
-        networkConfig.Address = "192.168.1.10/24";
-      };
+      networking.interfaces.eth1.ipv4.addresses = [{
+        address = "192.168.1.10";
+        prefixLength = 24;
+      }];
 
       services.k0s = {
         role = "controller+worker";
@@ -31,12 +29,10 @@ in
   nodes.controller =
     { pkgs, ... }:
     {
-      networking.useNetworkd = true;
-
-      systemd.network.networks."01-eth1" = {
-        name = "eth1";
-        networkConfig.Address = "192.168.1.20/24";
-      };
+      networking.interfaces.eth1.ipv4.addresses = [{
+        address = "192.168.1.20";
+        prefixLength = 24;
+      }];
 
       environment.systemPackages = with pkgs; [
         ansible
