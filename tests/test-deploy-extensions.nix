@@ -14,7 +14,6 @@ in
       networking = {
         useNetworkd = true;
         useDHCP = false;
-        firewall.enable = false;
       };
 
       systemd.network.networks."01-eth1" = {
@@ -38,7 +37,6 @@ in
       networking = {
         useNetworkd = true;
         useDHCP = false;
-        firewall.enable = false;
       };
 
       systemd.network.networks."01-eth1" = {
