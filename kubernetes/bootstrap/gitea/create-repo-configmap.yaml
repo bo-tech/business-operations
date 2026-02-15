@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: create-repo-scripts
+  namespace: flux-bootstrap
+data:
+  entrypoint.sh: |
+    #!/bin/sh
+
+    cat > "${HOME}/.curlrc" << EOT
+    user = "bootstrap:${GITEA_API_PASSWORD}"
+    header = "Content-Type: application/json"
+    EOT
+
+    exec "$@"
+
+  create-repo.sh: |
+    #!/bin/sh
+
+    repo_api_url="${GITEA_API_URL}/repos/bootstrap/b-ops"
+
+    # Check if the repository already exists
+    status_code=$(curl -s -o /dev/null -w "%{http_code}" ${repo_api_url})
+    if [ "${status_code}" = "200" ]
+    then
+        echo 'Repository "b-ops" does already exist, skipping initial setup.'
+        exit 0
+    else
+        echo 'Repository "b-ops" is missing, performing initial setup of Gitea.'
+    fi
+    echo "URL: ${repo_api_url}"
+    echo "Status code: ${status_code}"
+
+
+    # Create the repository
+    if curl -X POST --fail -d '{"name": "b-ops"}' ${GITEA_API_URL}/user/repos
+    then
+        echo 'Repository "b-ops" created.'
+    else
+        echo 'ERROR - Repository "b-ops cannot be created.'
+        exit 1
+    fi

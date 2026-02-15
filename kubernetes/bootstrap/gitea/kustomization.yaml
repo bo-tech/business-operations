@@ -1,0 +1,8 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: flux-bootstrap
+resources:
+  - ./gitea.yaml
+  - ./create-repo-configmap.yaml
+  - ./create-repo-job.yaml

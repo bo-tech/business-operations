@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-repo-job
+  namespace: flux-bootstrap
+spec:
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      containers:
+        - command:
+            - /scripts/entrypoint.sh
+          args:
+            - /scripts/create-repo.sh
+          env:
+            - name: GITEA_API_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: gitea-bootstrap-secret
+            - name: GITEA_API_URL
+              value: "http://gitea-http.flux-bootstrap.svc.cluster.local/api/v1"
+          image: curlimages/curl:latest@sha256:935d9100e9ba842cdb060de42472c7ca90cfe9a7c96e4dacb55e79e560b3ff40
+          imagePullPolicy: IfNotPresent
+          name: create-repo
+          volumeMounts:
+            - name: scripts
+              mountPath: "/scripts"
+      volumes:
+        - name: scripts
+          configMap:
+            name: create-repo-scripts
+            defaultMode: 0555
+      restartPolicy: OnFailure
