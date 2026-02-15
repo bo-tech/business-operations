@@ -9,6 +9,7 @@ Business Operations
    about
    testing
    decision-log
+   glossary
 
 
 Indices and tables
