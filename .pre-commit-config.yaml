@@ -3,3 +3,4 @@ repos:
     rev: v4.6.0
     hooks:
       - id: trailing-whitespace
+        exclude: kubernetes/bootstrap/gitea/gitea\.yaml
