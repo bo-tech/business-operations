@@ -38,6 +38,6 @@ data:
     then
         echo 'Repository "b-ops" created.'
     else
-        echo 'ERROR - Repository "b-ops cannot be created.'
+        echo 'ERROR - Repository "b-ops" cannot be created.'
         exit 1
     fi
