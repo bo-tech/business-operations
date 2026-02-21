@@ -30,6 +30,7 @@ spec:
       LLDAP_HTTP_URL: https://lldap.${cluster_domain}
       LLDAP_LDAP_PORT: &ldapPort 8389
       LLDAP_LDAP_BASE_DN: dc=lab,dc=bo-tech,dc=de
+      LLDAP_FORCE_LDAP_USER_PASS_RESET: always
 
     envFrom:
       - secretRef:
