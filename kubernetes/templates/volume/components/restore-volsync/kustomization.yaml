@@ -1,0 +1,108 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - ./external-secret.yaml
+  - ./replicationdestination.yaml
+
+replacements:
+  - source:
+      kind: PersistentVolumeClaim
+      group: ""
+      fieldPath: metadata.namespace
+    targets:
+      - select:
+          kind: ExternalSecret
+          group: external-secrets.io
+          name: restic-restore
+        fieldPaths:
+          - spec.target.template.data.RESTIC_REPOSITORY
+        options:
+          delimiter: "/"
+          index: 99
+  - source:
+      kind: PersistentVolumeClaim
+      group: ""
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: ReplicationDestination
+          group: volsync.backube
+        fieldPaths:
+          - metadata.name
+        options:
+          delimiter: "-"
+          index: 99
+      - select:
+          kind: ReplicationDestination
+          group: volsync.backube
+        fieldPaths:
+          - spec.restic.repository
+        options:
+          delimiter: "-"
+          index: 99
+      - select:
+          kind: ExternalSecret
+          group: external-secrets.io
+          name: restic-restore
+        fieldPaths:
+          - spec.target.template.data.RESTIC_REPOSITORY
+        options:
+          delimiter: "/"
+          index: 99
+      - select:
+          kind: ExternalSecret
+          group: external-secrets.io
+          name: restic-restore
+        fieldPaths:
+          - metadata.name
+          - spec.target.name
+        options:
+          delimiter: "-"
+          index: 99
+  - source:
+      kind: PersistentVolumeClaim
+      group: ""
+      fieldPath: spec.resources.requests.storage
+    targets:
+      - select:
+          kind: ReplicationDestination
+          group: volsync.backube
+        fieldPaths:
+          - spec.restic.capacity
+  - source:
+      kind: PersistentVolumeClaim
+      group: ""
+      fieldPath: spec.accessModes
+    targets:
+      - select:
+          kind: ReplicationDestination
+          group: volsync.backube
+        fieldPaths:
+          - spec.restic.accessModes
+  - source:
+      kind: ReplicationDestination
+      group: volsync.backube
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: PersistentVolumeClaim
+          group: ""
+        fieldPaths:
+          - spec.dataSourceRef.name
+
+patches:
+  - target:
+      kind: PersistentVolumeClaim
+      group: ""
+    patch: |
+      kind: PersistentVolumeClaim
+      metadata:
+        name: not-used
+      spec:
+        dataSourceRef:
+          kind: ReplicationDestination
+          apiGroup: volsync.backube
+          name: PATCH_REPLICATION_DESTINATION_NAME
