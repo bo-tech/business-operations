@@ -5,6 +5,9 @@ metadata:
   name: restore-configuration
 kind: Component
 
+resources:
+  - ./cnpg-restore-es.yaml
+
 patches:
   - path: ./patch-restore.yaml
     target:

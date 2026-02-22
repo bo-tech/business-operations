@@ -22,9 +22,7 @@ metadata:
   name: cluster-apps-forgejo-db
   namespace: flux-system
 spec:
-  # TODO: Work in backup and restore
-  path: ./external/business-operations/kubernetes/apps/code/forgejo/db/overlays/none
-  # path: ./external/business-operations/kubernetes/apps/code/forgejo/db/overlays/${cluster_bootstrap_mode}
+  path: ./external/business-operations/kubernetes/apps/code/forgejo/db/overlays/${cluster_bootstrap_mode}
   prune: true
   sourceRef:
     kind: GitRepository

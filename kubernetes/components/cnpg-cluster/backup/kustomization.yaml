@@ -5,6 +5,9 @@ metadata:
   name: backup-configuration
 kind: Component
 
+resources:
+  - ./cnpg-backup-es.yaml
+
 patches:
   - path: ./patch-backup.yaml
     target:

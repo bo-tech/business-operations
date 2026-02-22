@@ -4,8 +4,9 @@ kind: Cluster
 metadata:
   name: not-used
 spec:
-  recovery:
-    source: restore
+  bootstrap:
+    recovery:
+      source: restore
   externalClusters:
     - name: restore
       barmanObjectStore:
