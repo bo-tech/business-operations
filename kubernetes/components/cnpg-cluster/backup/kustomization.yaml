@@ -7,6 +7,7 @@ kind: Component
 
 resources:
   - ./cnpg-backup-es.yaml
+  - ./scheduledbackup.yaml
 
 patches:
   - path: ./patch-backup.yaml
@@ -28,3 +29,9 @@ replacements:
         options:
           delimiter: "/"
           index: 99
+      - select:
+          kind: ScheduledBackup
+          group: postgresql.cnpg.io
+        fieldPaths:
+          - metadata.name
+          - spec.cluster.name
