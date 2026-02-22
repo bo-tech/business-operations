@@ -1,1 +1,7 @@
-myValue: content
+gitea:
+  config:
+    database:
+      DB_TYPE: postgres
+      HOST: forgejo-db-v1-rw
+      NAME: app
+      USER: app

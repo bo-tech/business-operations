@@ -38,3 +38,7 @@ spec:
     - kind: ConfigMap
       name: forgejo-helm-values
       valuesKey: values.yaml
+    - kind: Secret
+      name: forgejo-db-v1-app
+      valuesKey: password
+      targetPath: gitea.config.database.PASSWD
