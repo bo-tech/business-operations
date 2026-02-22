@@ -8,5 +8,3 @@ spec:
   imageName: ghcr.io/cloudnative-pg/postgresql:18.2@sha256:7e95094990c3fd8150adcdc5888c02eeffb451427eca580a8692a3a4500deae9
   storage:
     size: 5Gi
-  bootstrap:
-    initdb: {}
