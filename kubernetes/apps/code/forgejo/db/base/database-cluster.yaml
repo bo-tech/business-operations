@@ -1,0 +1,12 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: forgejo-db-v1
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.2@sha256:7e95094990c3fd8150adcdc5888c02eeffb451427eca580a8692a3a4500deae9
+  storage:
+    size: 5Gi
+  bootstrap:
+    initdb: {}
