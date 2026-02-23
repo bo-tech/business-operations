@@ -1,0 +1,8 @@
+---
+- name: Refresh SSH host keys for all nodes
+  gather_facts: false
+  hosts: initial_controller:controllers:workers
+  roles:
+    - role: deploy_nixos
+      vars:
+        skip_nixos_deployment: true
