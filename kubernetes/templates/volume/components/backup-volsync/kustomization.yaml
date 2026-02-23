@@ -1,0 +1,69 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - ./external-secret.yaml
+  - ./replicationsource.yaml
+
+replacements:
+  - source:
+      kind: PersistentVolumeClaim
+      group: ""
+      fieldPath: metadata.namespace
+    targets:
+      - select:
+          kind: ExternalSecret
+          group: external-secrets.io
+          name: restic-backup
+        fieldPaths:
+          - spec.target.template.data.RESTIC_REPOSITORY
+        options:
+          delimiter: "/"
+          index: 99
+  - source:
+      kind: PersistentVolumeClaim
+      group: ""
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: ReplicationSource
+          group: volsync.backube
+        fieldPaths:
+          - metadata.name
+        options:
+          delimiter: "-"
+          index: 99
+      - select:
+          kind: ReplicationSource
+          group: volsync.backube
+        fieldPaths:
+          - spec.sourcePVC
+      - select:
+          kind: ReplicationSource
+          group: volsync.backube
+        fieldPaths:
+          - spec.restic.repository
+        options:
+          delimiter: "-"
+          index: 99
+      - select:
+          kind: ExternalSecret
+          group: external-secrets.io
+          name: restic-backup
+        fieldPaths:
+          - spec.target.template.data.RESTIC_REPOSITORY
+        options:
+          delimiter: "/"
+          index: 99
+      - select:
+          kind: ExternalSecret
+          group: external-secrets.io
+          name: restic-backup
+        fieldPaths:
+          - metadata.name
+          - spec.target.name
+        options:
+          delimiter: "-"
+          index: 99

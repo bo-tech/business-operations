@@ -1,0 +1,29 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: trigger-binding
+  annotations:
+    kustomize.toolkit.fluxcd.io/force: enabled
+spec:
+  completions: 1
+  parallelism: 1
+  # The Job must stay, otherwise Flux will re-create it regularly
+  # ttlSecondsAfterFinished:
+  template:
+    spec:
+      containers:
+        - command:
+            - echo
+            - "Stub job to trigger binding!"
+          image: busybox@sha256:e3652a00a2fabd16ce889f0aa32c38eec347b997e73bd09e69c962ec7f8732ee
+          imagePullPolicy: IfNotPresent
+          name: restore
+          volumeMounts:
+            - name: data
+              mountPath: "/data/PATCH_VOLUME_NAME"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: PATCH_VOLUME_NAME
+      restartPolicy: OnFailure

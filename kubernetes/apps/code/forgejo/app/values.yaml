@@ -1,0 +1,19 @@
+gitea:
+  config:
+    database:
+      DB_TYPE: postgres
+      HOST: forgejo-db-v1-rw
+      NAME: app
+      USER: app
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: &host code.${cluster_domain}
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - hosts:
+        - *host

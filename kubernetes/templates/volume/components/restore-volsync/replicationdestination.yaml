@@ -1,0 +1,24 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationdestination_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationDestination
+metadata:
+  name: bootstrap
+spec:
+  trigger:
+    manual: restore-once
+  restic:
+    copyMethod: Snapshot
+    repository: restic-restore
+    cacheStorageClassName: "${volsync_cache_storageclass}"
+    cacheAccessModes:
+      - ReadWriteOnce
+    cacheCapacity: 1Gi
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    accessModes:
+      - PATCH_ACCESS_MODES
+    capacity: PATCH_CAPACITY

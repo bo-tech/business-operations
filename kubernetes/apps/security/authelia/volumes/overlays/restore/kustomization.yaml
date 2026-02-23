@@ -1,0 +1,20 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: security
+
+resources:
+  - ../../base/data-authelia.yaml
+
+components:
+  - ../../../../../../templates/volume/components/backup-volsync
+  - ../../../../../../templates/volume/components/restore-volsync
+
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/trigger/schedule
+        value: "12 0/3 * * *"
+    target:
+      group: volsync.backube
+      kind: ReplicationSource

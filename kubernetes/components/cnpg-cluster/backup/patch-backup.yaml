@@ -1,0 +1,24 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: not-used
+spec:
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore:
+      data:
+        compression: bzip2
+      wal:
+        compression: bzip2
+        maxParallel: 8
+      destinationPath: s3://${cnpg_backup_base_path}
+      endpointURL: ${cnpg_backup_endpoint}
+      serverName: db-rev${cluster_revision}
+      s3Credentials:
+        accessKeyId:
+          name: cnpg-backup
+          key: s3_access_key_id
+        secretAccessKey:
+          name: cnpg-backup
+          key: s3_access_key_secret

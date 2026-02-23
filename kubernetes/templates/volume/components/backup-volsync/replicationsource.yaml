@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/volsync.backube/replicationsource_v1alpha1.json
+apiVersion: volsync.backube/v1alpha1
+kind: ReplicationSource
+metadata:
+  name: backup
+spec:
+  sourcePVC: PATCH_VOLUME_NAME
+  trigger:
+    schedule: "10 0/3 * * *"
+  restic:
+    copyMethod: Snapshot
+    repository: restic-backup
+    cacheStorageClassName: "${volsync_cache_storageclass}"
+    cacheAccessModes:
+      - ReadWriteOnce
+    cacheCapacity: 1Gi
+    moverSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: OnRootMismatch
+    pruneIntervalDays: 7
+    retain:
+      hourly: 24
+      daily: 7
+      weekly: 5
+      monthly: 4
+      yearly: 1

@@ -1,0 +1,50 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+metadata:
+  name: backup-configuration
+kind: Component
+
+resources:
+  - ./cnpg-backup-es.yaml
+  - ./scheduledbackup.yaml
+
+patches:
+  - path: ./patch-backup.yaml
+    target:
+      kind: Cluster
+      group: postgresql.cnpg.io
+
+replacements:
+  - source:
+      kind: Cluster
+      group: postgresql.cnpg.io
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: Cluster
+          group: postgresql.cnpg.io
+        fieldPaths:
+          - spec.backup.barmanObjectStore.destinationPath
+        options:
+          delimiter: "/"
+          index: 99
+      - select:
+          kind: ScheduledBackup
+          group: postgresql.cnpg.io
+        fieldPaths:
+          - metadata.name
+          - spec.cluster.name
+  - source:
+      kind: Cluster
+      group: postgresql.cnpg.io
+      fieldPath: metadata.annotations.[cnpg.local/backup-revision]
+    targets:
+      - select:
+          kind: Cluster
+          group: postgresql.cnpg.io
+        fieldPaths:
+          - spec.backup.barmanObjectStore.serverName
+        options:
+          delimiter: "-"
+          index: 99

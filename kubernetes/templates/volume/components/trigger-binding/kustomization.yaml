@@ -1,0 +1,30 @@
+---
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+resources:
+  - ./stub-job.yaml
+
+replacements:
+  - source:
+      kind: PersistentVolumeClaim
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: Job
+        fieldPaths:
+          - spec.template.spec.volumes.[name=^data$].persistentVolumeClaim.claimName
+      - select:
+          kind: Job
+        fieldPaths:
+          - spec.template.spec.containers.[name=^restore$].volumeMounts.[name=^data$].mountPath
+        options:
+          delimiter: "/"
+          index: 2
+      - select:
+          kind: Job
+        fieldPaths:
+          - metadata.name
+        options:
+          delimiter: "-"
+          index: 99

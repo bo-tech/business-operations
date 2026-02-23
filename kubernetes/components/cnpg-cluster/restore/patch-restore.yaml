@@ -1,0 +1,27 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: not-used
+spec:
+  bootstrap:
+    recovery:
+      source: restore
+  externalClusters:
+    - name: restore
+      barmanObjectStore:
+        data:
+          compression: bzip2
+        wal:
+          compression: bzip2
+          maxParallel: 8
+        destinationPath: s3://${cnpg_restore_base_path}
+        endpointURL: ${cnpg_restore_endpoint}
+        serverName: db-rev${cluster_bootstrap_revision}
+        s3Credentials:
+          accessKeyId:
+            name: cnpg-restore
+            key: s3_access_key_id
+          secretAccessKey:
+            name: cnpg-restore
+            key: s3_access_key_secret

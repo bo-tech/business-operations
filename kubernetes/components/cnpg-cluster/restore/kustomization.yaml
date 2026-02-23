@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/kustomization
+apiVersion: kustomize.config.k8s.io/v1alpha1
+metadata:
+  name: restore-configuration
+kind: Component
+
+resources:
+  - ./cnpg-restore-es.yaml
+
+patches:
+  - path: ./patch-restore.yaml
+    target:
+      kind: Cluster
+      group: postgresql.cnpg.io
+
+replacements:
+  - source:
+      kind: Cluster
+      group: postgresql.cnpg.io
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: Cluster
+          group: postgresql.cnpg.io
+        fieldPaths:
+          - spec.externalClusters.[name=restore].barmanObjectStore.destinationPath
+        options:
+          delimiter: "/"
+          index: 99
+  - source:
+      kind: Cluster
+      group: postgresql.cnpg.io
+      fieldPath: metadata.annotations.[cnpg.local/restore-revision]
+    targets:
+      - select:
+          kind: Cluster
+          group: postgresql.cnpg.io
+        fieldPaths:
+          - spec.externalClusters.[name=restore].barmanObjectStore.serverName
+        options:
+          delimiter: "-"
+          index: 99

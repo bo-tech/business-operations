@@ -1,0 +1,15 @@
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cnpg-restore
+spec:
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: vault
+  target:
+    name: cnpg-restore
+    creationPolicy: Owner
+  dataFrom:
+    - extract:
+        key: backup/env/${cluster_restore_env}/cnpg-restore

@@ -1,0 +1,74 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: lldap
+  namespace: security
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+
+  values:
+    controller:
+      replicas: 1
+      strategy: Recreate
+
+    image:
+      repository: ghcr.io/lldap/lldap
+      tag: v0.6.2-alpine@sha256:9e605a66c02514bfcffd1b67cafb1e98d50992216bb2871d7ae44622047dd09d
+
+    env:
+      LLDAP_HTTP_PORT: &port 8000
+      LLDAP_HTTP_URL: https://lldap.${cluster_domain}
+      LLDAP_LDAP_PORT: &ldapPort 8389
+      LLDAP_LDAP_BASE_DN: dc=lab,dc=bo-tech,dc=de
+      LLDAP_FORCE_LDAP_USER_PASS_RESET: always
+
+    envFrom:
+      - secretRef:
+          name: lldap-secret
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+          ldap:
+            enabled: true
+            port: *ldapPort
+
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          hajimari.io/enable: "true"
+        ingressClassName: "nginx"
+        hosts:
+          - host: &host "lldap.${cluster_domain}"
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - *host
+
+    persistence:
+      data:
+        enabled: true
+        type: pvc
+        existingClaim: data-lldap
+
+    resources:
+      requests:
+        cpu: 5m
+        memory: 128Mi
+      limits:
+        memory: 512Mi
