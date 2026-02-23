@@ -28,3 +28,16 @@ replacements:
         options:
           delimiter: "/"
           index: 99
+  - source:
+      kind: Cluster
+      group: postgresql.cnpg.io
+      fieldPath: metadata.annotations.[cnpg.local/restore-revision]
+    targets:
+      - select:
+          kind: Cluster
+          group: postgresql.cnpg.io
+        fieldPaths:
+          - spec.externalClusters.[name=restore].barmanObjectStore.serverName
+        options:
+          delimiter: "-"
+          index: 99

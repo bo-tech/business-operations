@@ -35,3 +35,16 @@ replacements:
         fieldPaths:
           - metadata.name
           - spec.cluster.name
+  - source:
+      kind: Cluster
+      group: postgresql.cnpg.io
+      fieldPath: metadata.annotations.[cnpg.local/backup-revision]
+    targets:
+      - select:
+          kind: Cluster
+          group: postgresql.cnpg.io
+        fieldPaths:
+          - spec.backup.barmanObjectStore.serverName
+        options:
+          delimiter: "-"
+          index: 99
