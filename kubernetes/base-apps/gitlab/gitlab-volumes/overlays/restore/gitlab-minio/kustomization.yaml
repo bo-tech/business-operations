@@ -1,0 +1,19 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../base/gitlab-minio
+
+components:
+  - ../../../../../../../../external/business-operations/kubernetes/components/volume/backup-volsync
+  - ../../../../../../../../external/business-operations/kubernetes/components/volume/restore-volsync
+
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/trigger/schedule
+        value: "43 2/3 * * *"
+    target:
+      group: volsync.backube
+      kind: ReplicationSource

@@ -1,0 +1,41 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../../base/data-gitlab-postgresql-0
+
+components:
+  - ../../../../../../../../external/business-operations/kubernetes/components/volume/backup-volsync
+  - ../../../../../../../../external/business-operations/kubernetes/components/volume/restore-volsync
+
+patches:
+  - target:
+      kind: ReplicationSource
+      group: volsync.backube
+    patch: |
+      kind: ReplicationSource
+      metadata:
+        name: not-used
+      spec:
+        restic:
+          moverSecurityContext:
+            runAsUser: 1001
+  - patch: |-
+      - op: replace
+        path: /spec/trigger/schedule
+        value: "28 2/3 * * *"
+    target:
+      group: volsync.backube
+      kind: ReplicationSource
+  - target:
+      kind: ReplicationDestination
+      group: volsync.backube
+    patch: |
+      kind: ReplicationDestination
+      metadata:
+        name: not-used
+      spec:
+        restic:
+          moverSecurityContext:
+            runAsUser: 1001

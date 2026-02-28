@@ -1,0 +1,192 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gitlab
+  namespace: gitlab
+spec:
+  interval: 30m
+  timeout: 15m
+  chart:
+    spec:
+      chart: gitlab
+      version: 7.11.10
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: gitlab
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              name: gitlab-minio
+            patch: |
+              - op: replace
+                path: /spec/template/spec/volumes/1
+                value:
+                  name: export
+                  persistentVolumeClaim:
+                    claimName: gitlab-minio
+
+  values:
+    global:
+      edition: "ce"
+      hosts:
+        domain: "gitlab.${cluster_domain}"
+        https: true
+      pages:
+        enabled: true
+      ingress:
+        apiVersion: "networking.k8s.io/v1"
+        configureCertmanager: false
+        tls:
+          enabled: true
+          secretName: "gitlab-tls-secret"
+      pdb:
+        apiVersion: "policy/v1"
+      hpa:
+        apiVersion: "autoscaling/v2"
+
+    gitlab:
+      gitaly:
+        resources:
+          requests:
+            cpu: 50m
+      gitlab-exporter:
+        resources:
+          requests:
+            cpu: 30m
+      gitlab-pages:
+        resources:
+          requests:
+            cpu: 100m
+      gitlab-shell:
+        minReplicas: 1
+      # Kubernetes agent
+      kas:
+        resources:
+          requests:
+            cpu: 50m
+        minReplicas: 1
+      migrations:
+        resources:
+          requests:
+            cpu: 100m
+      # Processes background jobs as threads
+      sidekiq:
+        minReplicas: 1
+        resources:
+          requests:
+            cpu: 100m
+            memory: 750M
+      webservice:
+        minReplicas: 1
+        ingress:
+          annotations:
+            hajimari.io/enable: "true"
+            hajimari.io/appName: Gitlab
+        resources:
+          requests:
+            cpu: 100m
+            memory: 750M
+
+    gitlab-runner:
+      gitlabUrl: "http://gitlab-webservice-default:8181"
+      runners:
+        # Config is templated and based on the default from the Gitlab chart.
+        # See: https://gitlab.com/gitlab-org/charts/gitlab/-/blob/cef9f911c2d0da7170005d86b9985c57eed40df7/values.yaml#L1247
+        #
+        # "runners.kubernetes.volumes.config_map"
+        # See: https://gitlab.com/gitlab-org/gitlab-runner/-/blob/220f6fe97fd98fd1d2c81c07bcf1ad5e61b50023/common/config.go#L638
+        config: |
+          [[runners]]
+            [runners.kubernetes]
+            image = "ubuntu:22.04"
+            [[runners.kubernetes.volumes.config_map]]
+                name = "cache-ca"
+                mount_path = "/var/run/config/local/cache-ca"
+                read_only = true
+            {{- if .Values.global.minio.enabled }}
+            [runners.cache]
+              Type = "s3"
+              Path = "gitlab-runner"
+              Shared = true
+              [runners.cache.s3]
+                ServerAddress = {{ include "gitlab-runner.cache-tpl.s3ServerAddress" . }}
+                BucketName = "runner-cache"
+                BucketLocation = "us-east-1"
+                Insecure = false
+            {{ end }}
+
+    shared-secrets:
+      enabled: false
+
+    certmanager-issuer:
+      email: "issuer-email@testhost.example"
+
+    certmanager:
+      install: false
+
+    minio:
+      persistence:
+        # We maintain the PVC ourselves and patch in the volume reference
+        enabled: false
+        storageClass: "ceph-block"
+      resources:
+        requests:
+          cpu: 25m
+
+    # TODO: Remove once GitLab chart ships current Bitnami images.
+    # Bitnami moved old tags from docker.io/bitnami/ to bitnamilegacy/.
+    postgresql:
+      image:
+        registry: docker.io
+        repository: bitnamilegacy/postgresql
+      metrics:
+        image:
+          registry: docker.io
+          repository: bitnamilegacy/postgres-exporter
+
+    redis:
+      image:
+        registry: docker.io
+        repository: bitnamilegacy/redis
+      metrics:
+        image:
+          registry: docker.io
+          repository: bitnamilegacy/redis-exporter
+
+    prometheus:
+      install: false
+
+    nginx-ingress:
+      controller:
+        ingressClassResource:
+          controllerValue: "k8s.io/gitlab-ingress-nginx"
+        service:
+          annotations:
+            lbipam.cilium.io/ips: "${gitlab_ingress_ip}"
+
+          # NOTE: This is vital to ensure that the L2 Announcements of the
+          # Cilium VIP work.
+          #
+          # See: https://docs.cilium.io/en/v1.16/network/l2-announcements/
+          externalTrafficPolicy: Cluster
+
+          labels:
+            ip-range: static-pool
+          enableHttps: true
+        replicaCount: 1
+
+    registry:
+      hpa:
+        minReplicas: 1

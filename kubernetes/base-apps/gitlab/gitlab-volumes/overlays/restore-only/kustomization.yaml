@@ -1,0 +1,10 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: gitlab
+
+resources:
+  - ./gitlab-minio
+  - ./repo-data-gitlab-gitaly-0
+  - ./data-gitlab-postgresql-0
+  - ./redis-data-gitlab-redis-master-0
