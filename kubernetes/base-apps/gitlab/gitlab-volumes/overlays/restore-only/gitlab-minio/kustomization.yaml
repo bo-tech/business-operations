@@ -6,4 +6,4 @@ resources:
   - ../../../base/gitlab-minio
 
 components:
-  - ../../../../../../../../external/business-operations/kubernetes/components/volume/restore-volsync
+  - ../../../../../../components/volume/restore-volsync

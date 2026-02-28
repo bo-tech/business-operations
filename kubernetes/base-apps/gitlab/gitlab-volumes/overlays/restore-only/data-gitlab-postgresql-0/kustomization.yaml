@@ -6,7 +6,7 @@ resources:
   - ../../../base/data-gitlab-postgresql-0
 
 components:
-  - ../../../../../../../../external/business-operations/kubernetes/components/volume/restore-volsync
+  - ../../../../../../components/volume/restore-volsync
 
 patches:
   - target:

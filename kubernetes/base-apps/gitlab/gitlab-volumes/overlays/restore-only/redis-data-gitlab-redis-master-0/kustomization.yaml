@@ -6,4 +6,4 @@ resources:
   - ../../../base/redis-data-gitlab-redis-master-0
 
 components:
-  - ../../../../../../../../external/business-operations/kubernetes/components/volume/trigger-binding
+  - ../../../../../../components/volume/trigger-binding
