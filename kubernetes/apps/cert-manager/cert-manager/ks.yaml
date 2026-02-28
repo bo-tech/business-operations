@@ -1,0 +1,29 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-cert-manager
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: "./external/business-operations/kubernetes/apps/cert-manager/cert-manager/app"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: bv-ops-kubernetes
+  wait: true
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-cert-manager-certificates-restore
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: "./external/business-operations/kubernetes/apps/cert-manager/cert-manager/certificates-restore/overlays/${cluster_bootstrap_mode}"
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: bv-ops-kubernetes

@@ -1,0 +1,93 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: restore-certificates-scripts
+  namespace: cert-manager
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+data:
+  restore-command.sh: |
+    #!/bin/bash
+
+    set -eux -o pipefail
+
+    : ${SNAPSHOT:=latest}
+
+    restic restore \
+      --host cert-manager \
+      --path /data/certificates \
+      --target / \
+      ${SNAPSHOT}
+
+  apply-command.sh: |
+    #!/bin/bash
+
+    set -eux -o pipefail
+
+    if kubectl get -f /data/certificates/certificates.yaml >/dev/null 2>&1; then
+      echo "Certificates already present, skipping restore apply."
+    else
+      echo "Certificates missing, applying restored manifests."
+      kubectl apply -f /data/certificates/certificates.yaml
+    fi
+
+    rm -fr /data/certificates/*
+
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: restore-certificates
+  namespace: cert-manager
+  annotations:
+    kustomize.toolkit.fluxcd.io/force: enabled
+spec:
+  completions: 1
+  parallelism: 1
+  # The Job must stay, otherwise Flux will re-create it regularly
+  # ttlSecondsAfterFinished:
+  template:
+    spec:
+      initContainers:
+        - command:
+            - /scripts/restore-command.sh
+          image: quay.io/backube/volsync:0.14.0@sha256:63ab8ea7baab8de91ab720685cccde0e64f8e60d82ac7be088c25cb56267c454
+          imagePullPolicy: IfNotPresent
+          name: restore
+          securityContext:
+            runAsUser: 0
+          env:
+            - name: SNAPSHOT
+              value: latest
+          envFrom:
+            - secretRef:
+                name: restic-restore-certificates
+          volumeMounts:
+            - name: scripts
+              mountPath: "/scripts"
+            - name: data
+              mountPath: "/data/certificates"
+      containers:
+        - command:
+            - /scripts/apply-command.sh
+          image: bitnami/kubectl@sha256:ed0797d94893f9c8e0b1537912fe97d2172b28ee05a55158a1abb916399380bc
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 0
+          name: kubectl
+          volumeMounts:
+            - name: scripts
+              mountPath: "/scripts"
+            - name: data
+              mountPath: "/data/certificates"
+      volumes:
+        - name: scripts
+          configMap:
+            name: restore-certificates-scripts
+            defaultMode: 0555
+        - name: data
+          emptyDir:
+            medium: Memory
+      restartPolicy: OnFailure
+      serviceAccountName: restore-certificates
