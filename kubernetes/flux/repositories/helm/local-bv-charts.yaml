@@ -1,0 +1,11 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: local-bv-charts
+  namespace: flux-system
+spec:
+  type: oci
+  interval: 2h
+  url: oci://registry.${use_gitlab_system}/bv/charts
+  timeout: 3m

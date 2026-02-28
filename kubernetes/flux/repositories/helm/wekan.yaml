@@ -1,0 +1,10 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: wekan
+  namespace: flux-system
+spec:
+  interval: 4h
+  url: https://wekan.github.io/charts
+  timeout: 3m

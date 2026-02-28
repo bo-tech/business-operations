@@ -1,0 +1,27 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./backube.yaml
+  - ./bitnami.yaml
+  - ./bjw-s.yaml
+  - ./cilium.yaml
+  - ./cloudnative-pg.yaml
+  - ./coredns.yaml
+  - ./external-secrets-io.yaml
+  - ./gitlab.yaml
+  - ./grafana.yaml
+  - ./harbor.yaml
+  - ./hajimari.yaml
+  - ./hashicorp.yaml
+  - ./ingress-nginx.yaml
+  - ./jetstack.yaml
+  - ./kubernetes-dashboard.yaml
+  - ./local-bv-charts.yaml
+  - ./local-mayan-edms.yaml
+  - ./openebs.yaml
+  - ./piraeus.yaml
+  - ./prometheus-community.yaml
+  - ./rook-ceph.yaml
+  - ./weave-gitops.yaml
+  - ./wekan.yaml
