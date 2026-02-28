@@ -1,0 +1,70 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: create-gitea-webhook-scripts
+  namespace: flux-bootstrap
+data:
+  # Escaping: The variable references are escaped because the resource is piped
+  # through the post processing of FluxCD. See "substituteFrom" in the resource
+  # "bv-ops-kubernetes".
+  entrypoint.sh: |
+    #!/bin/sh
+
+    cat > "$${HOME}/.curlrc" << EOT
+    user = "bootstrap:$${GITEA_API_PASSWORD}"
+    header = "Content-Type: application/json"
+    EOT
+
+    exec "$@"
+
+  create-gitea-webhook.sh: |
+    #!/bin/sh
+
+    hooks_api_url="$${GITEA_API_URL}/repos/bootstrap/b-ops/hooks"
+
+    # Check if the hook already exists
+    # TODO: Have "curl" and "jq" in an image or switch to Python
+    # for proper parsing of the result
+    result_size=$(curl $${hooks_api_url} | wc -c)
+    if [ "$${result_size}" -gt "3" ]
+    then
+      echo 'Hook for "b-ops" does already exist, skipping initial setup.'
+      exit 0
+    else
+      echo 'Hook for "b-ops" is missing, performing initial setup of Gitea.'
+    fi
+    echo "URL: $${hook_api_url}"
+    echo "Status code: $${status_code}"
+
+    # Set up the wekbook
+    if curl -X POST --fail $${GITEA_API_URL}/repos/bootstrap/b-ops/hooks -d '
+    {
+      "type": "gitea",
+      "branch_filter": "main",
+      "config": {
+        "content_type": "json",
+        "url": "http://webhook-receiver.flux-system.svc.cluster.local/hook/'$${GITEA_HOOK_TOKEN_PATH}'",
+        "secret": "'$${GITEA_HOOK_TOKEN}'"
+      },
+      "events": [
+        "push"
+      ],
+      "authorization_header": "",
+      "active": true
+    }
+    '
+    then
+        echo 'Webhook to update FluxCD created.'
+    else
+        echo 'ERROR - Failed to create webhook for FluxCD integration.'
+        exit 1
+    fi
+
+  wait-for-gitea.sh: |
+    #!/bin/sh
+    set -eu
+
+    kubectl -n flux-bootstrap wait Deployment/gitea \
+      --for='condition=available' \
+      --timeout=300s

@@ -1,0 +1,18 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1
+kind: Receiver
+metadata:
+  name: gitea-receiver
+  namespace: flux-bootstrap
+spec:
+  # Gitea's webhooks are compatible to Github's webhooks
+  type: github
+  events:
+    - "push"
+  secretRef:
+    name: webhook-token
+  resources:
+    - apiVersion: source.toolkit.fluxcd.io/v1
+      kind: GitRepository
+      name: bv-ops-kubernetes
+      namespace: flux-system

@@ -1,0 +1,59 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    # Flux must delete/recreate this immutable Job when images change; safe to
+    # rerun because the script skips if the webhook already exists.
+    kustomize.toolkit.fluxcd.io/force: enabled
+  name: create-gitea-webhook-job
+  namespace: flux-bootstrap
+spec:
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      initContainers:
+        - name: wait-for-gitea
+          command:
+            - /scripts/wait-for-gitea.sh
+          image: bitnami/kubectl@sha256:ed0797d94893f9c8e0b1537912fe97d2172b28ee05a55158a1abb916399380bc
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: scripts
+              mountPath: "/scripts"
+      containers:
+        - command:
+            - /scripts/entrypoint.sh
+          args:
+            - /scripts/create-gitea-webhook.sh
+          env:
+            - name: GITEA_API_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: gitea-bootstrap-secret
+            - name: GITEA_HOOK_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: webhook-token
+            - name: GITEA_HOOK_TOKEN_PATH
+              valueFrom:
+                secretKeyRef:
+                  key: token_path
+                  name: webhook-token
+            - name: GITEA_API_URL
+              value: "http://gitea-http.flux-bootstrap.svc.cluster.local/api/v1"
+          image: curlimages/curl:latest@sha256:935d9100e9ba842cdb060de42472c7ca90cfe9a7c96e4dacb55e79e560b3ff40
+          imagePullPolicy: IfNotPresent
+          name: create-gitea-webhook
+          volumeMounts:
+            - name: scripts
+              mountPath: "/scripts"
+      volumes:
+        - name: scripts
+          configMap:
+            name: create-gitea-webhook-scripts
+            defaultMode: 0555
+      serviceAccountName: create-gitea-webhook
+      restartPolicy: OnFailure

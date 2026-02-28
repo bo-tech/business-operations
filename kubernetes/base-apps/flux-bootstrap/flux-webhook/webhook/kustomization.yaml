@@ -1,0 +1,10 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: flux-bootstrap
+resources:
+  - ./flux-receiver-bv-ops-kubernetes.yaml
+  - ./create-gitea-webhook-configmap.yaml
+  - ./create-gitea-webhook-job.yaml
+  - ./create-gitea-webhook-sa.yaml
+  - ./create-gitea-webhook-crb.yaml

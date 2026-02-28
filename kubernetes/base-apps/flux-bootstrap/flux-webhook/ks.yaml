@@ -1,0 +1,13 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-base-apps-flux-webhook
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: "./external/business-operations/kubernetes/base-apps/flux-bootstrap/flux-webhook/webhook"
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: bv-ops-kubernetes
