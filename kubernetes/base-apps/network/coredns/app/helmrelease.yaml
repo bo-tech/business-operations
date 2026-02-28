@@ -1,0 +1,87 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.pages.dev/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: coredns
+  namespace: network
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: coredns
+      version: 1.45.0
+      sourceRef:
+        kind: HelmRepository
+        name: coredns
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+  uninstall:
+    keepHistory: false
+  values:
+
+    replicaCount: 2
+
+    isClusterService: false
+
+    service:
+      annotations:
+        lbipam.cilium.io/ips: "${coredns_ip}"
+    customLabels:
+      ip-range: static-pool
+
+    serviceType: "LoadBalancer"
+
+    podDisruptionBudget:
+      enabled: true
+      minAvailable: 1
+
+    deployment:
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 0
+          maxSurge: 1
+
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: coredns
+
+    servers:
+      - zones:
+          - zone: .
+        port: 53
+        plugins:
+          - name: log
+          - name: errors
+          - name: health
+            configBlock: |-
+              lameduck 5s
+          - name: ready
+          - name: prometheus
+            parameters: 0.0.0.0:9153
+          - name: forward
+            parameters: . /etc/resolv.conf
+          - name: cache
+            parameters: 30
+          - name: loop
+          - name: reload
+          - name: loadbalance
+
+    resources:
+      requests:
+        cpu: 10m
+        memory: 25Mi
