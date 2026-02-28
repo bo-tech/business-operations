@@ -1,0 +1,42 @@
+crds:
+  enabled: true
+csi:
+  cephFSKernelMountOptions: ms_mode=prefer-crc
+  enableLiveness: true
+  kubeletDirPath: /var/lib/k0s/kubelet
+  serviceMonitor:
+    enabled: true
+
+  csiRBDPluginVolume:
+    - name: lib-modules
+      hostPath:
+        path: /run/booted-system/kernel-modules/lib/modules/
+    - name: host-nix
+      hostPath:
+        path: /nix
+
+  csiRBDPluginVolumeMount:
+    - name: host-nix
+      mountPath: /nix
+      readOnly: true
+
+  csiCephFSPluginVolume:
+    - name: lib-modules
+      hostPath:
+        path: /run/booted-system/kernel-modules/lib/modules/
+    - name: host-nix
+      hostPath:
+        path: /nix
+
+  csiCephFSPluginVolumeMount:
+    - name: host-nix
+      mountPath: /nix
+      readOnly: true
+
+monitoring:
+  enabled: true
+resources:
+  requests:
+    memory: 128Mi # unchangable
+    cpu: 100m # unchangable
+  limits: {}

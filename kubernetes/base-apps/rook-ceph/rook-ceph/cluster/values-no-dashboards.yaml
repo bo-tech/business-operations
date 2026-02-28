@@ -1,0 +1,8 @@
+---
+monitoring:
+  enabled: false
+  createPrometheusRules: false
+
+ingress:
+  dashboard:
+    host: null
