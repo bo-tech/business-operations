@@ -1,0 +1,53 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-taiga6
+  namespace: flux-system
+spec:
+  path: ./external/business-operations/kubernetes/apps/default/taiga6/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: bv-ops-kubernetes
+  wait: false
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
+  dependsOn:
+    - name: cluster-apps-taiga6-db
+    - name: cluster-apps-taiga6-volumes
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-taiga6-db
+  namespace: flux-system
+spec:
+  path: ./external/business-operations/kubernetes/apps/default/taiga6/db/overlays/${cluster_bootstrap_mode}
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: bv-ops-kubernetes
+  wait: false
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
+  dependsOn:
+    - name: cluster-apps-cloudnative-pg
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-taiga6-volumes
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: "./external/business-operations/kubernetes/apps/default/taiga6/volumes/overlays/${cluster_bootstrap_mode}"
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: bv-ops-kubernetes
