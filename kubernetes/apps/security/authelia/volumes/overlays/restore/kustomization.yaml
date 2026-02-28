@@ -7,8 +7,8 @@ resources:
   - ../../base/data-authelia.yaml
 
 components:
-  - ../../../../../../templates/volume/components/backup-volsync
-  - ../../../../../../templates/volume/components/restore-volsync
+  - ../../../../../../components/volume/backup-volsync
+  - ../../../../../../components/volume/restore-volsync
 
 patches:
   - patch: |-
