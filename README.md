@@ -9,7 +9,7 @@ The current implementation is working and in use, but the repository contains
 internal data which has to be removed first.
 
 Planning takes place in the
-[business-operations-planning](https://github.com/bo-tech/business-operations-planning)
+[business-operations-planning](https://codeberg.org/business-operations/planning)
 repository.
 
 ## About

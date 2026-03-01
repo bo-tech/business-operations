@@ -7,9 +7,8 @@
     };
 
     business-operations.to = {
-      type = "github";
-      owner = "bo-tech";
-      repo = "business-operations";
+      type = "git";
+      url = "https://codeberg.org/business-operations/business-operations";
     };
   };
 }

@@ -35,7 +35,7 @@ The flake exposes `devShells.ansible` which:
 
 ```bash
 cd b-ops/infrastructure/ansible
-nix develop github:bo-tech/business-operations#ansible
+nix develop git+https://codeberg.org/business-operations/business-operations#ansible
 ansible-playbook -i ./inventory.yaml $BO_PLAYBOOKS/re-create-machines.yaml
 ```
 

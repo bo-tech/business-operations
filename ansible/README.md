@@ -17,7 +17,7 @@ the staging access concept.
 Enter the ansible devShell before running any playbooks:
 
 ```sh
-nix develop github:bo-tech/business-operations#ansible
+nix develop git+https://codeberg.org/business-operations/business-operations#ansible
 ```
 
 The devShell provides:
