@@ -4,3 +4,11 @@ kind: Kustomization
 namespace: default
 resources:
   - ./helmrelease.yaml
+
+configMapGenerator:
+  - name: hajimari-helm-values
+    files:
+      - values.yaml
+
+configurations:
+  - name-reference.yaml

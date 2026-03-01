@@ -1,0 +1,45 @@
+env:
+  TZ: Europe/Berlin
+hajimari:
+  title: Apps
+  darkTheme: espresso
+  lightTheme: cloud
+  alwaysTargetBlank: true
+  showGreeting: true
+  showAppGroups: true
+  showAppStatus: false
+  showBookmarkGroups: true
+  showGlobalBookmarks: false
+  showAppUrls: false
+  defaultEnable: false
+  namespaceSelector:
+    matchNames:
+      - default
+      - flux-system
+      - kube-system
+      - monitoring
+      - network
+      - rook-ceph
+      - secrets
+      - security
+
+ingress:
+  main:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - host: &host apps.${cluster_domain}
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - hosts:
+          - *host
+persistence:
+  data:
+    enabled: true
+    type: emptyDir
+resources:
+  requests:
+    cpu: 100m
+    memory: 128M
