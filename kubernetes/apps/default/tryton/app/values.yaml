@@ -1,0 +1,32 @@
+tryton:
+  dbHostname: "tryton-db-v2-rw"
+  dbName: "tryton"
+
+image:
+  pullPolicy: IfNotPresent
+  repository: registry.${use_gitlab_system}/bv/code/tryton/nix/nix-bo-tech-tryton/trytond
+  tag: v0.13.1
+
+postgresql:
+  bundled: false
+
+persistence:
+  existingClaim: data-tryton
+
+ingress:
+  annotations:
+    hajimari.io/enable: "true"
+  hosts:
+    - host: "tryton.${cluster_domain}"
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: ""
+      hosts:
+        - "tryton.${cluster_domain}"
+
+updateStrategy:
+  # Trytond uses a volume to hold data, this would have to be RWX to allow
+  # for rolling updates.
+  type: Recreate

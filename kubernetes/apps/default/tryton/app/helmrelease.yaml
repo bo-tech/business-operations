@@ -1,0 +1,45 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: tryton
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: tryton/helm/tryton
+      version: v0.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: local-bv-charts
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    remediation:
+      retries: 3
+    disableHooks: false
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+    disableHooks: false
+  uninstall:
+    keepHistory: false
+
+  valuesFrom:
+    - kind: ConfigMap
+      name: tryton-helm-values
+      valuesKey: values.yaml
+    - kind: Secret
+      name: tryton-db-v2-app
+      valuesKey: username
+      targetPath: tryton.dbUser
+    - kind: Secret
+      name: tryton-db-v2-app
+      valuesKey: password
+      targetPath: tryton.dbPassword
+    - kind: Secret
+      name: tryton-admin-ext
+      valuesKey: password
+      targetPath: tryton.adminPassword
