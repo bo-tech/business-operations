@@ -16,6 +16,7 @@ configMapGenerator:
   - name: authelia-configmap
     files:
       - configuration.yaml=./config/configuration.yaml
+      - access-control.yaml=./config/access-control.yaml
 
 generatorOptions:
   disableNameSuffixHash: true
