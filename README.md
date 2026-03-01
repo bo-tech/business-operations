@@ -1,5 +1,6 @@
 # Business Operations Project
 
+
 ## Status - In preparation
 
 I want to make the current setup public to prepare to create an open source
@@ -11,6 +12,7 @@ internal data which has to be removed first.
 Planning takes place in the
 [business-operations-planning](https://codeberg.org/business-operations/planning)
 repository.
+
 
 ## About
 
@@ -34,10 +36,22 @@ of automation. They have been combined so that both bootstrap from scratch and
 restore from backup are only two command calls away.
 
 
-## Next step
+## Progress
 
-High level I focus first on splitting things without yet refactoring or
-improving them. The goal is to extract all code which can be shared first.
+- The generic parts have been split out:
+  - `nixos` contains configuration for the machines
+  - `ansible` contains currently used automation for bootstrapping
+  - `kubernetes` contains the various applications
+- My deployment based on this still works.
+
+
+## Next steps
+
+Make it easy to try out the current state and deploy it into a bare-metal or
+virtual machine. Ideally also allow usage in a local dev cluster like minikube
+or similar.
+
+Split out the documentation.
 
 
 ## Contact
