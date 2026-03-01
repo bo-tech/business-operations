@@ -1,0 +1,16 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-mayan-edms-volumes
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./external/business-operations/kubernetes/apps/default/mayan-edms/volumes/overlays/${cluster_bootstrap_mode}
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: bv-ops-kubernetes
+  retryInterval: 1m
+  timeout: 5m

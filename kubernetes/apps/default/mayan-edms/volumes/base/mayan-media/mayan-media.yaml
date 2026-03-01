@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mayan-media
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteMany
+  # Multiple workers need the media files.
+  storageClassName: "ceph-filesystem"
+  resources:
+    requests:
+      storage: 5Gi

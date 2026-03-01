@@ -1,0 +1,75 @@
+global:
+  image:
+    repository: registry.${use_gitlab_system}/bv/images/mayan-edms/mayan-edms
+    pullPolicy: IfNotPresent
+    tag: v0.2.1@sha256:8045fb727a97e5cdd0d97e888a1a45137500a891695587af6139ce5b57e8c15f
+
+configuration:
+  MAYAN_LOCK_MANAGER_BACKEND: mayan.apps.lock_manager.backends.redis_lock.RedisLock
+  MAYAN_SEARCH_BACKEND: mayan.apps.dynamic_search.backends.whoosh.WhooshSearchBackend
+
+  # TODO: Make tasks visible in a more fine granular way
+  MAYAN_LOGGING_LEVEL: DEBUG
+
+  MAYAN_GUNICORN_WORKERS: 1
+
+  MAYAN_CELERY_ANNOTATIONS: "{'task_index_instance': {'max_retries': 3}}"
+
+  # Customizations
+  MAYAN_COMMON_EXTRA_APPS: "{botech.edms}"
+
+frontend:
+  replicaCount: 1
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      hajimari.io/enable: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: 20m
+
+workers:
+  worker-a:
+    replicaCount: 1
+    extraArguments:
+      - "--concurrency=1"
+  worker-b:
+    replicaCount: 1
+    extraArguments:
+      - "--concurrency=1"
+  worker-c:
+    replicaCount: 1
+    extraArguments:
+      - "--concurrency=1"
+  worker-d:
+    replicaCount: 1
+    extraArguments:
+      - "--concurrency=1"
+  worker-e:
+    replicaCount: 1
+    extraArguments:
+      - "--concurrency=1"
+
+elasticsearch:
+  enabled: false
+
+postgresql:
+  enabled: false
+
+rabbitmq:
+  enabled: false
+
+redis:
+  enabled: true
+  architecture: standalone
+  password: mayanredispassword
+  # Bitnami moved old tags to bitnamilegacy/ (Aug 2025)
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/redis
+    tag: 7.2.4-debian-11-r5
+
+letsencrypt:
+  enabled: false
+
+minio:
+  enabled: false

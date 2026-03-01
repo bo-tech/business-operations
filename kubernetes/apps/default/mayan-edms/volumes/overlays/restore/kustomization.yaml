@@ -1,0 +1,34 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: default
+
+resources:
+  - ../../base/mayan-media
+
+components:
+  - ../../../../../../components/volume/backup-volsync
+  - ../../../../../../components/volume/restore-volsync
+
+patches:
+  - target:
+      kind: ReplicationSource
+      group: volsync.backube
+    patch: |
+      kind: ReplicationSource
+      metadata:
+        name: not-used
+      spec:
+        restic:
+          volumeSnapshotClassName: csi-ceph-filesystem
+  - target:
+      kind: ReplicationDestination
+      group: volsync.backube
+    patch: |
+      kind: ReplicationDestination
+      metadata:
+        name: not-used
+      spec:
+        restic:
+          storageClassName: "ceph-filesystem"
+          volumeSnapshotClassName: csi-ceph-filesystem

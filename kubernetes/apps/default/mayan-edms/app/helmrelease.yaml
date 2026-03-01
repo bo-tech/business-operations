@@ -1,0 +1,43 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: mayan-edms
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: mayanedms
+      version: 5.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: local-mayan-edms
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    remediation:
+      retries: 3
+    # The install hook assumes that an empty system is being installed, this
+    # is leading to issues with a pre-existing and pre-loaded database.
+    disableHooks: true
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+    disableHooks: false
+  uninstall:
+    keepHistory: false
+
+  valuesFrom:
+    - kind: ConfigMap
+      name: mayan-edms-helm-values
+      valuesKey: values.yaml
+    - kind: Secret
+      name: mayan-db-app
+      valuesKey: username
+      targetPath: postgresql.auth.username
+    - kind: Secret
+      name: mayan-db-app
+      valuesKey: password
+      targetPath: postgresql.auth.password
