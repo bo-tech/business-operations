@@ -150,8 +150,7 @@ spec:
         enabled: true
         type: configMap
         name: authelia-configmap
-        subPath: configuration.yaml
-        mountPath: /config/configuration.yaml
+        mountPath: /config
         readOnly: false
 
       data:
