@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: security
 
 resources:
-  - ../../base/data-lldap.yaml
+  - ../../base/data-lldap
 
 components:
   - ../../../../../../components/volume/backup-volsync

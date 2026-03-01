@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: security
 
 resources:
-  - ../../base/data-authelia.yaml
+  - ../../base/data-authelia
 
 components:
   - ../../../../../../components/volume/backup-volsync
