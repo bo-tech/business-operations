@@ -18,5 +18,5 @@ configMapGenerator:
       - configuration.yaml=./config/configuration.yaml
       - access-control.yaml=./config/access-control.yaml
 
-generatorOptions:
-  disableNameSuffixHash: true
+configurations:
+  - name-reference.yaml
