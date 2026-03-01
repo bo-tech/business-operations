@@ -1,0 +1,57 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: renovate-gitlab
+spec:
+  schedule: "0 2 * * *"
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            runAsUser: 12021
+            runAsGroup: 12021
+            fsGroup: 12021
+          restartPolicy: Never
+          containers:
+            - name: renovate
+              image: renovate/renovate:42.26-full@sha256:155e426cb8f5030764bc04dcb7bb3272678f97236bf2fad4f45b0433f32eb340
+              resources:
+                requests:
+                  cpu: 300m
+                  memory: 500Mi
+                limits:
+                  cpu: "1"
+                  memory: 4Gi
+              env:
+                - name: RENOVATE_PLATFORM
+                  value: "gitlab"
+                - name: RENOVATE_ENDPOINT
+                  value: "https://gitlab.gitlab.${cluster_domain}/api/v4"
+                - name: RENOVATE_BASE_DIR
+                  value: "/tmp/renovate"
+                - name: LOG_LEVEL
+                  value: "info"
+                - name: RENOVATE_CONFIG_FILE
+                  value: "/etc/renovate/config.json"
+                - name: RENOVATE_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: renovate-gitlab
+                      key: token
+              volumeMounts:
+                - name: renovate-config
+                  mountPath: /etc/renovate
+                  readOnly: true
+                - name: renovate-cache
+                  mountPath: /tmp/renovate
+          volumes:
+            - name: renovate-config
+              configMap:
+                name: renovate-config
+            - name: renovate-cache
+              persistentVolumeClaim:
+                claimName: renovate-cache

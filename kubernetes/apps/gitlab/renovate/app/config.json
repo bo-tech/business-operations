@@ -1,0 +1,6 @@
+{
+  "autodiscover": true,
+  "onboarding": false,
+  "requireConfig": "required",
+  "allowedCommands": []
+}
