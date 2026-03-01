@@ -1,0 +1,82 @@
+image:
+  repository: jacobalberty/unifi
+  tag: v9.5.21@sha256:e21d932b36ceca1f3cfadb021f207016659bc8f7a59cd1b0d6ecf7ecd7067383
+
+env:
+  TZ: "Europe/Berlin"
+  RUNAS_UID0: "false"
+  UNIFI_UID: "999"
+  UNIFI_GID: "999"
+  UNIFI_STDOUT: "true"
+  JVM_INIT_HEAP_SIZE:
+  JVM_MAX_HEAP_SIZE: 1024M
+
+ingress:
+  main:
+    enabled: true
+    annotations:
+      hajimari.io/enable: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    ingressClassName: nginx
+    hosts:
+      - host: &host unifi.${cluster_domain}
+        paths:
+          - path: /
+    tls:
+      - hosts:
+          - *host
+
+service:
+  main:
+    type: LoadBalancer
+    annotations:
+      lbipam.cilium.io/ips: "${unifi_ip}"
+    labels:
+      ip-range: static-pool
+    externalTrafficPolicy: Cluster
+    ports:
+      http:
+        port: 8443
+        protocol: HTTPS
+      controller:
+        enabled: true
+        port: 8080
+        protocol: TCP
+      portal-http:
+        enabled: false
+        port: 8880
+        protocol: HTTP
+      portal-https:
+        enabled: false
+        port: 8843
+        protocol: HTTPS
+      speedtest:
+        enabled: true
+        port: 6789
+        protocol: TCP
+      stun:
+        enabled: true
+        port: 3478
+        protocol: UDP
+      syslog:
+        enabled: true
+        port: 5514
+        protocol: UDP
+      discovery:
+        enabled: true
+        port: 10001
+        protocol: UDP
+
+persistence:
+  data:
+    enabled: true
+    type: pvc
+    existingClaim: data-unifi
+    mountPath: /unifi
+
+resources:
+  requests:
+    memory: 750Mi
+    cpu: 15m
+  limits:
+    memory: 1250Mi
