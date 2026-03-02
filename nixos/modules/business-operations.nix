@@ -1,0 +1,88 @@
+{
+  config,
+  lib,
+  ...
+}:
+let
+  cfg = config.custom.business-operations;
+in
+{
+  options.custom.business-operations = {
+    enable = lib.mkEnableOption "business-operations platform";
+
+    role = lib.mkOption {
+      type = lib.types.enum ["single-node" "controller" "worker"];
+    };
+
+    network = {
+      address = lib.mkOption {
+        type = lib.types.str;
+      };
+
+      prefixLength = lib.mkOption {
+        type = lib.types.ints.between 0 32;
+        default = 24;
+      };
+
+      gateway = lib.mkOption {
+        type = lib.types.str;
+      };
+
+      nameservers = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [cfg.network.gateway];
+      };
+
+      interface = lib.mkOption {
+        type = lib.types.str;
+        default = "eth0";
+      };
+    };
+
+    cluster.apiAddress = lib.mkOption {
+      type = lib.types.str;
+      default = cfg.network.address;
+    };
+
+    serialConsole = lib.mkEnableOption "serial console (ttyS0)";
+
+    sshAuthorizedKeys = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+    };
+  };
+
+  config = lib.mkIf cfg.enable {
+    networking.useDHCP = false;
+    networking.interfaces.${cfg.network.interface}.ipv4.addresses = [
+      {
+        address = cfg.network.address;
+        prefixLength = cfg.network.prefixLength;
+      }
+    ];
+    networking.defaultGateway = cfg.network.gateway;
+    networking.nameservers = cfg.network.nameservers;
+
+    boot.kernelParams = lib.mkIf cfg.serialConsole [
+      "console=ttyS0,115200"
+    ];
+
+    services.k0s = {
+      spec.api.address = cfg.cluster.apiAddress;
+      controller.isLeader =
+        cfg.role == "single-node" || cfg.role == "controller";
+      role =
+        if cfg.role == "single-node"
+        then "controller+worker"
+        else cfg.role;
+    };
+
+    users.users.root.openssh.authorizedKeys.keys =
+      cfg.sshAuthorizedKeys;
+    users.users.admin = {
+      isNormalUser = true;
+      extraGroups = ["wheel"];
+      openssh.authorizedKeys.keys = cfg.sshAuthorizedKeys;
+    };
+    security.sudo.wheelNeedsPassword = false;
+  };
+}

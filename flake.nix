@@ -23,6 +23,9 @@
         profile-base = import ./nixos/profiles/base.nix;
         profile-oci-container = import ./nixos/profiles/oci-container.nix;
         profile-k0s-node = import ./nixos/profiles/k0s-node.nix;
+
+        business-operations =
+          import ./nixos/modules/business-operations.nix;
       };
 
       ansible = {
