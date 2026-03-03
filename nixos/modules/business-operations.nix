@@ -49,6 +49,36 @@ in
     sshAuthorizedKeys = lib.mkOption {
       type = lib.types.listOf lib.types.str;
     };
+
+    dev.proxy = {
+      url = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+      };
+
+      caCertificate = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+      };
+
+      noProxyBase = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "10.0.0.0/8"
+          "172.16.0.0/12"
+          "192.168.0.0/16"
+          "127.0.0.1"
+          "localhost"
+          ".svc"
+          ".cluster.local"
+        ];
+      };
+
+      noProxy = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [];
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -84,5 +114,17 @@ in
       openssh.authorizedKeys.keys = cfg.sshAuthorizedKeys;
     };
     security.sudo.wheelNeedsPassword = false;
+
+    systemd.services.${config.services.k0s.unitName}.environment =
+      lib.mkIf (cfg.dev.proxy.url != null) {
+        HTTP_PROXY = cfg.dev.proxy.url;
+        HTTPS_PROXY = cfg.dev.proxy.url;
+        NO_PROXY = lib.concatStringsSep ","
+          (cfg.dev.proxy.noProxyBase ++ cfg.dev.proxy.noProxy);
+      };
+
+    security.pki.certificateFiles =
+      lib.mkIf (cfg.dev.proxy.caCertificate != null)
+        [ cfg.dev.proxy.caCertificate ];
   };
 }
