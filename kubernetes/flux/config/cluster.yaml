@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 30m
-  path: ./kubernetes/${cluster_name}/flux
+  path: ./kubernetes/MUST_OVERRIDE/flux
   prune: true
   wait: false
   sourceRef:
