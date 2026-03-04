@@ -11,7 +11,12 @@ in
     enable = lib.mkEnableOption "business-operations platform";
 
     role = lib.mkOption {
-      type = lib.types.enum ["single-node" "controller" "worker"];
+      type = lib.types.enum [
+        "single-node"
+        "controller"
+        "controller+worker"
+        "worker"
+      ];
     };
 
     network = {
@@ -39,6 +44,11 @@ in
       };
     };
 
+    cluster.isLeader = lib.mkOption {
+      type = lib.types.bool;
+      default = cfg.role == "single-node";
+    };
+
     cluster.apiAddress = lib.mkOption {
       type = lib.types.str;
       default = cfg.network.address;
@@ -48,6 +58,7 @@ in
 
     sshAuthorizedKeys = lib.mkOption {
       type = lib.types.listOf lib.types.str;
+      default = [];
     };
 
     dev.proxy = {
@@ -98,8 +109,7 @@ in
 
     services.k0s = {
       spec.api.address = cfg.cluster.apiAddress;
-      controller.isLeader =
-        cfg.role == "single-node" || cfg.role == "controller";
+      controller.isLeader = cfg.cluster.isLeader;
       role =
         if cfg.role == "single-node"
         then "controller+worker"
