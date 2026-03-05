@@ -100,7 +100,10 @@ in
         prefixLength = cfg.network.prefixLength;
       }
     ];
-    networking.defaultGateway = cfg.network.gateway;
+    networking.defaultGateway = {
+      address = cfg.network.gateway;
+      interface = cfg.network.interface;
+    };
     networking.nameservers = cfg.network.nameservers;
 
     boot.kernelParams = lib.mkIf cfg.serialConsole [
