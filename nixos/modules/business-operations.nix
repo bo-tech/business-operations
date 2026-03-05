@@ -109,11 +109,12 @@ in
 
     services.k0s = {
       spec.api.address = cfg.cluster.apiAddress;
-      controller.isLeader = cfg.cluster.isLeader;
       role =
         if cfg.role == "single-node"
         then "controller+worker"
         else cfg.role;
+    } // lib.optionalAttrs (cfg.role != "worker") {
+      controller.isLeader = cfg.cluster.isLeader;
     };
 
     users.users.root.openssh.authorizedKeys.keys =
