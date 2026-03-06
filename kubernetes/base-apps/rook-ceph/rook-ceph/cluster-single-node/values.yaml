@@ -4,6 +4,43 @@ cephClusterSpec:
     allowMultiplePerNode: true
   mgr:
     count: 1
+  resources:
+    mgr:
+      requests:
+        cpu: 1m
+        memory: 1Mi
+    mon:
+      requests:
+        cpu: 1m
+        memory: 1Mi
+    osd:
+      requests:
+        cpu: 1m
+        memory: 1Mi
+    mgr-sidecar:
+      requests:
+        cpu: 1m
+        memory: 1Mi
+    prepareosd:
+      requests:
+        cpu: 1m
+        memory: 1Mi
+    cleanup:
+      requests:
+        cpu: 1m
+        memory: 1Mi
+    crashcollector:
+      requests:
+        cpu: 1m
+        memory: 1Mi
+    exporter:
+      requests:
+        cpu: 1m
+        memory: 1Mi
+    logcollector:
+      requests:
+        cpu: 1m
+        memory: 1Mi
 
 cephBlockPools:
   - name: ceph-blockpool
@@ -45,10 +82,8 @@ cephFileSystems:
         activeStandby: false
         resources:
           requests:
-            cpu: 100m
-            memory: 1Gi
-          limits:
-            memory: 3Gi
+            cpu: 1m
+            memory: 1Mi
     storageClass:
       enabled: true
       isDefault: false
