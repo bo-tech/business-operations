@@ -4,3 +4,6 @@ kind: Kustomization
 namespace: network
 resources:
   - ./helmrelease.yaml
+
+configurations:
+  - name-reference.yaml
