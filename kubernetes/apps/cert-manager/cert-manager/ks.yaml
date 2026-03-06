@@ -20,6 +20,8 @@ metadata:
   name: cluster-apps-cert-manager-certificates-restore
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: cluster-apps-cert-manager
   interval: 10m
   path: "./external/business-operations/kubernetes/apps/cert-manager/cert-manager/certificates-restore/overlays/${cluster_bootstrap_mode}"
   prune: true
