@@ -1,0 +1,24 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../..
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: rook-ceph-cluster
+    patch: |
+      - op: add
+        path: /spec/valuesFrom/-
+        value:
+          kind: ConfigMap
+          name: rook-ceph-cluster-values-single-node
+
+configMapGenerator:
+  - name: rook-ceph-cluster-values-single-node
+    files:
+      - values.yaml=./values.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
