@@ -1,0 +1,87 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lldap-bootstrap-scripts
+  namespace: security
+  annotations:
+    kustomize.toolkit.fluxcd.io/substitute: disabled
+data:
+  bootstrap.sh: |
+    #!/bin/sh
+    set -eu
+
+    LLDAP_URL="${LLDAP_URL:-http://lldap.security.svc.cluster.local:8000}"
+    LLDAP_USERNAME="${LLDAP_USERNAME:-admin}"
+    GROUP_NAME="${GROUP_NAME:-admins}"
+
+    graphql() {
+      curl -sf -X POST \
+        "${LLDAP_URL}/api/graphql" \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Bearer ${TOKEN}" \
+        -d "$1"
+    }
+
+    echo "Authenticating to LLDAP..."
+    login_response=$(curl -sf -X POST \
+      "${LLDAP_URL}/auth/simple/login" \
+      -H "Content-Type: application/json" \
+      -d "{\"username\": \"${LLDAP_USERNAME}\", \"password\": \"${LLDAP_PASSWORD}\"}")
+
+    TOKEN=$(echo "${login_response}" | sed -n 's/.*"token":"\([^"]*\)".*/\1/p')
+    if [ -z "${TOKEN}" ]; then
+      echo "ERROR: Authentication failed."
+      exit 1
+    fi
+    echo "Authenticated."
+
+    echo "Checking if group '${GROUP_NAME}' exists..."
+    groups_response=$(graphql '{"query": "{ groups { id displayName } }"}')
+
+    group_id=""
+    if echo "${groups_response}" | grep -q "\"displayName\":\"${GROUP_NAME}\""; then
+      group_id=$(echo "${groups_response}" \
+        | sed 's/},/}\n/g' \
+        | grep "\"displayName\":\"${GROUP_NAME}\"" \
+        | sed -n 's/.*"id":\([0-9]*\).*/\1/p')
+      echo "Group '${GROUP_NAME}' already exists (id=${group_id})."
+    else
+      echo "Creating group '${GROUP_NAME}'..."
+      create_response=$(graphql \
+        "{\"query\": \"mutation { createGroup(name: \\\"${GROUP_NAME}\\\") { id displayName } }\"}")
+
+      if echo "${create_response}" | grep -q '"errors"'; then
+        echo "ERROR: Failed to create group: ${create_response}"
+        exit 1
+      fi
+
+      group_id=$(echo "${create_response}" \
+        | sed -n 's/.*"id":\([0-9]*\).*/\1/p')
+      echo "Group '${GROUP_NAME}' created (id=${group_id})."
+    fi
+
+    if [ -z "${group_id}" ]; then
+      echo "ERROR: Could not determine group ID."
+      exit 1
+    fi
+
+    echo "Checking group membership..."
+    members_response=$(graphql \
+      "{\"query\": \"{ group(groupId: ${group_id}) { users { id } } }\"}")
+
+    if echo "${members_response}" | grep -q "\"id\":\"${LLDAP_USERNAME}\""; then
+      echo "User '${LLDAP_USERNAME}' is already in '${GROUP_NAME}'."
+      exit 0
+    fi
+
+    echo "Adding '${LLDAP_USERNAME}' to '${GROUP_NAME}'..."
+    add_response=$(graphql \
+      "{\"query\": \"mutation { addUserToGroup(userId: \\\"${LLDAP_USERNAME}\\\", groupId: ${group_id}) { ok } }\"}")
+
+    if echo "${add_response}" | grep -q '"ok":true'; then
+      echo "Done."
+    else
+      echo "ERROR: Failed to add user: ${add_response}"
+      exit 1
+    fi

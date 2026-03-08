@@ -18,6 +18,23 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: cluster-apps-lldap-bootstrap
+  namespace: flux-system
+spec:
+  interval: 30m
+  path: "./external/business-operations/kubernetes/apps/security/lldap/bootstrap"
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: bv-ops-kubernetes
+  dependsOn:
+    - name: cluster-apps-lldap
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: cluster-apps-lldap-volumes
   namespace: flux-system
 spec:

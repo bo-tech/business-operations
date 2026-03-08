@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    kustomize.toolkit.fluxcd.io/force: enabled
+  name: lldap-bootstrap
+  namespace: security
+spec:
+  completions: 1
+  parallelism: 1
+  template:
+    spec:
+      containers:
+        - name: lldap-bootstrap
+          image: curlimages/curl:latest@sha256:935d9100e9ba842cdb060de42472c7ca90cfe9a7c96e4dacb55e79e560b3ff40
+          imagePullPolicy: IfNotPresent
+          command:
+            - /scripts/bootstrap.sh
+          env:
+            - name: LLDAP_URL
+              value: "http://lldap.security.svc.cluster.local:8000"
+            - name: LLDAP_USERNAME
+              value: "admin"
+            - name: LLDAP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-secret
+                  key: LLDAP_LDAP_USER_PASS
+            - name: GROUP_NAME
+              value: "admins"
+          volumeMounts:
+            - name: scripts
+              mountPath: "/scripts"
+      volumes:
+        - name: scripts
+          configMap:
+            name: lldap-bootstrap-scripts
+            defaultMode: 0555
+      restartPolicy: OnFailure
