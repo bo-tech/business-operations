@@ -1,6 +1,4 @@
 cephClusterSpec:
-  cleanupPolicy:
-    wipeDevicesFromOtherClusters: true
   mon:
     count: 1
     allowMultiplePerNode: true
