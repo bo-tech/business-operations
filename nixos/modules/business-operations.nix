@@ -129,7 +129,7 @@ in
     };
     security.sudo.wheelNeedsPassword = false;
 
-    systemd.services.${config.services.k0s.unitName}.environment =
+    systemd.services.k0s.environment =
       lib.mkIf (cfg.dev.proxy.url != null) {
         HTTP_PROXY = cfg.dev.proxy.url;
         HTTPS_PROXY = cfg.dev.proxy.url;
