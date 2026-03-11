@@ -1,0 +1,17 @@
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-docs:
+    runs-on: codeberg-small
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: johbo/sphinx-builder@v0.9.0
+
+      - uses: actions/git-pages@v2
+        with:
+          site: "https://business-operations.codeberg.page/business-operations/"
+          token: ${{ forge.token }}
+          source: docs/_build/html/
