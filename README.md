@@ -3,11 +3,10 @@
 
 ## Status - In preparation
 
-I want to make the current setup public to prepare to create an open source
-project out of it.
-
-The current implementation is working and in use, but the repository contains
-internal data which has to be removed first.
+The current implementation is working and in use. The generic parts have been
+split out into this repository and the documentation has been extracted. The
+documentation still needs rework to fully reflect the generic approach of
+business-operations rather than the original site-specific setup.
 
 Planning takes place in the
 [business-operations-planning](https://codeberg.org/business-operations/planning)
@@ -40,18 +39,19 @@ restore from backup are only two command calls away.
 
 - The generic parts have been split out:
   - `nixos` contains configuration for the machines
-  - `ansible` contains currently used automation for bootstrapping
+  - `ansible` contains automation for bootstrapping
   - `kubernetes` contains the various applications
+- Documentation extracted from the original site-specific setup.
 - My deployment based on this still works.
 
 
 ## Next steps
 
-Make it easy to try out the current state and deploy it into a bare-metal or
-virtual machine. Ideally also allow usage in a local dev cluster like minikube
-or similar.
-
-Split out the documentation.
+- Rework the extracted documentation to be fully generic rather than
+  reflecting the original site-specific setup.
+- Make it easy to try out the current state and deploy it into a bare-metal or
+  virtual machine. Ideally also allow usage in a local dev cluster like minikube
+  or similar.
 
 
 ## Contact
