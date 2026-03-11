@@ -83,7 +83,7 @@ Flake based configuration in ``/etc/nixos/flake.nix``:
 .. code-block:: nix
 
    {
-     inputs.my-ops.url = "git+https://gitlab.example.com/infrastructure/my-ops.git?dir=nixos";
+     inputs.my-ops.url = "git+https://git.server.example/infrastructure/my-ops.git?dir=nixos";
 
      outputs = { self, my-ops }: {
        inherit (my-ops) nixosConfigurations;
@@ -111,7 +111,7 @@ repo on the target and rebuild from a branch:
 .. code-block:: shell
 
    ssh root@192.0.2.10
-   git clone https://gitlab.example.com/infrastructure/my-ops.git /root/my-ops
+   git clone https://git.server.example/infrastructure/my-ops.git /root/my-ops
    cd /root/my-ops
    git checkout my-branch
    nixos-rebuild switch --flake .#my-host
