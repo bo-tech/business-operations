@@ -49,7 +49,7 @@ in
     start_all()
     serial_stdout_off()
 
-    node1.wait_for_unit("k0scontroller")
+    node1.wait_for_unit("k0s")
     node1.wait_for_file("/run/k0s/status.sock")
     print(node1.succeed("k0s status"))
     node1.succeed("k0s kubectl wait --for=create nodes/node1 --timeout=60s")

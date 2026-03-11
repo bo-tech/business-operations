@@ -68,14 +68,14 @@ in
     start_all()
     serial_stdout_off()
 
-    node1.wait_for_unit("k0scontroller")
+    node1.wait_for_unit("k0s")
     node1.wait_for_file("/run/k0s/status.sock")
     print(node1.succeed("k0s status"))
     node1.succeed("k0s kubectl wait --for=create nodes/node1 --timeout=60s")
     node1.succeed("k0s kubectl wait --for=condition=Ready node/node1 --timeout=120s")
     node1.succeed("k0s kubectl wait --for=condition=Ready pod --all -A --timeout=120s")
 
-    info = worker1.get_unit_info("k0sworker")
+    info = worker1.get_unit_info("k0s")
     assert info["ActiveState"] == "inactive", f"Expected inactive, got {info['ActiveState']}"
 
     ansible.succeed('ssh-keygen -t ed25519 -N "" -f /root/.ssh/id_ed25519')
@@ -97,7 +97,7 @@ in
     node1.succeed("k0s kubectl wait --for=create nodes/worker1 --timeout=60s")
     node1.succeed("k0s kubectl wait --for=condition=Ready node/worker1 --timeout=120s")
 
-    info = worker1.get_unit_info("k0sworker")
+    info = worker1.get_unit_info("k0s")
     assert info["ActiveState"] == "active", f"Expected active, got {info['ActiveState']}"
 
     token_content = worker1.succeed("cat /etc/k0s/k0stoken")

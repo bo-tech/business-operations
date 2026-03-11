@@ -5,8 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     flake-utils.url = "github:numtide/flake-utils";
     k0s-nix = {
-      # TODO: Switch back to main after merging expose-unitname
-      url = "github:johbo/k0s-nix/expose-unitname";
+      # TODO: Switch back to main after merging consolidate-unit-name
+      url = "github:johbo/k0s-nix/consolidate-unit-name";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

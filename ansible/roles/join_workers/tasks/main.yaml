@@ -5,9 +5,9 @@
     dest: "{{ k0s_token_path }}"
     mode: "0600"
 
-- name: Start the k0sworker service
+- name: Start the k0s service
   ansible.builtin.systemd:
-    name: k0sworker
+    name: k0s
     no_block: false
     state: restarted
 
