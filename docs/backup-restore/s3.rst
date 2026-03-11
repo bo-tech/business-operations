@@ -1,0 +1,71 @@
+============
+ S3 Storage
+============
+
+Restic restore access requirements
+===================================
+
+Restic uses locks, so that e.g. a prune cannot start while a restore is
+running. For this to work it does require write access to the path ``/locks``
+also for the read only access keys.
+
+An alternative is to run the commands with the flag ``--no-lock``, it is not
+clear though if ``volsync`` does support this.
+
+The S3 policy required:
+
+.. code-block:: json
+
+   {
+    "Version": "2012-10-17",
+    "Statement": [
+     {
+      "Effect": "Allow",
+      "Action": [
+       "s3:GetBucketLocation",
+       "s3:GetObject",
+       "s3:ListBucket"
+      ],
+      "Resource": [
+       "arn:aws:s3:::my-volsync-bucket/*",
+       "arn:aws:s3:::my-other-volsync-bucket/*"
+      ]
+     },
+     {
+      "Effect": "Allow",
+      "Action": [
+       "s3:DeleteObject",
+       "s3:PutObject"
+      ],
+      "Resource": [
+       "arn:aws:s3:::my-volsync-bucket/*/*/locks/*",
+       "arn:aws:s3:::my-other-volsync-bucket/*/*/locks/*"
+      ]
+     }
+    ]
+   }
+
+
+CNPG restore access requirements
+==================================
+
+The following S3 policy is needed for the restore via CloudNative PG (Barman):
+
+.. code-block:: json
+
+   {
+    "Version": "2012-10-17",
+    "Statement": [
+     {
+      "Effect": "Allow",
+      "Action": [
+       "s3:GetBucketLocation",
+       "s3:GetObject",
+       "s3:ListBucket"
+      ],
+      "Resource": [
+       "arn:aws:s3:::my-cnpg-bucket/*"
+      ]
+     }
+    ]
+   }
