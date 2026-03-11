@@ -7,6 +7,7 @@
 
    git
    dev-env
+   add-application
    flux
    sops
    kubernetes
