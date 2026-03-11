@@ -8,6 +8,8 @@ split out into this repository and the documentation has been extracted. The
 documentation still needs rework to fully reflect the generic approach of
 business-operations rather than the original site-specific setup.
 
+Documentation: https://business-operations.codeberg.page/business-operations/
+
 Planning takes place in the
 [business-operations-planning](https://codeberg.org/business-operations/planning)
 repository.
