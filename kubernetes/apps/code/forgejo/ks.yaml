@@ -14,6 +14,9 @@ spec:
   interval: 30m
   retryInterval: 1m
   timeout: 5m
+  dependsOn:
+    - name: cluster-apps-forgejo-db
+    - name: cluster-apps-forgejo-volumes
 
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -33,3 +36,18 @@ spec:
   timeout: 5m
   dependsOn:
     - name: cluster-apps-cloudnative-pg
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-forgejo-volumes
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./external/business-operations/kubernetes/apps/code/forgejo/volumes/overlays/${cluster_bootstrap_mode}
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: bv-ops-kubernetes

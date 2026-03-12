@@ -6,6 +6,10 @@ gitea:
       NAME: app
       USER: app
 
+persistence:
+  enabled: true
+  existingClaim: forgejo-data
+
 ingress:
   enabled: true
   className: nginx
