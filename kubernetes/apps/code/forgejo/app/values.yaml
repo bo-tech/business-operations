@@ -8,7 +8,8 @@ gitea:
 
 persistence:
   enabled: true
-  existingClaim: forgejo-data
+  create: false
+  claimName: forgejo-data
 
 ingress:
   enabled: true
