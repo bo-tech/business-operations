@@ -39,7 +39,7 @@ spec:
           externalTrafficPolicy: Cluster
 
         type: "LoadBalancer"
-      tcp:
-        "22": "code/forgejo-ssh:22"
       extraArgs:
         default-ssl-certificate: "cert-manager/wildcard-tls-secret"
+    tcp:
+      "22": "code/forgejo-ssh:22"
