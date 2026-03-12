@@ -6,6 +6,8 @@ gitea:
   config:
     service:
       DISABLE_REGISTRATION: true
+    session:
+      PROVIDER: db
     database:
       DB_TYPE: postgres
       HOST: forgejo-db-v1-rw
