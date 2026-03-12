@@ -7,6 +7,7 @@ Business Operations
    :caption: Contents
 
    about
+   getting-started
    kubernetes/index
    core-components/index
    services/index
