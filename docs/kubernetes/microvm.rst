@@ -2,27 +2,51 @@
  MicroVM
 =========
 
-The acceptance cluster runs as lightweight VMs on the existing exp
-bare-metal nodes using `microvm.nix <https://github.com/astro/microvm.nix>`_.
-This reuses spare capacity without dedicated hardware. The same approach
-can be used to start up additional clusters in the future.
+Clusters can run as lightweight VMs on bare-metal nodes using
+`microvm.nix <https://github.com/astro/microvm.nix>`_.
+This reuses spare capacity without dedicated hardware and is useful
+for acceptance testing or development clusters.
 
 VMs are deployed imperatively --- they are not declared in the host's NixOS
 configuration. This means host rebuilds do not cause VM downtime.
 
-Overview
-========
+The consuming repository provides the ``microvm.nix`` flake input and
+imports the appropriate ``nixosModules`` (guest or host).
 
-- ``modules/microvm-bridge.nix`` --- Host module for bridge networking and
-  libvirtd ACL configuration.
 
-- ``modules/microvm-guest.nix`` --- Guest module for bootloader, memory
-  ballooning, and persistent ``/etc`` via virtiofs.
+NixOS Modules
+=============
 
-- ``profiles/`` --- Shared profiles setting common defaults (vCPUs, memory,
-  network) for groups of VMs.
+``nixosModules.microvm-guest``
+   Guest module (``nixos/modules/microvm/guest.nix``).
+   Disables bootloader, enables memory ballooning, and mounts
+   persistent ``/etc`` via virtiofs.
 
-- ``hosts/`` --- Per-VM NixOS configurations.
+``nixosModules.microvm-bridge``
+   Host module (``nixos/modules/microvm/bridge.nix``).
+   Sets up a bridge (``br0``) so VMs get direct LAN access.
+   Configure with ``microvm-bridge.enable`` and
+   ``microvm-bridge.physicalNic``.
+
+``nixosModules.virtualization``
+   Host module (``nixos/modules/virtualization.nix``).
+   Enables libvirtd with KVM support.
+
+
+Site Configuration
+==================
+
+The consuming repository provides:
+
+- **Profiles** --- Shared defaults (vCPUs, memory, volumes, network)
+  for groups of VMs.
+
+- **Host configs** --- Per-VM NixOS configurations (IP, MAC, k0s role).
+
+- **Hypervisor configs** --- Physical NIC name, host IP, bridge enable.
+
+- **Ansible inventory** --- Maps VMs to hypervisor hosts via
+  ``microvm_host``.
 
 
 Host Setup
@@ -31,22 +55,26 @@ Host Setup
 A NixOS host needs preparation before it can run microVMs:
 
 - KVM support
-- ``microvm.nixosModules.host``
-- Bridge networking
-
-The ``microvm-bridge.nix`` module in ``modules/`` handles the bridge
-configuration.
+- ``microvm.nixosModules.host`` (from the microvm.nix flake input)
+- ``nixosModules.virtualization`` and ``nixosModules.microvm-bridge``
 
 
 Deploying VMs
 =============
 
-Ansible playbooks in ``ansible/playbooks/`` manage the VM
-lifecycle. The inventory determines which VMs are deployed to which hosts.
+Ansible playbooks manage the VM lifecycle:
+
+- ``deploy-microvms.yaml`` --- Install and activate VMs on hypervisors.
+- ``start-microvms.yaml`` --- Start VM services.
+- ``stop-microvms.yaml`` --- Stop VM services.
+- ``restart-microvms.yaml`` --- Restart VM services.
+- ``destroy-microvms.yaml`` --- Stop and remove VMs.
+
+The inventory determines which VMs are deployed to which hosts.
 
 Rebuilding a running VM after configuration changes::
 
-   nix run .#nixosConfigurations.acct-k0s-01.config.microvm.deploy.rebuild
+   nix run .#nixosConfigurations.<vm-name>.config.microvm.deploy.rebuild
 
 
 Known Issues
@@ -55,9 +83,8 @@ Known Issues
 deploy-microvms fails on fresh deployment
 -----------------------------------------
 
-The ``deploy-microvms.yaml`` playbook runs the ``rebuild`` script which
-first installs the VM on the hypervisor host, then tries to SSH into the
-VM's IP to activate the config (``switch``). On a fresh deployment the VM
-is not running yet, so the SSH connection fails with "Network is
-unreachable". The install itself succeeds --- run ``start-microvms.yaml``
-afterwards to boot the VMs.
+The ``deploy-microvms.yaml`` playbook installs the VM on the
+hypervisor host, then optionally tries to SSH into the VM to activate
+the config (``switch`` mode). On a fresh deployment the VM is not
+running yet, so the SSH connection fails. The install itself
+succeeds --- run ``start-microvms.yaml`` afterwards to boot the VMs.

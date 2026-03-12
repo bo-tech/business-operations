@@ -20,6 +20,9 @@
         container-oci = import ./nixos/modules/container/oci.nix;
         server = import ./nixos/modules/server.nix;
         kubernetes-k0s = import ./nixos/modules/kubernetes/k0s.nix;
+        microvm-guest = import ./nixos/modules/microvm/guest.nix;
+        microvm-bridge = import ./nixos/modules/microvm/bridge.nix;
+        virtualization = import ./nixos/modules/virtualization.nix;
 
         profile-base = import ./nixos/profiles/base.nix;
         profile-oci-container = import ./nixos/profiles/oci-container.nix;

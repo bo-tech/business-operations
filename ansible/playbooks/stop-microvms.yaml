@@ -1,0 +1,9 @@
+---
+- name: Stop microVMs on their hypervisor hosts
+  gather_facts: false
+  hosts: initial_controller:controllers:workers
+  tasks:
+    - name: Stop microVM service
+      ansible.builtin.command: >-
+        systemctl stop microvm@{{ inventory_hostname }}
+      delegate_to: "{{ microvm_host }}"

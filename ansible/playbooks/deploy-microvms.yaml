@@ -1,0 +1,76 @@
+---
+- name: Deploy microVMs to their hypervisor hosts
+  gather_facts: false
+  hosts: initial_controller:controllers:workers
+  tasks:
+    - name: Ensure share directories exist on host
+      ansible.builtin.file:
+        path: "/var/lib/microvms/{{ inventory_hostname }}/share/etc"
+        state: directory
+      delegate_to: "{{ microvm_host }}"
+
+    - name: Create raw Ceph volume if missing
+      ansible.builtin.command: >-
+        truncate -s {{ microvm_ceph_volume_size | default('51200M') }}
+        /var/lib/microvms/{{ inventory_hostname }}/ceph.img
+      args:
+        creates: "/var/lib/microvms/{{ inventory_hostname }}/ceph.img"
+      delegate_to: "{{ microvm_host }}"
+
+    - name: Ensure Ceph volume owned by microvm
+      ansible.builtin.file:
+        path: "/var/lib/microvms/{{ inventory_hostname }}/ceph.img"
+        owner: microvm
+      delegate_to: "{{ microvm_host }}"
+
+    - name: Install microVM via nix
+      ansible.builtin.shell: >-
+        nix run
+        {{ nixos_flake }}#nixosConfigurations.{{ inventory_hostname }}.config.microvm.deploy.installOnHost
+        -- root@{{ microvm_host }}
+      args:
+        chdir: "{{ nixos_flake }}"
+      delegate_to: localhost
+
+    - name: Switch microVM config via SSH
+      ansible.builtin.shell: >-
+        nix run
+        {{ nixos_flake }}#nixosConfigurations.{{ inventory_hostname }}.config.microvm.deploy.sshSwitch
+        -- root@{{ ansible_host }}
+      args:
+        chdir: "{{ nixos_flake }}"
+      delegate_to: localhost
+      when: microvm_activate == "switch"
+
+    - name: Restart microVM service
+      ansible.builtin.command: >-
+        systemctl restart microvm@{{ inventory_hostname }}
+      delegate_to: "{{ microvm_host }}"
+      when: microvm_activate == "restart"
+
+    - name: Wait for VM to become reachable
+      ansible.builtin.wait_for:
+        port: 22
+        host: "{{ ansible_host }}"
+        search_regex: OpenSSH
+        delay: 2
+        timeout: 120
+      delegate_to: localhost
+      when: microvm_activate == "restart"
+
+    - name: Remove host from known_hosts
+      ansible.builtin.known_hosts:
+        name: "{{ ansible_host }}"
+        state: absent
+      throttle: 1
+      delegate_to: localhost
+      when: microvm_activate == "restart"
+
+    - name: Add SSH host key to known_hosts
+      ansible.builtin.known_hosts:
+        name: "{{ ansible_host }}"
+        key: "{{ lookup('pipe', 'ssh-keyscan ' + ansible_host) }}"
+        state: present
+      throttle: 1
+      delegate_to: localhost
+      when: microvm_activate == "restart"

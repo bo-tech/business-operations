@@ -1,0 +1,16 @@
+---
+- name: Destroy microVMs on their hypervisor hosts
+  gather_facts: false
+  hosts: initial_controller:controllers:workers
+  tasks:
+    - name: Stop microVM service
+      ansible.builtin.command: >-
+        systemctl stop microvm@{{ inventory_hostname }}
+      delegate_to: "{{ microvm_host }}"
+      ignore_errors: true
+
+    - name: Remove microVM directory
+      ansible.builtin.file:
+        path: "/var/lib/microvms/{{ inventory_hostname }}"
+        state: absent
+      delegate_to: "{{ microvm_host }}"
