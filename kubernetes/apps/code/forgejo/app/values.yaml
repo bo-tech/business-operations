@@ -14,6 +14,8 @@ persistence:
 ingress:
   enabled: true
   className: nginx
+  annotations:
+    hajimari.io/enable: "true"
   hosts:
     - host: &host code.${cluster_domain}
       paths:
