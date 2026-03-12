@@ -62,15 +62,54 @@ A NixOS host needs preparation before it can run microVMs:
 Deploying VMs
 =============
 
-Ansible playbooks manage the VM lifecycle:
+Ansible playbooks manage the VM lifecycle.
+All commands assume the ansible dev shell and the inventory file for
+the target environment:
 
-- ``deploy-microvms.yaml`` --- Install and activate VMs on hypervisors.
+.. code-block:: bash
+
+   nix develop ./external/business-operations#ansible
+   INVENTORY=./ansible/inventory-microvm.yaml
+
+Deploy VMs to their hypervisor hosts
+-------------------------------------
+
+.. code-block:: bash
+
+   ansible-playbook -i $INVENTORY $BO_PLAYBOOKS/deploy-microvms.yaml
+
+This installs the NixOS configuration on the hypervisor, creates
+volumes (``/var``, Ceph), and starts the VM. The inventory must
+define ``microvm_host`` for each VM.
+
+Bootstrap the Kubernetes cluster
+---------------------------------
+
+.. code-block:: bash
+
+   ansible-playbook -i $INVENTORY \
+     $BO_PLAYBOOKS/bootstrap-existing-machines.yaml
+
+Installs k0s, deploys Cilium, OpenEBS, and Rook-Ceph on the running
+nodes.
+
+Kick off FluxCD
+----------------
+
+.. code-block:: bash
+
+   ansible-playbook -i $INVENTORY $BO_PLAYBOOKS/bootstrap-cluster.yaml
+
+Deploys the in-cluster Gitea, pushes the repository, applies
+cluster settings and secrets, and starts Flux reconciliation.
+
+Other lifecycle playbooks
+--------------------------
+
 - ``start-microvms.yaml`` --- Start VM services.
 - ``stop-microvms.yaml`` --- Stop VM services.
 - ``restart-microvms.yaml`` --- Restart VM services.
 - ``destroy-microvms.yaml`` --- Stop and remove VMs.
-
-The inventory determines which VMs are deployed to which hosts.
 
 Rebuilding a running VM after configuration changes::
 
