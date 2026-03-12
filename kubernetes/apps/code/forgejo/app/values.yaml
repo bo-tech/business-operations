@@ -1,5 +1,7 @@
 gitea:
   config:
+    service:
+      DISABLE_REGISTRATION: true
     database:
       DB_TYPE: postgres
       HOST: forgejo-db-v1-rw
