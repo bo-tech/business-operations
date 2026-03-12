@@ -47,6 +47,9 @@ access_control:
       subject:
         - 'group:admins'
     - domain:
+        - "code.${cluster_domain}"
+      policy: bypass
+    - domain:
         - "vault.${cluster_domain}"
       subject:
         - "group:admins"
