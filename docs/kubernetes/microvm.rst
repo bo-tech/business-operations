@@ -5,7 +5,7 @@
 The acceptance cluster runs as lightweight VMs on the existing exp
 bare-metal nodes using `microvm.nix <https://github.com/astro/microvm.nix>`_.
 This reuses spare capacity without dedicated hardware. The same approach
-can be used to stand up additional clusters in the future.
+can be used to start up additional clusters in the future.
 
 VMs are deployed imperatively --- they are not declared in the host's NixOS
 configuration. This means host rebuilds do not cause VM downtime.
