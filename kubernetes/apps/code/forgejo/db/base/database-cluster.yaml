@@ -4,7 +4,7 @@ kind: Cluster
 metadata:
   name: forgejo-db-v1
   annotations:
-    cnpg.local/restore-revision: "v2"
+    cnpg.local/restore-revision: "v3"
     cnpg.local/backup-revision: "v3"
 spec:
   instances: 1
