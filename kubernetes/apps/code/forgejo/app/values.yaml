@@ -10,6 +10,10 @@ gitea:
     serviceMonitor:
       enabled: true
   config:
+    repository:
+      DEFAULT_REPO_UNITS: "repo.code,repo.releases,repo.pulls,repo.packages,repo.actions"
+      DEFAULT_FORK_REPO_UNITS: "repo.code,repo.releases,repo.pulls"
+      DEFAULT_MIRROR_REPO_UNITS: "repo.code,repo.releases"
     service:
       DISABLE_REGISTRATION: true
     session:
