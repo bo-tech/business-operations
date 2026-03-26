@@ -51,8 +51,8 @@ Example kustomization for a volume restore overlay:
      - ../../base
 
    components:
-     - ../../../../components/volsync/backup
-     - ../../../../components/volsync/restore
+     - ../../../../components/volume/backup-volsync
+     - ../../../../components/volume/restore-volsync
 
 
 Restore
