@@ -50,17 +50,17 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1770154392,
-        "narHash": "sha256-EjR59VVFFfXl3VqJ3VF8QGzRme1tNLnLqTf1hioC/Hs=",
-        "owner": "bo-tech",
-        "repo": "sphinx-builder",
-        "rev": "60361d47410c5fd4f7c2f9853abb634cb4715bb2",
-        "type": "github"
+        "lastModified": 1773824705,
+        "narHash": "sha256-Nv/6znQel9vTHOezpM3grE3keDXc+Csd7lvkjsK+J5M=",
+        "ref": "refs/heads/main",
+        "rev": "0e15aaa910241922756572e7bee7f7ba52639660",
+        "revCount": 37,
+        "type": "git",
+        "url": "https://codeberg.org/johbo/sphinx-builder"
       },
       "original": {
-        "owner": "bo-tech",
-        "repo": "sphinx-builder",
-        "type": "github"
+        "type": "git",
+        "url": "https://codeberg.org/johbo/sphinx-builder"
       }
     },
     "systems": {
