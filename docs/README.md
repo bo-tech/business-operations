@@ -34,12 +34,10 @@ nix build ./docs#pdf
 
 Build output will be in `result/share/doc/`.
 
-## GitLab CI
+## CI
 
-The CI pipeline automatically:
-
-- Builds and validates docs on merge requests
-- Publishes to GitLab Pages on pushes to main branch
+Documentation is built and published automatically via CI on pushes
+to the main branch.
 
 ## Architecture Decision Records
 
