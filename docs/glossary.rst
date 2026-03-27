@@ -23,6 +23,13 @@ Glossary
       repository. It represents a specific deployment environment with its own
       configuration, resources, and state.
 
+   CloudNativePG
+      Kubernetes operator for PostgreSQL. See https://cloudnative-pg.io/.
+      Documented in :ref:`app-postgresql`.
+
+   Helm
+      Package manager for Kubernetes. See https://helm.sh/.
+
    k0s
       See https://k0sproject.io/.
 
@@ -37,3 +44,13 @@ Glossary
    Node
       Refers to a `Kubernetes Node
       <https://kubernetes.io/docs/concepts/architecture/nodes/>`_.
+
+   PVC
+   PersistentVolumeClaim
+      A request for storage in Kubernetes. See
+      https://kubernetes.io/docs/concepts/storage/persistent-volumes/.
+
+   VolSync
+      Replication and backup of persistent volumes. See
+      https://volsync.readthedocs.io/. Documented in
+      :ref:`sec-backup-restore`.
