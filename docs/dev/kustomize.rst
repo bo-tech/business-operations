@@ -6,7 +6,7 @@
 Omitting a resource
 ====================
 
-When the source of resources is not in our control it may be required to omit
+When the source of resources is not under direct control it may be required to omit
 specific resources, e.g. a PersistentVolumeClaim from a Helm chart.
 
 

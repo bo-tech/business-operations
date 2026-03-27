@@ -45,7 +45,7 @@ The bootstrap is split into multiple stages:
     `Vault` instance.
 
   - `Gitlab` - This is used as the automation engine to host and build software
-    artifacts. It also serves as the source for our GitOps approach.
+    artifacts. It also serves as the source for the GitOps approach.
 
     - `PostgreSQL` - The bundled database. Intentionally kept, so that there is
       no dependency into a central database service.
@@ -113,13 +113,9 @@ Gitea bootstrapping
 Improvements
 ============
 
-The `Gitlab` instance may become quite heavy over time when used also as the
-central code and artifact hosting instance. The idea would be to replace it at
-some point with more lightweight solutions.
+The `Gitlab` instance is heavy for code and artifact hosting.
+:ref:`app-forgejo` is being integrated as a more lightweight replacement.
 
-Options could be to use external S3 storage and initially deploy from there or
-to deploy a lightweight git server plus a registry for the required artifacts
-(mainly container images).
-
-`Gitea` is also a valid replacement candidate, esp. since it does offer
-registries for all artifact types which we need.
+Options to further reduce resource usage include external S3 storage and
+initially deploying from there, or deploying a lightweight git server plus a
+registry for the required artifacts (mainly container images).
