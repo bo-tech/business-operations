@@ -54,7 +54,7 @@ The bootstrap is split into multiple stages:
       kept, so that there is no dependency into a central `S3` compatible
       service.
 
-  - `k8up` - This is used to restore the initial snapshots for Vault and Gitlab
+  - :term:`VolSync` - This is used to backup and restore persistent volumes
     from an external `S3` compatible source.
 
 - ``cluster-apps`` are all other services and applications.
