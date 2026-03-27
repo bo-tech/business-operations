@@ -3,8 +3,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Business Operations'
-copyright = 'joh@bo-tech.de'
-author = 'joh@bo-tech.de'
+copyright = '2023-2026, Johannes Bornhold <johannes@bornhold.name>'
+author = 'Johannes Bornhold'
 
 version = '0.0.1'
 release = version + '-dev'
