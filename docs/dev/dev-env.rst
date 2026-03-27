@@ -64,8 +64,8 @@ Quickstart::
    task c:bootstrap
 
 An opinionated Flux deployment into the cluster is required. The deployment
-should be done in the same way as ``cluster-0`` uses it, so that it does provide
-an environment with sufficient similarity to the production environment.
+should match the production cluster overlay, so that it provides an environment
+with sufficient similarity to production.
 
 A ``git push`` into the cluster should be possible based on the integrated Gitea
 instance.

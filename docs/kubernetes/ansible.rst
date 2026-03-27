@@ -89,8 +89,7 @@ feedback loop.
 Inventory Variables
 ===================
 
-All paths are relative to ``inventory_dir``. Helm roles use ``cluster-0`` as the
-reference cluster for HelmRelease files and values.
+All paths are relative to ``inventory_dir``.
 
 Required:
 

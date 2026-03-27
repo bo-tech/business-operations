@@ -28,7 +28,7 @@ cluster, the only drawback is that substitutions won't work.
 Example::
 
    flux build ks cluster-base-apps \
-     --path ../cluster-0/base-apps \
+     --path ../<cluster>/base-apps \
      --kustomization-file flux/cluster-base-apps.yaml \
      --dry-run
 
@@ -37,7 +37,7 @@ See ``flux build --help`` for more details about the supported parameters.
 Combined with ``kfilt`` this can give a simple feedback loop::
 
    flux build ks cluster-base-apps \
-     --path ../cluster-0/base-apps \
+     --path ../<cluster>/base-apps \
      --kustomization-file flux/cluster-base-apps.yaml \
      --dry-run | kfilt -i kind=ConfigMap
 

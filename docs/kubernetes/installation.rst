@@ -58,7 +58,7 @@ repository:
 
    helm install cilium cilium/cilium --version 1.14.2 \
       --namespace kube-system \
-      --values=../../kubernetes/cluster-0/base-apps/kube-system/cilium/app/values.yaml
+      --values=../../kubernetes/<cluster>/base-apps/kube-system/cilium/app/values.yaml
 
 Alternatively Cilium can be bootstrapped this way::
 
