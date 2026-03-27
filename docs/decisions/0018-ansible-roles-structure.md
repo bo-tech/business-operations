@@ -8,7 +8,7 @@ date: 2026-02-06
 ## Context and Problem Statement
 
 business-operations contains reusable ansible roles and playbooks for k0s
-cluster management. Consuming repositories (b-ops, demo-ops) need to use these
+cluster management. Consuming repositories (site overlays) need to use these
 roles with their site-specific inventories.
 
 How should the ansible environment be exposed for consumption?
@@ -34,7 +34,7 @@ The flake exposes `devShells.ansible` which:
 **Usage from consuming repository:**
 
 ```bash
-cd b-ops/infrastructure/ansible
+cd <site-repo>/ansible
 nix develop git+https://codeberg.org/business-operations/business-operations#ansible
 ansible-playbook -i ./inventory.yaml $BO_PLAYBOOKS/re-create-machines.yaml
 ```
