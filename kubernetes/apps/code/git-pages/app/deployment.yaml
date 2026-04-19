@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: git-pages
+  labels:
+    app.kubernetes.io/name: git-pages
+    app.kubernetes.io/instance: git-pages
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: git-pages
+      app.kubernetes.io/instance: git-pages
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: git-pages
+        app.kubernetes.io/instance: git-pages
+    spec:
+      containers:
+        - name: git-pages
+          image: codeberg.org/git-pages/git-pages:0.7.0@sha256:f064d6a1151613ca6839f0f99b974a81e2c0b8367bccf603bdac7dff7de5bf16
+          args:
+            - -config
+            - /etc/git-pages/config.toml
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+            - name: metrics
+              containerPort: 3002
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /etc/git-pages
+              readOnly: true
+            - name: data
+              mountPath: /app/data
+          resources:
+            requests:
+              cpu: 5m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+      volumes:
+        - name: config
+          configMap:
+            name: git-pages-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: git-pages-data

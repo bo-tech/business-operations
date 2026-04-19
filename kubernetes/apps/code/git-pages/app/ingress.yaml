@@ -1,0 +1,22 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: git-pages
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - "*.pages.${cluster_domain}"
+      secretName: wildcard-tls-secret
+  rules:
+    - host: "*.pages.${cluster_domain}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: git-pages
+                port:
+                  name: http

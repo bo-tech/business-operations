@@ -1,0 +1,20 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: code
+
+resources:
+  - ../../base/git-pages-data
+
+components:
+  - ../../../../../../components/volume/backup-volsync
+  - ../../../../../../components/volume/restore-volsync
+
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/trigger/schedule
+        value: "50 1/3 * * *"
+    target:
+      group: volsync.backube
+      kind: ReplicationSource

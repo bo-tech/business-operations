@@ -1,7 +1,7 @@
 ---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: code
+
 resources:
-  - ./ns
-  - ./forgejo/ks.yaml
-  - ./git-pages/ks.yaml
+  - ../../base/git-pages-data
