@@ -23,6 +23,8 @@ spec:
       containers:
         - name: git-pages
           image: codeberg.org/git-pages/git-pages:0.7.0@sha256:f064d6a1151613ca6839f0f99b974a81e2c0b8367bccf603bdac7dff7de5bf16
+          command:
+            - git-pages
           args:
             - -config
             - /etc/git-pages/config.toml
