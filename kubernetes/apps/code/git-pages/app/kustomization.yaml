@@ -6,7 +6,6 @@ resources:
   - deployment.yaml
   - service.yaml
   - ingress.yaml
-  - response-headers.yaml
 
 configMapGenerator:
   - name: git-pages-config
