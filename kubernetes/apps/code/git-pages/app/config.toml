@@ -1,0 +1,22 @@
+log-format = "text"
+
+[server]
+pages = "tcp/:3000"
+caddy = "-"
+metrics = "tcp/:3002"
+
+[[wildcard]]
+domain = "pages.${cluster_domain}"
+clone-url = "https://code.${cluster_domain}/<user>/<project>.git"
+index-repo = "pages"
+authorization = "forgejo"
+
+[storage]
+type = "fs"
+
+[storage.fs]
+root = "/app/data"
+
+[limits]
+max-site-size = "128MB"
+update-timeout = "2m0s"
