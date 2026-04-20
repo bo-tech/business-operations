@@ -50,6 +50,9 @@ access_control:
         - "code.${cluster_domain}"
       policy: bypass
     - domain:
+        - "*.pages.${cluster_domain}"
+      policy: bypass
+    - domain:
         - "vault.${cluster_domain}"
       subject:
         - "group:admins"
