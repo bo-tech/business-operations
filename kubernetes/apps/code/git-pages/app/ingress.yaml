@@ -6,6 +6,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "128m"
     nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_clear_headers Server;
       proxy_pass_header Server;
 spec:
   ingressClassName: nginx
