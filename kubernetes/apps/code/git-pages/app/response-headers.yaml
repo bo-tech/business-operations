@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: git-pages-response-headers
+data:
+  Server: "git-pages"
