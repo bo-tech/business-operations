@@ -20,6 +20,11 @@ spec:
         app.kubernetes.io/name: git-pages
         app.kubernetes.io/instance: git-pages
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
       containers:
         - name: git-pages
           image: codeberg.org/git-pages/git-pages:0.7.0@sha256:f064d6a1151613ca6839f0f99b974a81e2c0b8367bccf603bdac7dff7de5bf16
