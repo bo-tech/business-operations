@@ -5,8 +5,7 @@ metadata:
   name: git-pages
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "128m"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      proxy_pass_header Server;
+    nginx.ingress.kubernetes.io/proxy-pass-headers: "Server"
 spec:
   ingressClassName: nginx
   tls:
