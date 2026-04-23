@@ -5,5 +5,10 @@ namespace: network-external
 resources:
   - ./helmrelease.yaml
 
+configMapGenerator:
+  - name: traefik-external-values
+    files:
+      - values.yaml=./values.yaml
+
 configurations:
   - name-reference.yaml
