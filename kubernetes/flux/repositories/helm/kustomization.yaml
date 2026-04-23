@@ -23,5 +23,6 @@ resources:
   - ./piraeus.yaml
   - ./prometheus-community.yaml
   - ./rook-ceph.yaml
+  - ./traefik.yaml
   - ./weave-gitops.yaml
   - ./wekan.yaml

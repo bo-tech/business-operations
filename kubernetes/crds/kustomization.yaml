@@ -5,3 +5,4 @@ resources:
   - ./kube-prometheus-stack-ks.yaml
   - ./external-secrets.yaml
   - ./volsync-ks.yaml
+  - ./gateway-api-ks.yaml
