@@ -1,14 +1,17 @@
 providers:
-  kubernetesGateway:
-    enabled: true
   kubernetesCRD:
     enabled: false
   kubernetesIngress:
     enabled: false
+  kubernetesGateway:
+    enabled: true
+    labelSelector: local/gateway-role=external
 
 gatewayClass:
   enabled: true
   name: external
+  labels:
+    local/gateway-role: external
 
 gateway:
   enabled: true
