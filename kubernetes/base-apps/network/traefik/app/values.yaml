@@ -1,0 +1,65 @@
+providers:
+  kubernetesGateway:
+    enabled: true
+  kubernetesCRD:
+    enabled: false
+  kubernetesIngress:
+    enabled: false
+
+gatewayClass:
+  enabled: true
+  name: internal
+
+gateway:
+  enabled: true
+  name: internal
+  listeners:
+    web:
+      port: 8000
+      protocol: HTTP
+      namespacePolicy:
+        from: All
+
+ingressClass:
+  enabled: false
+
+ingressRoute:
+  dashboard:
+    enabled: false
+
+service:
+  type: LoadBalancer
+  annotations:
+    lbipam.cilium.io/ips: "${cluster_internal_traefik_ip}"
+  labels:
+    ip-range: static-pool
+
+ports:
+  web:
+    port: 8000
+    expose:
+      default: true
+    exposedPort: 80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+  websecure:
+    port: 8443
+    expose:
+      default: true
+    exposedPort: 443
+
+logs:
+  general:
+    level: INFO
+  access:
+    enabled: true
+    format: json
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 50Mi
