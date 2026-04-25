@@ -12,4 +12,5 @@
    lldap
    openebs
    rook
+   traefik
    vault

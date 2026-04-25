@@ -23,3 +23,5 @@ to perform additional steps like joining the :term:`Nodes <Node>` into the
    bootstrap-overview
    crds
    core-components
+   external-access
+   internal-access

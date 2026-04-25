@@ -18,8 +18,11 @@
 
 - :doc:`/core-components/gitea`: Cluster internal Git server.
 
-- `ingress-nginx <https://github.com/kubernetes/ingress-nginx/>`_: Ingress
-  controller to expose HTTP traffic to pods over DNS.
+- `ingress-nginx <https://github.com/kubernetes/ingress-nginx/>`_: Legacy
+  ingress controller, being replaced by :doc:`/core-components/traefik`.
+
+- :doc:`/core-components/traefik`: :term:`Gateway API` controller for
+  external and internal traffic.
 
 - :doc:`/core-components/openebs` is used to provision local volumes via the
   storage class ``openebs-hostpath``.

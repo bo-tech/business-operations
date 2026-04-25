@@ -18,6 +18,29 @@ Glossary
       .. _PostgreSQL: https://www.postgresql.org/
       .. _etcd: https://etcd.io/
 
+   ForwardAuth
+      Authentication pattern where a reverse proxy delegates
+      authorization decisions to an external service before
+      forwarding requests to the backend. See
+      :ref:`sec-internal-access`.
+
+   Gateway API
+      Kubernetes API for service networking, successor to Ingress.
+      Uses GatewayClass, Gateway, and route resources (HTTPRoute,
+      TCPRoute, etc.). See https://gateway-api.sigs.k8s.io/.
+      Documented in :ref:`sec-external-access` and
+      :ref:`sec-internal-access`.
+
+   GatewayClass
+      Cluster-scoped Gateway API resource that binds a Gateway to
+      a specific controller implementation. See
+      `Gateway API concepts <https://gateway-api.sigs.k8s.io/concepts/api-overview/>`_.
+
+   HTTPRoute
+      Gateway API resource defining HTTP routing rules from a
+      Gateway to backend services. See
+      `HTTPRoute documentation <https://gateway-api.sigs.k8s.io/guides/http-routing/>`_.
+
    Instance
       An instance of the deployment, typically a cluster created based on this
       repository. It represents a specific deployment environment with its own
@@ -49,6 +72,11 @@ Glossary
    PersistentVolumeClaim
       A request for storage in Kubernetes. See
       https://kubernetes.io/docs/concepts/storage/persistent-volumes/.
+
+   Traefik
+      Reverse proxy and :term:`Gateway API` controller. See
+      https://doc.traefik.io/traefik/. Documented in
+      :doc:`core-components/traefik`.
 
    VolSync
       Replication and backup of persistent volumes. See
