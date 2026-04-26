@@ -1,6 +1,7 @@
 providers:
   kubernetesCRD:
-    enabled: false
+    enabled: true
+    allowCrossNamespace: true
   kubernetesIngress:
     enabled: false
   kubernetesGateway:

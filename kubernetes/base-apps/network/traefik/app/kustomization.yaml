@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: network
 resources:
   - ./helmrelease.yaml
+  - ./middleware-forwardauth.yaml
 
 configMapGenerator:
   - name: traefik-internal-values
