@@ -92,6 +92,29 @@ referencing the appropriate Gateway::
            - name: my-app
              port: 80
 
+Authentication
+==============
+
+The internal Traefik instance uses a ``ForwardAuth`` middleware to
+delegate authentication to :ref:`app-authelia`. The middleware is
+deployed as part of the Traefik base in
+``base-apps/network/traefik/app/middleware-forwardauth.yaml``.
+
+Authelia's Traefik-specific endpoint (``/api/authz/forward-auth``)
+handles the redirect flow. Unlike nginx where the proxy constructs
+the auth redirect, Traefik delegates the redirect to Authelia —
+the ``authelia_url`` query parameter tells Authelia its own
+external URL.
+
+Routes that require authentication add the middleware as an
+``ExtensionRef`` filter:
+
+.. literalinclude:: ../../kubernetes/apps/network/echo-server/app/httproute.yaml
+   :language: yaml
+   :start-after: [docs-forwardauth-filter]
+   :end-before: [docs-forwardauth-filter]
+   :dedent:
+
 Pointers
 ========
 

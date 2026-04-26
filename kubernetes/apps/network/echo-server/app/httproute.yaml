@@ -11,6 +11,7 @@ spec:
   hostnames:
     - "echo-server.${cluster_domain}"
   rules:
+    # [docs-forwardauth-filter]
     - filters:
         - type: ExtensionRef
           extensionRef:
@@ -20,3 +21,4 @@ spec:
       backendRefs:
         - name: echo-server
           port: 8080
+    # [docs-forwardauth-filter]
