@@ -11,11 +11,11 @@ Apply a kustomization manually
 
 ::
 
-   # This will put the Kustomization resource into Kubernetes
-   kubectl apply --server-side --kustomization ./apps/network/echo-server
+   # This will put the Flux Kustomization resource into Kubernetes
+   kubectl apply --server-side --kustomization ./apps/<namespace>/<app>
 
-   # This will put the HelmRelease into the cluster
-   kubectl apply --server-side --kustomization ./apps/network/echo-server/app
+   # This will put the app resources into the cluster
+   kubectl apply --server-side --kustomization ./apps/<namespace>/<app>/app
 
 
 Build Flux resources locally
@@ -75,6 +75,6 @@ separate file, so that they can be used directly.
 
 Example::
 
-   helm -n network upgrade \
-     --values ./apps/network/echo-server/app/values.yaml \
-     echo-server bjw-s/app-template
+   helm -n <namespace> upgrade \
+     --values ./path/to/values.yaml \
+     <release-name> <chart-repo>/<chart-name>
