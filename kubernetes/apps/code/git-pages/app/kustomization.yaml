@@ -5,7 +5,6 @@ namespace: code
 resources:
   - deployment.yaml
   - service.yaml
-  - ingress.yaml
   - httproute.yaml
 
 configMapGenerator:
