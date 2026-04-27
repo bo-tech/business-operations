@@ -3,36 +3,39 @@ date: 2026-04-27
 ---
 
 (adr-0027)=
-# 0027 Use Gateway API experimental channel CRDs
+# 0027 Upgrade Gateway API CRDs for TLSRoute v1
 
 ## Context and Problem Statement
 
 The platform uses Traefik with the Kubernetes Gateway API
-provider. Traefik v3.7 unconditionally watches TLSRoute
-resources, which graduated to a v1 API but are only included
-in the Gateway API experimental installation channel.
+provider. Traefik v3.7 unconditionally watches TLSRoute v1
+resources. TLSRoute was promoted to v1 in Gateway API v1.5.0
+— earlier versions only have v1alpha3.
 
-Without the TLSRoute CRD installed, the Traefik Gateway
-provider fails continuously with "failed to list TLSRoute",
-preventing proper certificate loading and routing.
+Without the v1 TLSRoute CRD, the Traefik Gateway provider
+fails continuously with "failed to list TLSRoute", preventing
+proper certificate loading and routing.
+
+Additionally, Traefik v3.6 only uses the first certificateRef
+on a Gateway listener for SNI matching. Multiple certificate
+support requires v3.7 (traefik/traefik#12590).
 
 ## Considered Options
 
-1. Switch from standard to experimental CRD bundle
-2. Install only the TLSRoute CRD separately
+1. Upgrade Gateway API CRDs to v1.5.1 (standard channel
+   includes TLSRoute v1)
+2. Stay on v1.4.0 and switch to experimental channel
+   (TLSRoute v1alpha3 — insufficient for Traefik v3.7)
 3. Stay on Traefik v3.6 and avoid the issue
 
 ## Decision Outcome
 
-Option 1: switch to the experimental channel bundle.
+Option 1: upgrade Gateway API CRDs to v1.5.1 standard channel.
 
-The experimental channel is a superset of the standard
-channel. It adds CRDs (TLSRoute, TCPRoute, UDPRoute,
-BackendLBPolicy) but does not change the behavior of
-existing standard resources. Installing the bundle is
-safe — unused CRDs are inert.
+TLSRoute graduated to v1 and moved into the standard channel
+in Gateway API v1.5.0. No need for the experimental channel.
+The upgrade is backward-compatible — existing HTTPRoute,
+Gateway, and GatewayClass resources are unchanged.
 
-This also unblocks future use of TLSRoute for TLS
-passthrough routing (e.g. end-to-end encrypted services
-where the backend terminates TLS) and TCPRoute for raw
-TCP forwarding.
+External Traefik pinned to v3.7.0-rc.2 via image tag override
+until the Helm chart ships a stable v3.7 release.
