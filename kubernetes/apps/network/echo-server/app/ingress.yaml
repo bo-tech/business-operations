@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: echo-server
+  namespace: network
+  annotations:
+    hajimari.io/enable: "true"
+    hajimari.io/appName: "Echo Server"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "echo-server.${cluster_domain}"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: echo-server
+                port:
+                  number: 8080
+  tls:
+    - hosts:
+        - "echo-server.${cluster_domain}"
