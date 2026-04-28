@@ -58,6 +58,21 @@ the ``Authorization: Pages <token>`` header when publishing. An A or
 CNAME record pointing to the cluster ingress serves the site.
 
 
+Access control
+==============
+
+The deployment exposes two Services (see :ref:`adr-0028`):
+
+``git-pages``
+   Full access on port 3000. Used by internal routes, webhooks,
+   and CI archive uploads.
+
+``git-pages-read-only``
+   Read-only proxy (nginx sidecar) on port 8080. Returns 405 for
+   anything other than GET/HEAD/OPTIONS. External HTTPRoutes for
+   custom domains should target this Service.
+
+
 Storage
 =======
 
