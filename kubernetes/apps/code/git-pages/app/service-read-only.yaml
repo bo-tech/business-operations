@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: git-pages-read-only
+  labels:
+    app.kubernetes.io/name: git-pages
+    app.kubernetes.io/instance: git-pages
+spec:
+  selector:
+    app.kubernetes.io/name: git-pages
+    app.kubernetes.io/instance: git-pages
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http-ro
+      protocol: TCP

@@ -5,9 +5,13 @@ namespace: code
 resources:
   - deployment.yaml
   - service.yaml
+  - service-read-only.yaml
   - httproute.yaml
 
 configMapGenerator:
   - name: git-pages-config
     files:
       - config.toml
+  - name: git-pages-nginx-config
+    files:
+      - nginx.conf
