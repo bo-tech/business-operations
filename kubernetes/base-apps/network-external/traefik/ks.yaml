@@ -14,3 +14,4 @@ spec:
   wait: true
   dependsOn:
     - name: cluster-crds-gateway-api
+    - name: cluster-crds-traefik

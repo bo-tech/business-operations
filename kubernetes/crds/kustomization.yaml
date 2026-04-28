@@ -6,3 +6,4 @@ resources:
   - ./external-secrets.yaml
   - ./volsync-ks.yaml
   - ./gateway-api-ks.yaml
+  - ./traefik-ks.yaml

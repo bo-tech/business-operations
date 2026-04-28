@@ -17,9 +17,11 @@ spec:
         namespace: flux-system
   maxHistory: 2
   install:
+    crds: Skip
     remediation:
       retries: 3
   upgrade:
+    crds: Skip
     cleanupOnFail: true
     remediation:
       retries: 3
