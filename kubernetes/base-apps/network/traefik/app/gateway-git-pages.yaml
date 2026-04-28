@@ -1,0 +1,16 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: git-pages
+  labels:
+    local/gateway-role: internal
+spec:
+  gatewayClassName: internal
+  listeners:
+    - name: git-pages
+      port: 8444
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: All

@@ -37,6 +37,12 @@ service:
     lbipam.cilium.io/ips: "${cluster_internal_traefik_ip}"
   labels:
     ip-range: static-pool
+  additionalServices:
+    git-pages:
+      annotations:
+        lbipam.cilium.io/ips: "${cluster_git_pages_ip}"
+      labels:
+        ip-range: static-pool
 
 ports:
   web:
@@ -54,6 +60,13 @@ ports:
     port: 8443
     expose:
       default: true
+    exposedPort: 443
+
+  git-pages:
+    port: 8444
+    expose:
+      default: false
+      git-pages: true
     exposedPort: 443
 
 logs:

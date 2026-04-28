@@ -6,10 +6,8 @@ metadata:
   namespace: code
 spec:
   parentRefs:
-    - name: internal
+    - name: git-pages
       namespace: network
-  hostnames:
-    - "*.pages.${cluster_domain}"
   rules:
     - backendRefs:
         - name: git-pages
