@@ -70,6 +70,39 @@ namespace to reference Secrets in ``cert-manager``.
 The external instance avoids this by keeping its certificates
 in its own namespace.
 
+Serving an additional certificate
+=================================
+
+A Gateway listener serves a single certificate per SNI. Stacking
+several ``certificateRefs`` on one hostname-less listener does *not*
+make Traefik SNI-select among them — it serves the first (the
+wildcard) and falls back to its self-signed ``TRAEFIK DEFAULT CERT``
+for any SNI the wildcard does not cover.
+
+To serve a domain outside the wildcard (e.g. a separately delegated
+domain), add a dedicated listener with its own ``hostname`` and
+certificate, alongside the wildcard listener::
+
+   gateway:
+     listeners:
+       websecure:
+         port: 8443
+         protocol: HTTPS
+         certificateRefs:
+           - name: wildcard-tls-secret
+             namespace: cert-manager
+       websecure-example:
+         port: 8443
+         hostname: "*.example.org"
+         protocol: HTTPS
+         certificateRefs:
+           - name: example-org-tls
+             namespace: cert-manager
+
+The more specific listener ``hostname`` wins SNI selection, so its
+certificate is served. Point the ``HTTPRoute`` at the new listener
+with ``sectionName``.
+
 Adding a route
 ==============
 
