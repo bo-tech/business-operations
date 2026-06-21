@@ -54,6 +54,39 @@ Example IAM policy for Route53 access:
        ]
    }
 
+External domains via CNAME delegation
+=====================================
+
+A certificate can be issued for a domain whose DNS is *not* hosted in
+the Route53 zone ``cert-manager`` controls, without moving that domain's
+DNS. Only the ACME challenge is delegated:
+
+1. In the issuer, add the external domain to the ``dnsZones`` selector of
+   a solver that has ``cnameStrategy: Follow`` set. That solver keeps the
+   Route53 credentials for the zone you *do* control.
+
+2. At the external domain's DNS provider, create a CNAME that points the
+   challenge record into a name under your controlled zone:
+
+   .. code-block:: text
+
+      _acme-challenge.<external-domain>.  CNAME  _acme-challenge.<external-domain>.<controlled-zone>.
+
+3. Create the ``Certificate`` as usual.
+
+With ``cnameStrategy: Follow``, ``cert-manager`` resolves the CNAME and
+writes the validation ``TXT`` record into the controlled zone (where it
+has Route53 access). No hosted zone is needed for the external domain.
+
+For a wildcard certificate (``*.<external-domain>``) ACME validates at
+the apex challenge name ``_acme-challenge.<external-domain>``, so a single
+delegation CNAME at that name covers both the apex and the wildcard.
+
+The delegation CNAME lives at the external provider, outside the
+cluster's GitOps configuration. If such a certificate fails to issue or
+renew, confirm the CNAME still exists.
+
+
 Backup and restore
 ==================
 
