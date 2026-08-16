@@ -25,8 +25,3 @@ ingress:
     - secretName: ""
       hosts:
         - "tryton.${cluster_domain}"
-
-updateStrategy:
-  # Trytond uses a volume to hold data, this would have to be RWX to allow
-  # for rolling updates.
-  type: Recreate
