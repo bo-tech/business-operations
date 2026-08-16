@@ -22,7 +22,10 @@ spec:
   upgrade:
     cleanupOnFail: true
     remediation:
-      retries: 3
+      # No rollback: db-init migrates the database as part of the
+      # upgrade, and a rollback moves the image back but not the schema.
+      # The way back is restoring the database.
+      retries: 0
     disableHooks: false
   uninstall:
     keepHistory: false
