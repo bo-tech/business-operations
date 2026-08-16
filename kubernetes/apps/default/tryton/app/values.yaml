@@ -5,7 +5,7 @@ tryton:
 image:
   pullPolicy: IfNotPresent
   repository: registry.${use_gitlab_system}/bv/code/tryton/nix/nix-bo-tech-tryton/trytond
-  tag: v0.13.1
+  tag: v0.15.0@sha256:2144477046d2b34f8bcab80be901ec319864466f8a8fe383a31338225e4aba53
 
 postgresql:
   bundled: false
