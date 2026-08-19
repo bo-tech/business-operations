@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: https://codeberg.org/johbo/sphinx-builder@v0.10.0
+      - uses: https://codeberg.org/johbo/sphinx-builder@v0.11.0
 
       - uses: actions/git-pages@v2
         with:

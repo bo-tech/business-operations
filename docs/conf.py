@@ -1,13 +1,15 @@
 # Configuration file for the Sphinx documentation builder.
 
+from pathlib import Path
+
 # -- Project information -----------------------------------------------------
 
 project = 'Business Operations'
 copyright = '2023-2026, Johannes Bornhold <johannes@bornhold.name>'
 author = 'Johannes Bornhold'
 
-version = '0.0.1'
-release = version + '-dev'
+version = (Path(__file__).resolve().parent.parent / 'VERSION').read_text().strip()
+release = version
 
 
 # -- General configuration ---------------------------------------------------

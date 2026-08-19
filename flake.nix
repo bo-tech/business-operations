@@ -90,6 +90,14 @@
             echo "Playbooks: $BO_PLAYBOOKS"
           '';
         };
+
+        devShells.release = pkgs.mkShell {
+          packages = [
+            pkgs.cocogitto
+            pkgs.just
+            pkgs.python3Packages.towncrier
+          ];
+        };
       }
     );
 }

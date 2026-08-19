@@ -15,6 +15,8 @@ Business Operations
    backup-restore/index
    dev/index
    testing
+   changelog
+   releasing
    decision-log
    known-issues
    credits
