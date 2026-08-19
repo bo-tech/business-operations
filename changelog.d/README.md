@@ -23,6 +23,12 @@ A generated repository can release more than once
 Write the entry without a leading `-`. towncrier adds the bullet when it
 collects the fragments, so a dash here renders as `- - The entry`.
 
+Order inside a section is towncrier's, not the order the fragments were
+written. Entries carrying an issue reference come first, sorted by it;
+`+` entries come last, sorted alphabetically by their own text. So the
+entry you consider most important cannot be put at the top by naming
+its file — write the section so that the order does not carry meaning.
+
 **Do not delete this file.** A release removes every fragment it
 consumed, git does not track an empty directory, and the next change
 would then have nowhere to write.
