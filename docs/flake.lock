@@ -13,22 +13,25 @@
         "type": "github"
       },
       "original": {
-        "id": "flake-utils",
-        "type": "indirect"
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1767364772,
-        "narHash": "sha256-fFUnEYMla8b7UKjijLnMe+oVFOz6HjijGGNS1l7dYaQ=",
+        "lastModified": 1787052956,
+        "narHash": "sha256-fZt7Au28AduGpt7vRfIOcpsHKJ+9cEnuQ2NdWuh0KVc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "16c7794d0a28b5a37904d55bcca36003b9109aaa",
+        "rev": "b47ad65d73ab65ded9ab408fe558866d71defee8",
         "type": "github"
       },
       "original": {
-        "id": "nixpkgs",
-        "type": "indirect"
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     },
     "root": {
@@ -50,17 +53,17 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1773824705,
-        "narHash": "sha256-Nv/6znQel9vTHOezpM3grE3keDXc+Csd7lvkjsK+J5M=",
+        "lastModified": 1787123779,
+        "narHash": "sha256-i1PEgdglhava3Jv4PyAGYqD1jphK20734IQEf/3jS70=",
         "ref": "refs/heads/main",
-        "rev": "0e15aaa910241922756572e7bee7f7ba52639660",
-        "revCount": 37,
+        "rev": "e9c803df383ce034afe6e2eb47fdccdae6e2486c",
+        "revCount": 58,
         "type": "git",
-        "url": "https://codeberg.org/johbo/sphinx-builder"
+        "url": "https://codeberg.org/johbo/sphinx-builder.git"
       },
       "original": {
         "type": "git",
-        "url": "https://codeberg.org/johbo/sphinx-builder"
+        "url": "https://codeberg.org/johbo/sphinx-builder.git"
       }
     },
     "systems": {

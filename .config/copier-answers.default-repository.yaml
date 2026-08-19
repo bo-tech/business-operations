@@ -1,6 +1,12 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v0.0.10
+_commit: v0.0.28
 _src_path: https://codeberg.org/johbo/default-repository.git
+changelog_approach: fragments
 contact: joh@bo-tech.de
+copyright_holder: Johannes Bornhold
+language: none
+license: AGPL-3.0-or-later
 project_name: Business Operations
-sphinx_builder_url: github:bo-tech/sphinx-builder
+sphinx_builder_url: git+https://codeberg.org/johbo/sphinx-builder.git
+versioned: true
+visibility: public

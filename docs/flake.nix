@@ -2,7 +2,7 @@
   description = "Business Operations documentation build using sphinx-builder";
 
   inputs = {
-    sphinx-builder.url = "git+https://codeberg.org/johbo/sphinx-builder";
+    sphinx-builder.url = "git+https://codeberg.org/johbo/sphinx-builder.git";
     nixpkgs.follows = "sphinx-builder/nixpkgs";
     flake-utils.follows = "sphinx-builder/flake-utils";
   };
@@ -15,6 +15,21 @@
         src = pkgs.lib.cleanSource ./..;
         projectSlug = "business-operations";
         docName = "${projectSlug}-docs";
+
+        # Sphinx renders the year of SOURCE_DATE_EPOCH as the copyright
+        # year, so the last commit's date advances it on its own.
+        sourceDateEpoch = toString self.lastModified;
+
+        # stdenv defaults the epoch to 1980, which renders as the
+        # copyright year without failing. Not `preBuild`: a `buildPhase`
+        # attribute replaces the function that runs the hooks.
+        refuseAPlaceholderEpoch = ''
+          year=$(date -u -d "@$SOURCE_DATE_EPOCH" +%Y)
+          if [ "$year" -lt 2000 ]; then
+            echo "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH renders the copyright year as $year" >&2
+            exit 1
+          fi
+        '';
 
         makeRunner = pkgs.writeShellApplication {
           name = "docs-make";
@@ -29,11 +44,13 @@
         packages.html = pkgs.stdenv.mkDerivation {
           name = docName;
           inherit src;
+          SOURCE_DATE_EPOCH = sourceDateEpoch;
           nativeBuildInputs = [
             builder.full-sphinx-env
           ];
 
           buildPhase = ''
+            ${refuseAPlaceholderEpoch}
             pushd docs
             make html
             popd
@@ -54,11 +71,13 @@
         packages.pdf = pkgs.stdenv.mkDerivation {
           name = "${docName}-pdf";
           inherit src;
+          SOURCE_DATE_EPOCH = sourceDateEpoch;
           nativeBuildInputs = [
             builder.full-sphinx-env
           ];
 
           buildPhase = ''
+            ${refuseAPlaceholderEpoch}
             pushd docs
             export TEXMFVAR="$TMPDIR/texmf-var"
             export TEXMFCONFIG="$TMPDIR/texmf-config"
@@ -88,5 +107,6 @@
 
         apps.default = flake-utils.lib.mkApp { drv = makeRunner; };
         apps.make = flake-utils.lib.mkApp { drv = makeRunner; };
+        apps.watch = sphinx-builder.apps.${system}.watch;
       });
 }
