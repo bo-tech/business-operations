@@ -55,6 +55,72 @@ Example kustomization for a volume restore overlay:
      - ../../../../components/volume/restore-volsync
 
 
+.. _sec-backup-existing-volume:
+
+Adding backup to an existing volume
+===================================
+
+A volume already in use needs more care than a new one: its claim has
+to move into a Kustomization of its own, and it has to survive that
+move. Two mistakes are easy to make and both are expensive.
+
+**Pruning.** The ``kustomize.toolkit.fluxcd.io/name`` label decides
+which Kustomization may *apply* an object. Pruning works off the
+Kustomization's stored inventory and ignores that label, so relabelling
+a claim to its new owner does not stop the previous owner from deleting
+it once it leaves that path. Label the claim before the commit lands:
+
+.. code-block:: shell
+
+   kubectl -n <namespace> label pvc <name> \
+       kustomize.toolkit.fluxcd.io/prune=disabled --overwrite
+
+With a storage class that reclaims using ``Delete``, a pruned claim
+takes the volume with it.
+
+**The restore patch.** ``restore-volsync`` patches ``dataSourceRef``
+onto the claim, and a bound ``PersistentVolumeClaim`` has an immutable
+spec. The component therefore cannot be applied to a volume that
+already exists. Flux dry-runs the whole set and rejects all of it, so
+the ``ReplicationDestination`` is not created either. Only a claim
+created fresh can carry the field.
+
+A sequence that works:
+
+1. Set the ``PersistentVolume`` to ``Retain``, so the data outlives the
+   claim whatever happens next.
+2. Label the claim ``prune: disabled`` and relabel its owner to the new
+   Kustomization.
+3. Land the volume Kustomization with the ``backup-volsync`` component
+   alone - an ``overlays/backup`` variant - and let a backup run.
+   Confirm from ``status.latestMoverStatus`` that the snapshot holds
+   what it should, rather than that the job went green.
+4. Switch the Kustomization to ``overlays/${cluster_bootstrap_mode}``
+   and recreate the claim: scale the workload down, delete the claim,
+   and reconcile. It comes back carrying ``dataSourceRef`` and is
+   populated from the backup, which doubles as the first real test of
+   the restore.
+5. Set the ``PersistentVolume`` back to ``Delete`` and remove the
+   retained one.
+
+If a claim is pruned before its volume is set to ``Retain``, the volume
+goes as soon as the last Pod releases the claim. While a Pod still
+mounts it the ``kubernetes.io/pvc-protection`` finalizer holds it open,
+and that is the window in which the reclaim policy can still be
+patched. Recovering from there means clearing the stale binding so the
+retained volume can be claimed again:
+
+.. code-block:: shell
+
+   kubectl patch pv <name> --type=json \
+       -p '[{"op":"remove","path":"/spec/claimRef/uid"},
+            {"op":"remove","path":"/spec/claimRef/resourceVersion"}]'
+
+The volume goes ``Available`` while staying reserved for the same
+namespace and claim name, so recreating the claim binds it back to the
+original data.
+
+
 Restore
 =======
 
