@@ -3,7 +3,7 @@ date: 2024-01-06
 ---
 
 (adr-0006)=
-# 0006 Add caching http proxy
+# ADR-0006 Add caching http proxy
 
 ## Context and Problem Statement
 

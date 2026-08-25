@@ -3,7 +3,7 @@ date: 2024-01-13
 ---
 
 (adr-0008)=
-# 0008 Use Ansible to automate the cluster setup
+# ADR-0008 Use Ansible to automate the cluster setup
 
 ## Context and Problem Statement
 

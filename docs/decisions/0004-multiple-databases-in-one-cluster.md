@@ -3,7 +3,7 @@ date: 2023-09-19
 ---
 
 (adr-0004)=
-# 0004 Multiple databases in one PostgreSQL Cluster
+# ADR-0004 Multiple databases in one PostgreSQL Cluster
 
 ## Context and Problem Statement
 

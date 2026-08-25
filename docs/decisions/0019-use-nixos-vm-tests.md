@@ -3,7 +3,7 @@ date: 2026-02-12
 ---
 
 (adr-0019)=
-# 0019 Start with NixOS VM tests for end-to-end testing
+# ADR-0019 Start with NixOS VM tests for end-to-end testing
 
 ## Context and Problem Statement
 

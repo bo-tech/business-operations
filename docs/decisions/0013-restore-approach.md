@@ -3,7 +3,7 @@ date: 2024-05-30
 ---
 
 (adr-0013)=
-# 0013 Restore Approach
+# ADR-0013 Restore Approach
 
 ## Context and Problem Statement
 

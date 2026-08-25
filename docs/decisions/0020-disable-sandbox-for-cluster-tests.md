@@ -3,7 +3,7 @@ date: 2026-02-13
 ---
 
 (adr-0020)=
-# 0020 Disable sandbox for tests
+# ADR-0020 Disable sandbox for tests
 
 ## Context and Problem Statement
 

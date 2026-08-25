@@ -6,7 +6,7 @@ Superseded by [ADR-0025](0025-external-exposure-via-traefik-gateway-api.md)
 once internal Traefik is deployed.
 
 (adr-0024)=
-# 0024 Forgejo SSH via ingress-nginx TCP passthrough
+# ADR-0024 Forgejo SSH via ingress-nginx TCP passthrough
 
 ## Context and Problem Statement
 

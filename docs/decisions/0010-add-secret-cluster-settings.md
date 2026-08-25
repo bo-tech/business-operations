@@ -3,7 +3,7 @@ date: 2024-01-28
 ---
 
 (adr-0010)=
-# 0010 Add secret cluster settings
+# ADR-0010 Add secret cluster settings
 
 ## Context and Problem Statement
 

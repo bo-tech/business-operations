@@ -3,7 +3,7 @@ date: 2024-01-13
 ---
 
 (adr-0009)=
-# 0009 Use Nix Flakes to split Nix configuration
+# ADR-0009 Use Nix Flakes to split Nix configuration
 
 ## Context and Problem Statement
 

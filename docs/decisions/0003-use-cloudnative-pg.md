@@ -3,7 +3,7 @@ date: 2023-09-19
 ---
 
 (adr-0003)=
-# 0003 Use CloudNativePG as Operator for PostgreSQL
+# ADR-0003 Use CloudNativePG as Operator for PostgreSQL
 
 ## Context and Problem Statement
 

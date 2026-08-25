@@ -3,7 +3,7 @@ date: 2026-04-27
 ---
 
 (adr-0027)=
-# 0027 Upgrade Gateway API CRDs for TLSRoute v1
+# ADR-0027 Upgrade Gateway API CRDs for TLSRoute v1
 
 ## Context and Problem Statement
 

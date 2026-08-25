@@ -3,7 +3,7 @@ date: 2026-04-28
 ---
 
 (adr-0028)=
-# 0028 Read-only sidecar for git-pages public access
+# ADR-0028 Read-only sidecar for git-pages public access
 
 ## Context and Problem Statement
 

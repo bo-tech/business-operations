@@ -3,7 +3,7 @@ date: 2026-02-06
 ---
 
 (adr-0018)=
-# 0018 Exposing ansible via Nix devShell
+# ADR-0018 Exposing ansible via Nix devShell
 
 ## Context and Problem Statement
 

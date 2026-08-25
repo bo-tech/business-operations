@@ -3,7 +3,7 @@ date: 2026-04-23
 ---
 
 (adr-0025)=
-# 0025 External exposure via dedicated Traefik with Gateway API
+# ADR-0025 External exposure via dedicated Traefik with Gateway API
 
 ## Context and Problem Statement
 

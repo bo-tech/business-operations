@@ -3,7 +3,7 @@ date: 2024-05-30
 ---
 
 (adr-0012)=
-# 0012 Support two bootstrap modes
+# ADR-0012 Support two bootstrap modes
 
 
 ## Context and Problem Statement

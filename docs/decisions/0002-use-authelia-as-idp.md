@@ -3,7 +3,7 @@ date: 2023-09-18
 ---
 
 (adr-0002)=
-# 0002 Use Authelia as identity provider
+# ADR-0002 Use Authelia as identity provider
 
 ## Context and Problem Statement
 

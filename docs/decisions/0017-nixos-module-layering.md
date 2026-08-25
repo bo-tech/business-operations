@@ -3,7 +3,7 @@ date: 2026-02-05
 ---
 
 (adr-0017)=
-# 0017 NixOS module layering with profiles
+# ADR-0017 NixOS module layering with profiles
 
 ## Context and Problem Statement
 

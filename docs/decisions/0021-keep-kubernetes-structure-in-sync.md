@@ -3,7 +3,7 @@ date: 2026-02-20
 ---
 
 (adr-0021)=
-# 0021 Keep Kubernetes structure in sync with source
+# ADR-0021 Keep Kubernetes structure in sync with source
 
 
 ## Context and Problem Statement

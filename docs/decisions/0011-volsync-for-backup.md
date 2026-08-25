@@ -4,7 +4,7 @@ status: superseded by [ADR-0014](./0014-stay-with-k8up-for-backup.md)
 ---
 
 (adr-0011)=
-# 0011 Use Volsync for backup and restore
+# ADR-0011 Use Volsync for backup and restore
 
 ## Context and Problem Statement
 

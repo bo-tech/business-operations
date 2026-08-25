@@ -3,7 +3,7 @@ date: 2024-01-13
 ---
 
 (adr-0007)=
-# 0007 Use `nixos-anywhere` for machine deployments
+# ADR-0007 Use `nixos-anywhere` for machine deployments
 
 ## Context and Problem Statement
 

@@ -3,7 +3,7 @@ date: 2026-02-28
 ---
 
 (adr-0022)=
-# 0022 Kustomization.yaml at every directory level
+# ADR-0022 Kustomization.yaml at every directory level
 
 ## Context and Problem Statement
 

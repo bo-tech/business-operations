@@ -3,7 +3,7 @@ date: 2026-04-25
 ---
 
 (adr-0026)=
-# 0026 Replace ingress-nginx with internal Traefik
+# ADR-0026 Replace ingress-nginx with internal Traefik
 
 ## Context and Problem Statement
 

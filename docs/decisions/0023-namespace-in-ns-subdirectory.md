@@ -3,7 +3,7 @@ date: 2026-02-28
 ---
 
 (adr-0023)=
-# 0023 Namespace manifests in ns/ subdirectory
+# ADR-0023 Namespace manifests in ns/ subdirectory
 
 ## Context and Problem Statement
 

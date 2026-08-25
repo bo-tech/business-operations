@@ -3,7 +3,7 @@ date: 2023-09-15
 ---
 
 (adr-0000)=
-# 0000 Use Markdown Any Decision Records
+# ADR-0000 Use Markdown Any Decision Records
 
 ## Context and Problem Statement
 

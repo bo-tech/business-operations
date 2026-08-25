@@ -3,7 +3,7 @@ date: 2024-05-31
 ---
 
 (adr-0014)=
-# 0014 Stay with k8up for backup and restore with restic
+# ADR-0014 Stay with k8up for backup and restore with restic
 
 ## Context and Problem Statement
 

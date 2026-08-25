@@ -3,7 +3,7 @@ date: 2023-09-30
 ---
 
 (adr-0005)=
-# 0005 Adjust the max body size per Ingress resource
+# ADR-0005 Adjust the max body size per Ingress resource
 
 ## Context and Problem Statement
 

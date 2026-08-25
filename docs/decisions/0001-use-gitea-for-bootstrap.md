@@ -3,7 +3,7 @@ date: 2023-09-15
 ---
 
 (adr-0001)=
-# 0001 Use Gitea instead of Gogs
+# ADR-0001 Use Gitea instead of Gogs
 
 ## Context and Problem Statement
 
