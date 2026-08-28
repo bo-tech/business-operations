@@ -59,7 +59,7 @@ Glossary
    k0s-nix
       Integrates :term:`k0s` into NixOS.
 
-      See https://github.com/johbo/k0s-nix.
+      See https://github.com/nix-community/k0s-nix.
 
    k0sctl
       See https://docs.k0sproject.io/head/k0sctl-install/.
