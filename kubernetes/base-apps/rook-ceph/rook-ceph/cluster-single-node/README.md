@@ -9,3 +9,5 @@ Key differences from the base cluster configuration:
 - Replication size 1 with `failureDomain: osd`
 - No standby MDS
 - Object store disabled
+- `devicePathFilter` also accepts a whole raw disk, so the overlay
+  serves a microVM guest as well as a disko-partitioned machine
