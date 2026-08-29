@@ -2,7 +2,7 @@
   description = "Business Operations - Self-hostable infrastructure platform";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     flake-utils.url = "github:numtide/flake-utils";
     k0s-nix = {
       url = "github:nix-community/k0s-nix";
