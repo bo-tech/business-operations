@@ -4,6 +4,9 @@ cephClusterSpec:
     allowMultiplePerNode: true
   mgr:
     count: 1
+  storage:
+    # Two branches: a disko partition, or a microVM's whole raw disk
+    devicePathFilter: "^(/dev/disk/by-partlabel/disk-disk1-data|/dev/vd[b-z])$"
   resources:
     mgr:
       requests:
