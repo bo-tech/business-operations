@@ -6,8 +6,10 @@ rook_ceph_namespace: "rook-ceph"
 
 business_operations_dir: "../../external/business-operations"
 
-rook_ceph_operator_helmrelease_path: "{{ business_operations_dir }}/kubernetes/base-apps/rook-ceph/rook-ceph/operator/helmrelease.yaml"
-rook_ceph_cluster_helmrelease_path: "{{ business_operations_dir }}/kubernetes/base-apps/rook-ceph/rook-ceph/cluster/helmrelease.yaml"
+rook_ceph_operator_helmrelease_path: >-
+  {{ business_operations_dir }}/kubernetes/base-apps/rook-ceph/rook-ceph/operator/helmrelease.yaml
+rook_ceph_cluster_helmrelease_path: >-
+  {{ business_operations_dir }}/kubernetes/base-apps/rook-ceph/rook-ceph/cluster/helmrelease.yaml
 
 rook_ceph_operator_values_files:
   - "{{ business_operations_dir }}/kubernetes/base-apps/rook-ceph/rook-ceph/operator/values.yaml"
