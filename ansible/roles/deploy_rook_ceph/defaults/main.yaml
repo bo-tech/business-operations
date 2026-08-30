@@ -4,13 +4,17 @@ rook_ceph_operator_chart_name: "rook-ceph"
 rook_ceph_cluster_chart_name: "rook-ceph-cluster"
 rook_ceph_namespace: "rook-ceph"
 
-rook_ceph_operator_helmrelease_path: "../../external/business-operations/kubernetes/base-apps/rook-ceph/rook-ceph/operator/helmrelease.yaml"
-rook_ceph_cluster_helmrelease_path: "../../external/business-operations/kubernetes/base-apps/rook-ceph/rook-ceph/cluster/helmrelease.yaml"
+business_operations_dir: "../../external/business-operations"
+
+rook_ceph_operator_helmrelease_path: >-
+  {{ business_operations_dir }}/kubernetes/base-apps/rook-ceph/rook-ceph/operator/helmrelease.yaml
+rook_ceph_cluster_helmrelease_path: >-
+  {{ business_operations_dir }}/kubernetes/base-apps/rook-ceph/rook-ceph/cluster/helmrelease.yaml
 
 rook_ceph_operator_values_files:
-  - "../../external/business-operations/kubernetes/base-apps/rook-ceph/rook-ceph/operator/values.yaml"
-  - "../../external/business-operations/kubernetes/base-apps/rook-ceph/rook-ceph/operator/values-no-dashboards.yaml"
+  - "{{ business_operations_dir }}/kubernetes/base-apps/rook-ceph/rook-ceph/operator/values.yaml"
+  - "{{ business_operations_dir }}/kubernetes/base-apps/rook-ceph/rook-ceph/operator/values-no-dashboards.yaml"
 
 rook_ceph_cluster_values_files:
-  - "../../external/business-operations/kubernetes/base-apps/rook-ceph/rook-ceph/cluster/values.yaml"
-  - "../../external/business-operations/kubernetes/base-apps/rook-ceph/rook-ceph/cluster/values-no-dashboards.yaml"
+  - "{{ business_operations_dir }}/kubernetes/base-apps/rook-ceph/rook-ceph/cluster/values.yaml"
+  - "{{ business_operations_dir }}/kubernetes/base-apps/rook-ceph/rook-ceph/cluster/values-no-dashboards.yaml"

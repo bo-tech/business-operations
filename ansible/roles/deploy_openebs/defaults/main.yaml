@@ -3,6 +3,8 @@ openebs_chart_repo: "https://openebs.github.io/openebs"
 openebs_chart_name: "openebs"
 openebs_namespace: "openebs"
 
-openebs_helmrelease_path: "../../external/business-operations/kubernetes/base-apps/openebs/openebs/app/helmrelease.yaml"
+business_operations_dir: "../../external/business-operations"
+
+openebs_helmrelease_path: "{{ business_operations_dir }}/kubernetes/base-apps/openebs/openebs/app/helmrelease.yaml"
 openebs_values_files:
-  - "../../external/business-operations/kubernetes/base-apps/openebs/openebs/app/values.yaml"
+  - "{{ business_operations_dir }}/kubernetes/base-apps/openebs/openebs/app/values.yaml"
