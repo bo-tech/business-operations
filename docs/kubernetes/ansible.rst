@@ -18,11 +18,19 @@ the staging access concept.
 Setup
 =====
 
-Enter the ansible devShell before running any playbooks:
+Enter the ansible devShell before running any playbooks. From a checkout of
+this repository:
 
 .. code-block:: shell
 
    nix develop .#ansible
+
+A consumer that reaches the platform as a flake input or a submodule names it
+instead, for example:
+
+.. code-block:: shell
+
+   nix develop git+https://codeberg.org/business-operations/business-operations#ansible
 
 The devShell provides:
 
