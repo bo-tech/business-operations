@@ -13,6 +13,7 @@ Business Operations
    services/index
    apps/index
    backup-restore/index
+   architecture
    dev/index
    testing
    changelog

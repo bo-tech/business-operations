@@ -18,6 +18,12 @@ Glossary
       .. _PostgreSQL: https://www.postgresql.org/
       .. _etcd: https://etcd.io/
 
+   Deployment depth
+      The point in the stack at which a run stops — a machine that
+      boots, a cluster that answers, or a cluster with its workloads
+      reconciled into it. A property of the run rather than of the
+      machine. See :ref:`sec-deployment-axes`.
+
    ForwardAuth
       Authentication pattern where a reverse proxy delegates
       authorization decisions to an external service before
@@ -72,6 +78,12 @@ Glossary
    PersistentVolumeClaim
       A request for storage in Kubernetes. See
       https://kubernetes.io/docs/concepts/storage/persistent-volumes/.
+
+   Substrate
+      The environment a machine runs in — bare metal, a hosted VM, a
+      microVM on a NixOS host, or a VM on a workstation. It decides what
+      hardware the machine sees, and nothing above that. See
+      :ref:`sec-deployment-axes`.
 
    Traefik
       Reverse proxy and :term:`Gateway API` controller. See
