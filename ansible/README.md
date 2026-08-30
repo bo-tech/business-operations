@@ -80,7 +80,9 @@ feedback loop.
 
 All paths are relative to `inventory_dir`. The helm roles read their
 HelmRelease and values files out of this repository, wherever the consumer
-checks it out.
+checks it out. `business_operations_dir` says where that is and defaults
+to `../../external/business-operations`; a consumer whose inventory sits
+at another depth sets it once rather than overriding each path.
 
 **Required:**
 

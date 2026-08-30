@@ -3,7 +3,9 @@ cilium_chart_repo: "https://helm.cilium.io/"
 cilium_chart_name: "cilium"
 cilium_namespace: "kube-system"
 
-cilium_helmrelease_path: "../../external/business-operations/kubernetes/base-apps/kube-system/cilium/app/helmrelease.yaml"
+business_operations_dir: "../../external/business-operations"
+
+cilium_helmrelease_path: "{{ business_operations_dir }}/kubernetes/base-apps/kube-system/cilium/app/helmrelease.yaml"
 cilium_values_files:
-  - "../../external/business-operations/kubernetes/base-apps/kube-system/cilium/app/values.yaml"
-  - "../../external/business-operations/kubernetes/base-apps/kube-system/cilium/app/values-no-dashboards.yaml"
+  - "{{ business_operations_dir }}/kubernetes/base-apps/kube-system/cilium/app/values.yaml"
+  - "{{ business_operations_dir }}/kubernetes/base-apps/kube-system/cilium/app/values-no-dashboards.yaml"
