@@ -58,8 +58,8 @@ in the shell before invoking ``ctr``.
 Cilium translates the source address of traffic arriving at a
 ``LoadBalancer`` Service. A proxy behind one therefore logs a
 cluster-internal address for a request rather than the address of the
-Node that made it, and filtering its log by the Node's own address
-returns nothing.
+:term:`Node` that made it, and filtering its log by the Node's own
+address returns nothing.
 
 
 Trust
@@ -67,7 +67,8 @@ Trust
 
 Caching an HTTPS response means terminating the connection and
 re-signing it, which is why a CA is installed into the system trust
-store. Every Node configured with one trusts that CA system-wide, so
-the proxy can read and alter any proxied TLS traffic from that Node.
+store. Every :term:`Node` configured with one trusts that CA
+system-wide, so the proxy can read and alter any proxied TLS traffic
+from that Node.
 Where the proxy runs, and who can reach it, are part of the platform's
 trust boundary rather than an operational detail.
