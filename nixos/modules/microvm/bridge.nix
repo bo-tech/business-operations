@@ -4,14 +4,15 @@
 # and the host IP moves to br0. MicroVM TAP interfaces attach to br0
 # so VMs get direct LAN access.
 #
-# Usage: Set `microvm-bridge.physicalNic` to the host's NIC name.
+# Usage: Set `business-operations.microvm-bridge.physicalNic` to the
+# host's NIC name.
 { config, lib, ... }:
 
 let
-  cfg = config.microvm-bridge;
+  cfg = config.business-operations.microvm-bridge;
 in
 {
-  options.microvm-bridge = {
+  options.business-operations.microvm-bridge = {
     enable = lib.mkEnableOption "bridge for microvm networking";
     physicalNic = lib.mkOption {
       type = lib.types.str;

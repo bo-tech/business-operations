@@ -27,8 +27,8 @@ NixOS Modules
 ``nixosModules.microvm-bridge``
    Host module (``nixos/modules/microvm/bridge.nix``).
    Sets up a bridge (``br0``) so VMs get direct LAN access.
-   Configure with ``microvm-bridge.enable`` and
-   ``microvm-bridge.physicalNic``.
+   Configure with ``business-operations.microvm-bridge.enable`` and
+   ``business-operations.microvm-bridge.physicalNic``.
 
 ``nixosModules.virtualization``
    Host module (``nixos/modules/virtualization.nix``).
