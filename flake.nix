@@ -87,6 +87,11 @@
             inherit pkgs nixpkgs k0s-nix;
             modules = self.nixosModules;
           };
+          node-local-load-balancing =
+            import ./tests/check-node-local-load-balancing.nix {
+              inherit pkgs nixpkgs k0s-nix;
+              modules = self.nixosModules;
+            };
         };
 
         devShells.ansible = pkgs.mkShell {
