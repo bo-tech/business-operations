@@ -77,7 +77,12 @@
               };
             };
           }
-        );
+        ) // {
+          etcd-peer-address = import ./tests/check-etcd-peer-address.nix {
+            inherit pkgs nixpkgs k0s-nix;
+            modules = self.nixosModules;
+          };
+        };
 
         devShells.ansible = pkgs.mkShell {
           packages = ansiblePackages;
