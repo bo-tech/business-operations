@@ -4,10 +4,10 @@
   ...
 }:
 let
-  cfg = config.custom.business-operations;
+  cfg = config.business-operations;
 in
 {
-  options.custom.business-operations = {
+  options.business-operations = {
     enable = lib.mkEnableOption "business-operations platform";
 
     role = lib.mkOption {

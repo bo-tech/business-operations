@@ -18,7 +18,7 @@ let
       k0s-nix.nixosModules.default
       modules.business-operations
       {
-        custom.business-operations = {
+        business-operations = {
           enable = true;
           role = "controller+worker";
           network = {
