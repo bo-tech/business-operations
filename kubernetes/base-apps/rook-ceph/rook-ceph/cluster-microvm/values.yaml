@@ -1,0 +1,3 @@
+cephClusterSpec:
+  storage:
+    devicePathFilter: "^/dev/vd[b-z]$"
