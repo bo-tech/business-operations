@@ -2,8 +2,15 @@
 Testing
 =======
 
-Tests use the NixOS VM test framework (``testers.runNixOSTest``). Test files
-in ``tests/`` are auto-discovered and exposed as ``checks`` in the flake.
+Most tests use the NixOS VM test framework (``testers.runNixOSTest``). Files
+named ``test-*.nix`` in ``tests/`` are auto-discovered and exposed as
+``checks`` in the flake.
+
+A check that only has to read a rendered configuration is cheaper as an
+evaluation check: it builds no machine, so it needs neither a disabled sandbox
+nor network access. Those files are named ``check-*.nix``, outside the
+auto-discovery prefix, and ``flake.nix`` wires each one in by name.
+``check-etcd-peer-address.nix`` is the example.
 
 .. seealso::
 
