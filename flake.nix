@@ -83,6 +83,10 @@
             inherit pkgs nixpkgs k0s-nix;
             modules = self.nixosModules;
           };
+          cache-proxy = import ./tests/check-cache-proxy.nix {
+            inherit pkgs nixpkgs k0s-nix;
+            modules = self.nixosModules;
+          };
         };
 
         devShells.ansible = pkgs.mkShell {
