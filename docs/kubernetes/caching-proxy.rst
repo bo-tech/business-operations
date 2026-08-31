@@ -13,15 +13,18 @@ platform caches at the HTTP layer.
 
 .. code-block:: nix
 
-   custom.business-operations.dev.proxy = {
+   business-operations.cache-proxy = {
+     enable = true;
      url = "http://cache.internal.example:3128";
      caCertificate = ./cache-ca.crt;
      noProxy = [ ".internal.example" ];
    };
 
-The options are defined in ``nixos/modules/business-operations.nix``.
-The ``dev`` namespace does not limit them to a development environment;
-any tier may set them.
+The options are defined in ``nixos/modules/cache-proxy.nix`` and reached
+by importing ``nixosModules.cache-proxy``. That module stands on its
+own: a :term:`Node` that does not run the platform module can still use
+the cache. ``url`` has no default, because the proxy is a property of
+the site rather than of the platform.
 
 
 What the proxy covers
