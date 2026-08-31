@@ -19,7 +19,10 @@ let
 
   machine = nixpkgs.lib.nixosSystem {
     modules = [
-      { nixpkgs.pkgs = pkgs; }
+      # Not the evaluating system's pkgs: reading the unit's
+      # environment forces systemd, which breaks once
+      # --all-systems reaches darwin.
+      { nixpkgs.hostPlatform = "x86_64-linux"; }
       k0s-nix.nixosModules.default
       modules.cache-proxy
       {
