@@ -112,6 +112,7 @@ in
 
     services.k0s = {
       spec.api.address = cfg.cluster.apiAddress;
+      spec.storage.etcd.peerAddress = cfg.network.address;
       role =
         if cfg.role == "single-node"
         then "controller+worker"
