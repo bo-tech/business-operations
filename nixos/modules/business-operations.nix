@@ -54,6 +54,17 @@ in
       default = cfg.network.address;
     };
 
+    cluster.multipleControllers = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        The cluster runs more than one controller. Enables node-local
+        load balancing, so that konnectivity agents reach every
+        controller instead of one. Set it identically on every node of
+        the cluster.
+      '';
+    };
+
     serialConsole = lib.mkEnableOption "serial console (ttyS0)";
 
     sshAuthorizedKeys = lib.mkOption {
@@ -83,6 +94,8 @@ in
     services.k0s = {
       spec.api.address = cfg.cluster.apiAddress;
       spec.storage.etcd.peerAddress = cfg.network.address;
+      spec.network.nodeLocalLoadBalancing.enabled =
+        cfg.cluster.multipleControllers;
       role =
         if cfg.role == "single-node"
         then "controller+worker"

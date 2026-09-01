@@ -34,10 +34,10 @@ let
     }).config.services.k0s.spec.network.nodeLocalLoadBalancing.enabled;
 
   failures =
-    lib.optional (!enabledFor { nodeLocalLoadBalancing = true; })
-      "a cluster asking for node-local load balancing does not get it"
+    lib.optional (!enabledFor { multipleControllers = true; })
+      "a cluster with several controllers does not get node-local load balancing"
     ++ lib.optional (enabledFor { })
-      "node-local load balancing is on for a cluster that did not ask";
+      "node-local load balancing is on for a single controller cluster";
 in
 pkgs.runCommand "check-node-local-load-balancing" { } (
   if failures == [ ] then
