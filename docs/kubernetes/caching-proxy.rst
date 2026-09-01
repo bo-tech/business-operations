@@ -28,7 +28,7 @@ the site rather than of the platform.
 
 
 What the option covers on a Node
-===============================
+================================
 
 The proxy environment reaches the ``k0s`` systemd unit and nothing else
 on the machine. containerd runs under that unit, so container image
