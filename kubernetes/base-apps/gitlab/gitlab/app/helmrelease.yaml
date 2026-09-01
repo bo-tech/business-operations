@@ -109,6 +109,26 @@ spec:
         # See: https://gitlab.com/gitlab-org/gitlab-runner/-/blob/220f6fe97fd98fd1d2c81c07bcf1ad5e61b50023/common/config.go#L638
         config: |
           [[runners]]
+            # The proxy bumps TLS, so every proxied connection is re-signed by
+            # its CA and that CA alone is the whole trust set a job needs. One
+            # variable per ecosystem: no single one covers an image, git
+            # ignoring SSL_CERT_FILE where curl honours it. no_proxy is not
+            # optional - the proxy denies private ranges, so an in-cluster
+            # destination sent through it is refused rather than slowed.
+            environment = [
+              "http_proxy=${cache_proxy_url}",
+              "https_proxy=${cache_proxy_url}",
+              "HTTP_PROXY=${cache_proxy_url}",
+              "HTTPS_PROXY=${cache_proxy_url}",
+              "no_proxy=localhost,127.0.0.1,gitlab-webservice-default,.svc,.cluster.local",
+              "NO_PROXY=localhost,127.0.0.1,gitlab-webservice-default,.svc,.cluster.local",
+              "SSL_CERT_FILE=/var/run/config/local/cache-ca/ca.crt",
+              "NIX_SSL_CERT_FILE=/var/run/config/local/cache-ca/ca.crt",
+              "GIT_SSL_CAINFO=/var/run/config/local/cache-ca/ca.crt",
+              "CURL_CA_BUNDLE=/var/run/config/local/cache-ca/ca.crt",
+              "REQUESTS_CA_BUNDLE=/var/run/config/local/cache-ca/ca.crt",
+              "NODE_EXTRA_CA_CERTS=/var/run/config/local/cache-ca/ca.crt"
+            ]
             [runners.kubernetes]
             image = "ubuntu:22.04"
             [[runners.kubernetes.volumes.config_map]]
