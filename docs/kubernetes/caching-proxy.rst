@@ -47,6 +47,87 @@ traffic to a Kubernetes ``Service`` are reached directly. ``noProxy``
 adds site-specific destinations to that list.
 
 
+.. _sec-caching-proxy-ci:
+
+CI jobs
+=======
+
+GitLab CI jobs reach the proxy by a different route. The runner sets the
+proxy and certificate variables for every job it starts, so a job
+inherits the cache without its repository naming it. The configuration
+sits with the runner in ``kubernetes/base-apps/gitlab/gitlab/app``; the
+consuming repository supplies the proxy URL as ``cache_proxy_url`` and a
+``cache-ca`` ``ConfigMap`` in the ``gitlab`` namespace.
+
+Nix is covered here, unlike on a :term:`Node`: a job container starts
+with an empty store, so every closure it needs comes over the network.
+
+What a job trusts
+-----------------
+
+The ``ConfigMap`` carries two keys, and the distinction matters:
+
+``ca.crt``
+   the proxy's CA alone.
+
+``ca-bundle.crt``
+   the public roots with that CA appended. This is what the certificate
+   variables point at, because a job needs both halves — the proxy bumps
+   TLS, so proxied traffic carries its signature, while a destination in
+   ``no_proxy`` is reached directly and presents its real certificate.
+
+It is a mounted file rather than something a job assembles. A
+``ConfigMap`` volume is present in every container of the job pod before
+anything runs, including the helper that clones; a script only ever runs
+in the build container, so the clone would find nothing.
+
+What an image must satisfy
+--------------------------
+
+There is no single way to tell a program which CA to trust, so the
+runner points one variable per ecosystem at the bundle:
+``SSL_CERT_FILE``, ``NIX_SSL_CERT_FILE``, ``GIT_SSL_CAINFO``,
+``CURL_CA_BUNDLE`` and ``REQUESTS_CA_BUNDLE``, with
+``NODE_EXTRA_CA_CERTS`` naming ``ca.crt`` because node adds it to its own
+roots rather than replacing them. Each is honoured by the tools that know
+it and ignored by the rest, so the list is best effort and grows when an
+ecosystem turns up that none of them covers. It is not even uniform for
+one tool: git ignores ``SSL_CERT_FILE`` on a Debian image while honouring
+it on a Nix-built one.
+
+Nor can the image's own trust store be relied on to carry the CA instead:
+neither ``ubuntu:22.04`` nor the ``nix-flakes`` image ships
+``update-ca-certificates``, and on a Nix-built image the bundle lives
+read-only in the store, so writing to ``/etc/ssl/certs/ca-bundle.crt``
+changes nothing that any tool reads.
+
+An image whose tooling honours none of the variables fails, rather than
+quietly going direct::
+
+   error: unable to download 'https://...': SSL peer certificate or SSH
+   remote key was not OK (60) SSL certificate OpenSSL verify result:
+   self-signed certificate in certificate chain (19)
+
+That is the intended behaviour: a job that cannot use the cache says so,
+and the image gets adjusted. An ``http://`` URL is not a way around it,
+because an origin that redirects to HTTPS fails at the same point.
+
+Where the image does have a trust store and the tool to load it,
+installing the CA there covers every tool in the image at once::
+
+   cp /var/run/config/local/cache-ca/ca.crt \
+      /usr/local/share/ca-certificates/cache-proxy.crt
+   update-ca-certificates
+
+Or the job can leave the proxy alone:
+
+.. code-block:: yaml
+
+   variables:
+     http_proxy: ""
+     https_proxy: ""
+
+
 Confirming that a pull used the proxy
 =====================================
 
