@@ -18,6 +18,13 @@ Glossary
       .. _PostgreSQL: https://www.postgresql.org/
       .. _etcd: https://etcd.io/
 
+   Controller
+      A :term:`Node` running the Kubernetes control plane. Not a
+      controller in the workload sense — the :term:`Gateway API` and
+      ingress controllers described elsewhere are workloads running on
+      a Cluster, not machines forming one. See
+      :ref:`sec-multiple-controllers`.
+
    Deployment depth
       The point in the stack at which a run stops — a machine that
       boots, a cluster that answers, or a cluster with its workloads

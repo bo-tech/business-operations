@@ -18,6 +18,7 @@ to perform additional steps like joining the :term:`Nodes <Node>` into the
 
    nixos
    microvm
+   multiple-controllers
    caching-proxy
    installation
    ansible
