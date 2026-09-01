@@ -90,7 +90,8 @@ inputs, at the topology a real deployment uses. Nothing smaller answers
 it, and it earns its cost only against a change that has already passed
 the cheaper environments.
 
-A multi-node cluster of microVMs is the environment.
+A multi-node cluster of microVMs is the environment. Configuring one is
+covered in :ref:`sec-multiple-controllers`.
 
 Environment tiers
 =================
