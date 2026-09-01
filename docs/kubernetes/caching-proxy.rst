@@ -69,18 +69,30 @@ exactly what the proxy holds.
 What an image must satisfy
 --------------------------
 
-The proxy bumps TLS, so a job has to trust its CA — and that CA is the
-whole trust set a job needs, because every proxied connection is
-re-signed by it. No public root bundle is involved.
+The proxy bumps TLS, so a job has to trust its CA. It has to keep
+trusting the public roots as well: the destinations in ``no_proxy`` are
+reached directly and present their real certificates, and the site's own
+GitLab is one of them. A job therefore needs *both*, and the runner
+assembles them at job start — the image's own root bundle with the proxy
+CA appended, written to ``/tmp/ci-ca-bundle.crt``.
+
+Assembling beats mounting a fixed bundle because the roots belong to the
+image and stay current with it. It also beats the image's own trust
+store, which cannot be counted on: neither ``ubuntu:22.04`` nor the
+``nix-flakes`` image ships ``update-ca-certificates``, and on a Nix-built
+image the bundle lives read-only in the store, so appending to
+``/etc/ssl/certs/ca-bundle.crt`` changes nothing that any tool reads.
 
 There is no single way to tell a program which CA to trust, so the
-runner sets one variable per ecosystem: ``SSL_CERT_FILE``,
-``NIX_SSL_CERT_FILE``, ``GIT_SSL_CAINFO``, ``CURL_CA_BUNDLE``,
-``REQUESTS_CA_BUNDLE`` and ``NODE_EXTRA_CA_CERTS``. Each is honoured by
-the tools that know it and ignored by the rest, so the list is best
-effort and grows when an ecosystem turns up that none of them covers.
-It is not even uniform for one tool: git ignores ``SSL_CERT_FILE`` on a
-Debian image while honouring it on a Nix-built one.
+runner points one variable per ecosystem at that bundle:
+``SSL_CERT_FILE``, ``NIX_SSL_CERT_FILE``, ``GIT_SSL_CAINFO``,
+``CURL_CA_BUNDLE`` and ``REQUESTS_CA_BUNDLE``, with
+``NODE_EXTRA_CA_CERTS`` naming the proxy CA alone because node adds it to
+its own roots rather than replacing them. Each is honoured by the tools
+that know it and ignored by the rest, so the list is best effort and
+grows when an ecosystem turns up that none of them covers. It is not
+even uniform for one tool: git ignores ``SSL_CERT_FILE`` on a Debian
+image while honouring it on a Nix-built one.
 
 An image whose tooling honours none of them fails, rather than quietly
 going direct::
@@ -93,9 +105,9 @@ That is the intended behaviour: a job that cannot use the cache says
 so. An ``http://`` URL is not a way around it, because an origin that
 redirects to HTTPS fails at the same point.
 
-There are two ways out. The image can install the CA into its own trust
-store, which covers every tool in it at once and is the better answer
-for an image used repeatedly::
+There are two ways out. Where the image does have a trust store and the
+tool to load it, installing the CA there covers every tool in the image
+at once::
 
    cp /var/run/config/local/cache-ca/ca.crt \
       /usr/local/share/ca-certificates/cache-proxy.crt
