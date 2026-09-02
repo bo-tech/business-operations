@@ -5,7 +5,7 @@
 =========
 
 Clusters can run as lightweight VMs on bare-metal nodes using
-`microvm.nix <https://github.com/astro/microvm.nix>`_.
+`microvm.nix <https://github.com/microvm-nix/microvm.nix>`_.
 This reuses spare capacity without dedicated hardware and is useful
 for acceptance testing or development clusters.
 

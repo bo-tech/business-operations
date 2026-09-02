@@ -49,7 +49,7 @@ Pointers
 
 - `Renovate Bot Documentation <https://docs.renovatebot.com/>`_
 - `Running Renovate in Kubernetes
-  <https://docs.renovatebot.com/self-hosted/running-in-kubernetes/>`_
+  <https://docs.renovatebot.com/examples/self-hosting/#kubernetes>`_
 
 
 Future improvements

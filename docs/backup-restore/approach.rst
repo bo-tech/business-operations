@@ -55,7 +55,7 @@ Implementation pointers
 -----------------------
 
 - `Mover implementation
-  <https://github.com/backube/volsync/tree/main/controllers/mover/restic>`_
+  <https://github.com/backube/volsync/tree/main/internal/controller/mover/restic>`_
 
 - `Restic shell script
   <https://github.com/backube/volsync/blob/main/mover-restic/entry.sh>`_

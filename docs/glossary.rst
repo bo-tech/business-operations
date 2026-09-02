@@ -4,7 +4,7 @@ Glossary
 .. glossary::
 
    Ansible
-      See https://docs.ansible.com/ansible/latest/index.html.
+      See https://docs.ansible.com/projects/ansible/latest/index.html.
 
    Cluster
       In the context of this document it refers most of the time to a
@@ -47,12 +47,12 @@ Glossary
    GatewayClass
       Cluster-scoped Gateway API resource that binds a Gateway to
       a specific controller implementation. See
-      `Gateway API concepts <https://gateway-api.sigs.k8s.io/concepts/api-overview/>`_.
+      `Gateway API concepts <https://gateway-api.sigs.k8s.io/docs/concepts/api-overview/>`_.
 
    HTTPRoute
       Gateway API resource defining HTTP routing rules from a
       Gateway to backend services. See
-      `HTTPRoute documentation <https://gateway-api.sigs.k8s.io/guides/http-routing/>`_.
+      `HTTPRoute documentation <https://gateway-api.sigs.k8s.io/guides/user-guides/http-routing/>`_.
 
    Instance
       An instance of the deployment, typically a cluster created based on this

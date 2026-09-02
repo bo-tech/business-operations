@@ -8,7 +8,7 @@ to perform additional steps like joining the :term:`Nodes <Node>` into the
 :term:`Cluster`.
 
 
-.. _Ansible: https://docs.ansible.com/ansible/latest/
+.. _Ansible: https://docs.ansible.com/projects/ansible/latest/
 .. _NixOS: https://nixos.org/
 .. _nixos-anywhere: https://nix-community.github.io/nixos-anywhere/
 
