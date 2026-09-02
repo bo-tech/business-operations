@@ -180,6 +180,11 @@ The patch prevents the truncation rather than repairing it. An entry
 stored short before the fix keeps serving short until the store is
 cleared of it.
 
+:ref:`ADR-0035 <adr-0035>` moves container image pulls to a pull-through
+registry, which removes this failure class rather than patching around
+it. Until then the patched build is what keeps a proxied image pull
+whole.
+
 
 Trust
 =====
