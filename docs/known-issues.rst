@@ -40,3 +40,15 @@ cases the snapshot does not contain all restored files.
 
 This is currently worked around by a call to ``sleep`` 20 seconds right before
 creating the snapshot.
+
+
+Truncated image layers behind a caching proxy
+==============================================
+
+A container image pull fails with ``unexpected EOF``, or a layer arrives
+smaller than the registry reports it to be, on a :term:`Node` that fetches
+through a caching proxy in front of a CDN.
+
+The proxy stores a short body after revalidating the entry, and keeps serving
+it. See :ref:`sec-caching-proxy-truncation` for the mechanism and the
+workaround.
