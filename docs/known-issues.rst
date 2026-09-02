@@ -3,7 +3,7 @@ Known issues and limitations
 ==============================
 
 
-Admission Webhook of ingress-nginx
+Admission webhook of ingress-nginx
 ===================================
 
 There seems to be a problem around the FluxCD controller for ``HelmRelease``
@@ -20,7 +20,7 @@ The exact cause is not yet clear.
 As a workaround a restart of the controller does help.
 
 
-External IP Address of Service not working
+External IP address of Service not working
 ===========================================
 
 Restores do at times suffer from external IP addresses not working as expected.
