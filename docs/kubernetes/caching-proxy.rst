@@ -164,9 +164,9 @@ fetching a tarball over plain HTTP — there the truncated body is
 accepted as the file.
 
 `RFC 9110 section 15.4.5
-<https://www.rfc-editor.org/rfc/rfc9110#section-15.4.5>`_ states that a
-304 carries no content, so the stored length is never the 304's to
-revise. This is a defect in squid rather than in the CDN, and it is
+<https://www.rfc-editor.org/rfc/rfc9110.html#section-15.4.5>`_ states
+that a 304 carries no content, so the stored length is never the 304's
+to revise. This is a defect in squid rather than in the CDN, and it is
 unfixed upstream as of September 2026.
 
 Run a squid build that drops ``Content-Length`` from the 304 header
