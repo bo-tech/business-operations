@@ -16,9 +16,17 @@ nix run .#make -- latexpdf
 # Build EPUB documentation
 nix run .#make -- epub
 
+# Check that external links still resolve
+nix run .#make -- linkcheck
+
 # Enter development shell with all tools available
 nix develop
 ```
+
+`linkcheck` fails on a link that 404s and passes on one that redirects,
+so read its report rather than its exit status: a permanent redirect is
+a page that has moved and is worth following, while a temporary one
+means the address in the docs is already the right one.
 
 ## Building Packages
 
