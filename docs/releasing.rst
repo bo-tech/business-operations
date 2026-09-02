@@ -17,6 +17,16 @@ The release tools are not assumed to be installed:
 
 Run everything below from that shell.
 
+The first run needs both flake files tracked. Nix will not evaluate an
+untracked ``flake.nix``, and ``cog bump`` refuses to start against an
+untracked ``flake.lock``:
+
+.. code-block:: console
+
+   $ git add flake.nix
+   $ nix flake lock
+   $ git add flake.lock
+
 
 Recording a change
 ==================

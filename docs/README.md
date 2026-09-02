@@ -42,10 +42,15 @@ nix build ./docs#pdf
 
 Build output will be in `result/share/doc/`.
 
-## CI
+The HTML package treats a Sphinx warning as an error, so a broken
+reference fails the build rather than rendering as plain text. The
+local builds above do not, so a page still being written does not fail
+while you are working on it.
 
-Documentation is built and published automatically via CI on pushes
-to the main branch.
+## Continuous integration
+
+None ships with this repository. A pipeline that builds these docs
+arrives by applying a CI overlay template for the forge that hosts it.
 
 ## Architecture Decision Records
 

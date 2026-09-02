@@ -14,10 +14,22 @@ changelog.d/+reopen-unreleased.fixed.md
 ```
 
 The content is the entry itself, written for someone consuming a
-release rather than reading the commits:
+release rather than reading the commits. Write in the present tense,
+describing the repository as it now is rather than what you did to it.
+A fix usually reads as the absence of the problem.
 
 ```markdown
-A generated repository can release more than once
+A generated repository can release more than once.
+```
+
+Start the entry with a capital and end it with a full stop. Keep it to
+a few lines. One sentence is often enough; add more only to say what
+was wrong before and why it mattered.
+
+```markdown
+A first release no longer stalls on the flake files. Nix will not
+evaluate an untracked `flake.nix`, so the release shell could not be
+entered in a fresh clone.
 ```
 
 Write the entry without a leading `-`. towncrier adds the bullet when it

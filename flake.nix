@@ -32,13 +32,16 @@
           import ./nixos/modules/business-operations.nix;
       };
 
-      ansible = {
+      lib.ansible = {
         rolesPath = "${self}/ansible/roles";
         playbooksPath = "${self}/ansible/playbooks";
       };
     }
     //
-    flake-utils.lib.eachDefaultSystem (system:
+    flake-utils.lib.eachSystem [
+      "x86_64-linux"
+      "aarch64-linux"
+    ] (system:
       let
         pkgs = import nixpkgs {
           inherit system;
@@ -93,6 +96,8 @@
               modules = self.nixosModules;
             };
         };
+
+        formatter = pkgs.nixfmt-tree;
 
         devShells.ansible = pkgs.mkShell {
           packages = ansiblePackages;
