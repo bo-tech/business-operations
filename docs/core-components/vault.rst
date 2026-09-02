@@ -26,7 +26,7 @@ According to the docs, this can be done on the CLI::
       -format=json > cluster-keys.json
 
 Source: `Vault installation to minikube via Helm with Integrated Storage
-<https://developer.hashicorp.com/vault/tutorials/kubernetes/kubernetes-minikube-raft>`_
+<https://developer.hashicorp.com/vault/tutorials/kubernetes-introduction/kubernetes-minikube-raft>`_
 
 
 Configuring

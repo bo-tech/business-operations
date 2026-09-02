@@ -29,7 +29,7 @@
 
 - :doc:`/core-components/rook` is used to provide the default storage.
 
-- `SOPS <https://toolkit.fluxcd.io/guides/mozilla-sops/>`_: Managed secrets for
+- `SOPS <https://fluxcd.io/flux/guides/mozilla-sops/>`_: Managed secrets for
   Kubernetes, Ansible and Terraform which are committed to Git.
 
 - `Vault <https://developer.hashicorp.com/vault/docs>`_: Cluster internal

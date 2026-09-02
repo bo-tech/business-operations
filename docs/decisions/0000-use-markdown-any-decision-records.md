@@ -14,9 +14,9 @@ or other fields. Which format and structure should these records follow?
 ## Considered Options
 
 * [MADR](https://adr.github.io/madr/) 3.0.0 – The Markdown Any Decision Records
-* [Michael Nygard's template](http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions) – The first incarnation of the term "ADR"
+* [Michael Nygard's template](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) – The first incarnation of the term "ADR"
 * [Sustainable Architectural Decisions](https://www.infoq.com/articles/sustainable-architectural-design-decisions) – The Y-Statements
-* Other templates listed at <https://github.com/joelparkerhenderson/architecture_decision_record>
+* Other templates listed at <https://github.com/architecture-decision-record/architecture-decision-record>
 * Formless – No conventions for file format and structure
 
 ## Decision Outcome

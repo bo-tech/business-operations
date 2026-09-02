@@ -18,7 +18,7 @@ Pointers
   https://cloudnative-pg.io
 
 - Blog post comparing PostgreSQL operators ---
-  https://blog.palark.com/cloudnativepg-and-other-kubernetes-operators-for-postgresql/
+  https://palark.com/blog/cloudnativepg-and-other-kubernetes-operators-for-postgresql/
 
 
 Usage pattern
