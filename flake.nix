@@ -32,7 +32,7 @@
           import ./nixos/modules/business-operations.nix;
       };
 
-      ansible = {
+      lib.ansible = {
         rolesPath = "${self}/ansible/roles";
         playbooksPath = "${self}/ansible/playbooks";
       };
