@@ -171,7 +171,8 @@ unfixed upstream as of September 2026.
 
 Run a squid build that drops ``Content-Length`` from the 304 header
 merge. `ci-cache <https://codeberg.org/johbo/ci-cache>`_ carries the
-patch as ``patches/0002-fix-drop-content-length-from-304-header-merge``;
+patch as
+``patches/0002-fix-drop-content-length-from-304-header-merge.patch``;
 its container image is published only to a private registry, so a
 consumer builds the image locally.
 
