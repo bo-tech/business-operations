@@ -47,7 +47,7 @@ Glossary
    GatewayClass
       Cluster-scoped Gateway API resource that binds a Gateway to
       a specific controller implementation. See
-      `Gateway API concepts <https://gateway-api.sigs.k8s.io/concepts/api-overview/>`_.
+      `Gateway API concepts <https://gateway-api.sigs.k8s.io/docs/concepts/api-overview/>`_.
 
    HTTPRoute
       Gateway API resource defining HTTP routing rules from a
