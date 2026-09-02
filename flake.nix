@@ -97,6 +97,8 @@
             };
         };
 
+        formatter = pkgs.nixfmt-tree;
+
         devShells.ansible = pkgs.mkShell {
           packages = ansiblePackages;
           shellHook = ''
