@@ -49,3 +49,13 @@ latex_documents = [
 
 
 intersphinx_mapping = {}
+
+
+# -- Options for link checking -----------------------------------------------
+
+# matrix.to routes the fragment client-side, so the document linkcheck
+# fetches carries no anchor to match. Exempting the host from the anchor
+# check keeps the URL itself checked, which linkcheck_ignore would drop.
+linkcheck_anchors_ignore_for_url = [
+    r'https://matrix\.to/.*',
+]
