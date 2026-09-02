@@ -146,6 +146,46 @@ cluster-internal address for a request rather than the address of the
 address returns nothing.
 
 
+.. _sec-caching-proxy-truncation:
+
+Truncated entries from a CDN 304
+================================
+
+A proxy that revalidates a stored entry can truncate it. Where the
+origin is a CDN that answers the conditional request with ``304 Not
+Modified`` and a ``Content-Length: 0`` header, squid merges that length
+into the entry it holds, and the entry then serves short. Observed on
+``cdn.registry.gitlab-static.net``: a 54.8 MB image layer served as
+6.29 MB, with the pull aborting on ``unexpected EOF``.
+
+A content-addressed pull detects this, because the digest no longer
+matches what arrived. A tag-based pull does not, and neither does a job
+fetching a tarball over plain HTTP — there the truncated body is
+accepted as the file.
+
+`RFC 9110 section 15.4.5
+<https://www.rfc-editor.org/rfc/rfc9110.html#section-15.4.5>`_ states
+that a 304 carries no content, so the stored length is never the 304's
+to revise. This is a defect in squid rather than in the CDN, and it is
+unfixed upstream as of September 2026.
+
+Run a squid build that drops ``Content-Length`` from the 304 header
+merge. `ci-cache <https://codeberg.org/johbo/ci-cache>`_ carries the
+patch as
+``patches/0002-fix-drop-content-length-from-304-header-merge.patch``;
+its container image is published only to a private registry, so a
+consumer builds the image locally.
+
+The patch prevents the truncation rather than repairing it. An entry
+stored short before the fix keeps serving short until the store is
+cleared of it.
+
+:ref:`ADR-0035 <adr-0035>` moves container image pulls to a pull-through
+registry, which removes this failure class rather than patching around
+it. Until then the patched build is what keeps a proxied image pull
+whole.
+
+
 Trust
 =====
 
