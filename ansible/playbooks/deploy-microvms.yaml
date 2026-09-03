@@ -9,6 +9,43 @@
         state: directory
       delegate_to: "{{ microvm_host }}"
 
+    - name: Check whether the guest has a secrets file
+      ansible.builtin.stat:
+        path: "{{ nixos_flake }}/secrets/{{ inventory_hostname }}.sops.yaml"
+      register: guest_secrets
+      delegate_to: localhost
+
+    - name: Place the guest's SSH host key
+      when: guest_secrets.stat.exists
+      block:
+        - name: Ensure the ssh directory exists in the guest's share
+          ansible.builtin.file:
+            path: "/var/lib/microvms/{{ inventory_hostname }}/share/etc/ssh"
+            state: directory
+            mode: "0755"
+          delegate_to: "{{ microvm_host }}"
+
+        - name: Read the guest's SSH host key
+          ansible.builtin.command:
+            argv:
+              - sops
+              - --decrypt
+              - --extract
+              - '["ssh"]["ssh_host_ed25519_key"]'
+              - "{{ nixos_flake }}/secrets/{{ inventory_hostname }}.sops.yaml"
+          register: guest_host_key
+          changed_when: false
+          no_log: true
+          delegate_to: localhost
+
+        - name: Write it into the guest's share
+          ansible.builtin.copy:
+            content: "{{ guest_host_key.stdout }}\n"
+            dest: "/var/lib/microvms/{{ inventory_hostname }}/share/etc/ssh/ssh_host_ed25519_key"
+            mode: "0600"
+          no_log: true
+          delegate_to: "{{ microvm_host }}"
+
     - name: Create raw Ceph volume if missing
       ansible.builtin.command: >-
         truncate -s {{ microvm_ceph_volume_size | default('51200M') }}
