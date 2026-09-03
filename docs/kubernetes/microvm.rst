@@ -48,7 +48,8 @@ The consuming repository provides:
 - **Hypervisor configs** --- Physical NIC name, host IP, bridge enable.
 
 - **Ansible inventory** --- Maps VMs to hypervisor hosts via
-  ``microvm_host``.
+  ``microvm_host``, and sets ``microvm_activate`` to ``switch`` or
+  ``restart`` to choose how a deploy activates the new closure.
 
 
 Host Setup
@@ -73,6 +74,8 @@ the target environment:
    nix develop ./external/business-operations#ansible
    INVENTORY=./ansible/inventory-microvm.yaml
 
+.. _sec-microvm-deploy:
+
 Deploy VMs to their hypervisor hosts
 -------------------------------------
 
@@ -80,9 +83,26 @@ Deploy VMs to their hypervisor hosts
 
    ansible-playbook -i $INVENTORY $BO_PLAYBOOKS/deploy-microvms.yaml
 
-This installs the NixOS configuration on the hypervisor, creates
-volumes (``/var``, Ceph), and starts the VM. The inventory must
-define ``microvm_host`` for each VM.
+On a hypervisor that carries no guest of this name yet, this installs
+the NixOS configuration, creates volumes (``/var``, Ceph), and starts
+the VM. The inventory must define ``microvm_host`` for each VM.
+
+On one that already carries the guest, a deploy is a switch rather than
+a fresh install --- the microvm.nix equivalent of ``nixos-rebuild
+switch``. The new closure is installed and then activated, either by
+switching into the running guest or by restarting it onto the closure,
+depending on ``microvm_activate``. A volume that exists is left alone
+and nothing removes ``/var/lib/microvms/<guest>``, so the machine comes
+back with the ``var.img`` and ``ceph.img`` it had before, and with them
+its etcd and its Flux installation. Bootstrapping such a cluster again
+fails at ``kubectl apply --server-side`` with a field manager conflict
+against ``kustomize-controller``.
+
+Destroying the guest is therefore what makes the next deploy build a
+machine from scratch --- see ``destroy-microvms.yaml`` below. The switch
+assumes a guest that is already running; on a first deploy there is
+none, which is what `deploy-microvms fails on fresh deployment`_
+describes.
 
 Where a VM has a secrets file at ``<flake>/secrets/<vm>.sops.yaml``,
 the playbook also places its ``ssh.ssh_host_ed25519_key`` into the
@@ -118,7 +138,9 @@ Other lifecycle playbooks
 - ``start-microvms.yaml`` --- Start VM services.
 - ``stop-microvms.yaml`` --- Stop VM services.
 - ``restart-microvms.yaml`` --- Restart VM services.
-- ``destroy-microvms.yaml`` --- Stop and remove VMs.
+- ``destroy-microvms.yaml`` --- Stop the ``microvm@`` unit and remove
+  ``/var/lib/microvms/<guest>`` with its volumes, so the next deploy
+  builds the machine from scratch.
 
 Rebuilding a running VM after configuration changes::
 
