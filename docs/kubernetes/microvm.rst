@@ -84,6 +84,13 @@ This installs the NixOS configuration on the hypervisor, creates
 volumes (``/var``, Ceph), and starts the VM. The inventory must
 define ``microvm_host`` for each VM.
 
+Where a VM has a secrets file at ``<flake>/secrets/<vm>.sops.yaml``,
+the playbook also places its ``ssh.ssh_host_ed25519_key`` into the
+VM's ``/etc`` share before the VM boots. sops-nix decrypts with that
+key, so placing it is what lets a VM be destroyed and recreated
+without becoming a different machine. A VM without a secrets file
+generates a key on first boot as before.
+
 Bootstrap the Kubernetes cluster
 ---------------------------------
 
