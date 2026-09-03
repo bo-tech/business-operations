@@ -58,3 +58,10 @@ restore from backup are only two command calls away.
 
 Reach me via [`@jbornhold:matrix.org`](https://matrix.to/#/@jbornhold:matrix.org)
 or [`@johbo@mastodon.social`](https://mastodon.social/@johbo).
+
+
+## License
+
+MIT, see [`LICENSES/MIT.txt`](LICENSES/MIT.txt). The repository follows
+[REUSE](https://reuse.software/), so `reuse lint` states the licensing of
+every file.
