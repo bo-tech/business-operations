@@ -75,6 +75,44 @@ configuration management to the operator, and the imports stop being
 applied.
 
 
+Configuring it with NixOS
+=========================
+
+The ``registry-mirror`` module writes both files above. It is
+importable on its own, so a :term:`Node` that does not run the platform
+module can pull through the mirror:
+
+.. code-block:: nix
+
+   {
+     imports = [ business-operations.nixosModules.registry-mirror ];
+
+     business-operations.registry-mirror = {
+       enable = true;
+       url = "http://10.96.0.30:5000";
+     };
+   }
+
+``url`` has no default, because the mirror's address is a property of
+the site.
+
+``upstreamsBase`` holds the registries the platform pulls from, each
+mapped to the ``server`` containerd falls back to. A site adds its own
+through ``upstreams``, which is merged over the base rather than
+replacing it:
+
+.. code-block:: nix
+
+   business-operations.registry-mirror.upstreams = {
+     "forge.internal.example" = "https://forge.internal.example";
+   };
+
+An upstream the platform pulls from belongs in the base instead, so
+that every site mirrors it. One missing from the base is pulled
+directly, and no error says so --- the mirror is simply bypassed for
+it.
+
+
 Verifying that pulls go through it
 ==================================
 
