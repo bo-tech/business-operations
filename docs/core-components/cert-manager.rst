@@ -1,3 +1,5 @@
+.. _sec-cert-manager:
+
 ==============
  Cert Manager
 ==============
@@ -5,6 +7,10 @@
 
 Overview
 ========
+
+``cert-manager`` issues certificates for public names. It is one half of
+:ref:`sec-certificate-trust`, which describes how private names are
+meant to be served as well.
 
 The current setup uses the DNS system, so that it can also be used for
 clusters which are not reachable from the internet.
