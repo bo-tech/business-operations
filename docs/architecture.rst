@@ -18,3 +18,4 @@ of applications all arrive from whichever repository consumes it.
    architecture/constraints
    architecture/deployment
    architecture/principles/deployment-axes
+   architecture/principles/certificate-trust
