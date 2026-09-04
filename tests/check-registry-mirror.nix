@@ -18,9 +18,8 @@ let
 
   machine = nixpkgs.lib.nixosSystem {
     modules = [
-      # Not the evaluating system's pkgs: reading environment.etc
-      # forces a Linux stdenv, which breaks once --all-systems reaches
-      # darwin.
+      # Not the evaluating system's pkgs: a NixOS system evaluates for
+      # Linux whatever system the check itself is built for.
       { nixpkgs.hostPlatform = "x86_64-linux"; }
       k0s-nix.nixosModules.default
       modules.registry-mirror

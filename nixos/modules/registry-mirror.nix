@@ -12,7 +12,9 @@
 let
   cfg = config.business-operations.registry-mirror;
 
-  configPath = "/etc/k0s/containerd.d/certs.d";
+  # Relative to /etc, so that the drop-in's config_path and the files
+  # it points at cannot drift apart.
+  certsDir = "k0s/containerd.d/certs.d";
 
   # `override_path` keeps containerd from appending /v2 to a host URL
   # that already carries one, which is what addressing the upstream as
@@ -27,7 +29,7 @@ let
 
   hostsFiles = lib.mapAttrs' (
     registry: server:
-    lib.nameValuePair "k0s/containerd.d/certs.d/${registry}/hosts.toml" {
+    lib.nameValuePair "${certsDir}/${registry}/hosts.toml" {
       text = hostsToml registry server;
     }
   ) (cfg.upstreamsBase // cfg.upstreams);
@@ -70,7 +72,7 @@ in
         version = 3
 
         [plugins."io.containerd.cri.v1.images".registry]
-        config_path = "${configPath}"
+        config_path = "/etc/${certsDir}"
       '';
     }
     // hostsFiles;
