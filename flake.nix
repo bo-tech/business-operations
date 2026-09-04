@@ -24,6 +24,7 @@
         microvm-bridge = import ./nixos/modules/microvm/bridge.nix;
         virtualization = import ./nixos/modules/virtualization.nix;
         cache-proxy = import ./nixos/modules/cache-proxy.nix;
+        registry-mirror = import ./nixos/modules/registry-mirror.nix;
 
         profile-base = import ./nixos/profiles/base.nix;
         profile-oci-container = import ./nixos/profiles/oci-container.nix;
@@ -88,6 +89,10 @@
             modules = self.nixosModules;
           };
           cache-proxy = import ./tests/check-cache-proxy.nix {
+            inherit pkgs nixpkgs k0s-nix;
+            modules = self.nixosModules;
+          };
+          registry-mirror = import ./tests/check-registry-mirror.nix {
             inherit pkgs nixpkgs k0s-nix;
             modules = self.nixosModules;
           };
