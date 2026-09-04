@@ -20,6 +20,7 @@ to perform additional steps like joining the :term:`Nodes <Node>` into the
    microvm
    multiple-controllers
    caching-proxy
+   registry-mirror
    installation
    ansible
    bootstrap-overview
