@@ -4,8 +4,11 @@
  Authelia IdP
 =============
 
-Authelia is used to protect the default ``Ingress`` and provides both
-authentication and authorization.
+Authelia provides both authentication and authorization for the
+applications the platform serves. Routes on the internal Traefik delegate
+to it through a ForwardAuth middleware; see :ref:`app-traefik`.
+
+Authelia's own route carries no such filter — it is what serves the login.
 
 The users are configured via :doc:`lldap`.
 

@@ -22,6 +22,13 @@ hajimari:
       - rook-ceph
       - secrets
       - security
+  # Hajimari discovers from Ingress only, so an app on an HTTPRoute is
+  # listed here instead. See ADR-0038.
+  customApps:
+    - group: security
+      apps:
+        - name: Authelia
+          url: https://auth.${cluster_domain}
 
 ingress:
   main:
