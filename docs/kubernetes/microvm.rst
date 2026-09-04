@@ -62,6 +62,28 @@ A NixOS host needs preparation before it can run microVMs:
 - ``nixosModules.virtualization`` and ``nixosModules.microvm-bridge``
 
 
+Hosts that cannot bridge
+------------------------
+
+``microvm-bridge`` makes the host's physical interface a port of
+``br0``, which puts guests on the LAN. A host whose only interface is
+wifi cannot do this. 802.11 associates one MAC address per station and
+an infrastructure-mode frame has no field for a sender behind that
+station, so a bridged guest's frames are never carried.
+
+Such a host gives ``br0`` no uplink and masquerades guest traffic out
+through its own interface instead. Guests then reach the network but
+are not reachable from the LAN. The ``bridge`` interface type needs no
+change: it attaches a tap to the named bridge whatever that bridge is
+attached to.
+
+Where the host also runs libvirtd, add the bridge to
+``virtualisation.libvirtd.allowedBridges``. libvirtd writes
+``/etc/qemu/bridge.conf``, which is the ACL ``qemu-bridge-helper``
+reads when attaching the tap, and it overrides the permissive default
+the microvm.nix host module sets.
+
+
 Deploying VMs
 =============
 
