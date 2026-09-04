@@ -5,7 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     flake-utils.url = "github:numtide/flake-utils";
     k0s-nix = {
-      url = "github:nix-community/k0s-nix";
+      # TODO: Back to nix-community once k0s-nix PR 141 lands.
+      url = "github:johbo/k0s-nix/default-1-36";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
