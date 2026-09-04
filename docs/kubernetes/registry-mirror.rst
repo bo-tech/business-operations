@@ -6,10 +6,10 @@
 
 A :term:`Node` can pull container images through a pull-through
 registry instead of fetching each one from its upstream. The mirror
-speaks the OCI protocol rather than caching at the HTTP layer, which
-is what separates it from the :ref:`caching proxy <sec-caching-proxy>`;
-the proxy continues to serve everything that is not an image pull.
-:ref:`ADR-0035 <adr-0035>` records the decision.
+speaks the OCI protocol rather than caching at the HTTP layer, which is
+what separates it from the :ref:`caching proxy <sec-caching-proxy>`.
+Where a mirror is in use, the proxy serves everything that is not an
+image pull. :ref:`ADR-0035 <adr-0035>` records the decision.
 
 The mirror itself is not part of this repository. A consuming
 repository supplies its address. The mirror must serve upstream bytes
