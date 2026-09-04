@@ -36,6 +36,14 @@ Disable the sandbox for tests which need network access:
 
    nix build .#checks.aarch64-darwin.k0s-profile -L --option sandbox false
 
+Those tests cannot be offloaded to a remote builder. ``sandbox`` is
+read by the daemon that runs the build, so the option above never
+reaches a builder configured with ``sandbox = true`` and the test fails
+on ``condition=Ready node/node1`` where the same test passes locally.
+Marking the derivation ``__noChroot`` does not help either, since a
+daemon refuses that unless its ``sandbox`` is ``relaxed``. Build them on
+a machine that runs them itself.
+
 
 Interactive debugging with a Python REPL (runs outside the sandbox):
 
