@@ -4,8 +4,8 @@ kind: Kustomization
 namespace: network
 resources:
   - ./helmrelease.yaml
-  - ./middleware-forwardauth.yaml
   - ./gateway-git-pages.yaml
+  - ../../../../shared/authelia-forwardauth
 
 configMapGenerator:
   - name: traefik-internal-values
