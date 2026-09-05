@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: default
 resources:
   - ./helmrelease.yaml
+  - ./httproute.yaml
 
 configMapGenerator:
   - name: mayan-edms-helm-values

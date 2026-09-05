@@ -27,6 +27,8 @@ hajimari:
   customApps:
     - group: default
       apps:
+        - name: Mayan EDMS
+          url: https://mayan.${cluster_domain}
         - name: Taiga
           url: https://taiga.${cluster_domain}
         - name: Tryton
