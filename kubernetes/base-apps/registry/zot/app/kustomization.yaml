@@ -7,3 +7,6 @@ resources:
 
 patches:
   - path: patch-harden.yaml
+    target:
+      kind: Deployment
+      name: zot
