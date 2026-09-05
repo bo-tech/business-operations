@@ -5,7 +5,6 @@ namespace: network
 resources:
   - ./helmrelease.yaml
   - ./gateway-git-pages.yaml
-  - ../../../../shared/authelia-forwardauth
 
 configMapGenerator:
   - name: traefik-internal-values
