@@ -113,6 +113,42 @@ directly, and no error says so --- the mirror is simply bypassed for
 it.
 
 
+Seeding a Node before the mirror answers
+========================================
+
+The mirror runs in the cluster, on a ClusterIP that Cilium translates
+on the consuming :term:`Node`. So it cannot serve that Node's own
+Cilium pull: the thing being fetched is the thing that would do the
+fetching. :ref:`ADR-0037 <adr-0037>` records the decision.
+
+The images that precede the mirror ride in the Node's nix closure
+instead. k0s imports every file in ``/var/lib/k0s/images/`` into
+containerd at startup, so nothing has to serve them:
+
+.. code-block:: nix
+
+   {
+     imports = [ business-operations.nixosModules.image-bundle ];
+
+     business-operations.image-bundle.enable = true;
+   }
+
+``imagesBase`` carries the sandbox image, zot and the two Cilium
+images. A site adds its own through ``images``, merged over the base
+the way ``upstreams`` is. The pins are amd64.
+
+This is an optimisation and not a mechanism. With it off the deploy
+path is identical and only slower, and a stale pin costs only the
+pull it would have saved --- containerd fetches the current image
+through the mirror either way.
+
+Two consequences worth knowing. A changed pin is imported at the next
+k0s start rather than at once, because the modification time k0s
+compares is the one nix gives every store path. And turning the option
+off leaves the archives in place, since ``/var/lib`` is state rather
+than nix-managed; removing them by hand is what unpins the images.
+
+
 Verifying that pulls go through it
 ==================================
 
