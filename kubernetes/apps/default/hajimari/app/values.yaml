@@ -38,18 +38,6 @@ hajimari:
         - name: Prometheus
           url: https://prometheus.${cluster_domain}
 
-ingress:
-  main:
-    enabled: true
-    ingressClassName: nginx
-    hosts:
-      - host: &host apps.${cluster_domain}
-        paths:
-          - path: /
-            pathType: Prefix
-    tls:
-      - hosts:
-          - *host
 persistence:
   data:
     enabled: true
