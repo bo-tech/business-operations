@@ -49,11 +49,7 @@ spec:
       enabled: true
 
     ingress:
-      annotations:
-        hajimari.io/enable: "true"
-      hostname: "taiga.${cluster_domain}"
-      tls: true
-      secretName: ""
+      enabled: false
 
     persistence:
       static:

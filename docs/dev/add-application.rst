@@ -26,6 +26,11 @@ same way — several of the charts used here cannot produce one at all.
 Note that the ``backendRef`` then names a Service the chart derives from
 the release name, and nothing checks the two still agree.
 
+Set ``ingress.enabled`` to ``false`` rather than deleting the values
+block. Most of the charts used here default it to true, so a block that
+is merely removed leaves an ``Ingress`` behind on whatever host the
+chart defaults to.
+
 
 Add to Hajimari
 ================
@@ -46,6 +51,11 @@ application on an ``HTTPRoute`` is invisible to it. List it in Hajimari's
 
 The group is the namespace the application runs in, which is what discovery
 used. ``icon`` and ``info`` are optional.
+
+Helm replaces a list rather than merging it, so a site overlay that sets
+``customApps`` discards every entry from the values above. An application
+only one cluster runs is listed in that overlay instead, which then has
+to repeat the platform's entries to keep them.
 
 Restart Hajimari afterwards::
 

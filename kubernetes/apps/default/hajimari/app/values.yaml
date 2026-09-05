@@ -25,6 +25,14 @@ hajimari:
   # Hajimari discovers from Ingress only, so an app on an HTTPRoute is
   # listed here instead. See ADR-0038.
   customApps:
+    - group: default
+      apps:
+        - name: Mayan EDMS
+          url: https://mayan.${cluster_domain}
+        - name: Taiga
+          url: https://taiga.${cluster_domain}
+        - name: Tryton
+          url: https://tryton.${cluster_domain}
     - group: security
       apps:
         - name: Authelia
@@ -38,18 +46,6 @@ hajimari:
         - name: Prometheus
           url: https://prometheus.${cluster_domain}
 
-ingress:
-  main:
-    enabled: true
-    ingressClassName: nginx
-    hosts:
-      - host: &host apps.${cluster_domain}
-        paths:
-          - path: /
-            pathType: Prefix
-    tls:
-      - hosts:
-          - *host
 persistence:
   data:
     enabled: true

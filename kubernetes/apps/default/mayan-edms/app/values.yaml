@@ -21,11 +21,7 @@ configuration:
 frontend:
   replicaCount: 1
   ingress:
-    enabled: true
-    className: nginx
-    annotations:
-      hajimari.io/enable: "true"
-      nginx.ingress.kubernetes.io/proxy-body-size: 20m
+    enabled: false
 
 workers:
   worker-a:
