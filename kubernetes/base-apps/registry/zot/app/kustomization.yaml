@@ -4,3 +4,6 @@ kind: Kustomization
 namespace: registry
 resources:
   - rendered.yaml
+
+patches:
+  - path: patch-harden.yaml
