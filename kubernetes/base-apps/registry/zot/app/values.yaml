@@ -1,0 +1,29 @@
+---
+image:
+  # Arch-specific, not the chart's multi-arch `zot`: this reference is
+  # pinned again in `business-operations.image-bundle`.
+  repository: ghcr.io/project-zot/zot-linux-amd64
+  tag: "v2.1.20@sha256:95a837a0afacf5b7edc0c92493f04beee6891989b8d2fd50a00cf65a1e6d4fd5"
+
+service:
+  # The chart defaults to NodePort, which would expose the mirror.
+  type: ClusterIP
+  clusterIP: "10.96.0.30"
+  port: 5000
+
+# config.json arrives through render.sh's --set-file, not from here.
+mountConfig: true
+
+persistence: false
+
+env:
+  - name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      secretKeyRef:
+        name: zot-s3
+        key: s3_access_key_id
+  - name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: zot-s3
+        key: s3_access_key_secret
