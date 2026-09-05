@@ -11,10 +11,11 @@ what separates it from the :ref:`caching proxy <sec-caching-proxy>`.
 Where a mirror is in use, the proxy serves everything that is not an
 image pull. :ref:`ADR-0035 <adr-0035>` records the decision.
 
-The mirror itself is not part of this repository. A consuming
-repository supplies its address. The mirror must serve upstream bytes
-unchanged: a mirror that rewrites manifests changes their digests, and
-every digest-pinned reference then fails.
+The mirror ships in this repository as the ``registry`` base app, and a
+consuming repository supplies its address, its bucket and its
+credentials. The mirror must serve upstream bytes unchanged: a mirror
+that rewrites manifests changes their digests, and every digest-pinned
+reference then fails.
 
 
 Addressing an upstream
@@ -111,6 +112,26 @@ An upstream the platform pulls from belongs in the base instead, so
 that every site mirrors it. One missing from the base is pulled
 directly, and no error says so --- the mirror is simply bypassed for
 it.
+
+
+Deploying the mirror
+====================
+
+``kubernetes/base-apps/registry`` carries the mirror: a zot Deployment,
+a ClusterIP-only Service on the address the ``hosts.toml`` above names,
+and zot's configuration. :ref:`ADR-0037 <adr-0037>` records why it
+stores in S3 with deduplication disabled.
+
+A site supplies three things:
+
+``zot_s3_endpoint`` and ``zot_s3_bucket``
+   In ``cluster-settings``, substituted into zot's configuration.
+
+A ``zot-s3`` Secret
+   With ``s3_access_key_id`` and ``s3_access_key_secret``.
+
+The manifests are the upstream chart rendered into the repository;
+``zot/app/render.sh`` regenerates them.
 
 
 Seeding a Node before the mirror answers

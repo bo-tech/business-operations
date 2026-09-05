@@ -1,0 +1,133 @@
+---
+# Source: zot/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: zot
+  namespace: registry
+  labels:
+    helm.sh/chart: zot-0.1.122
+    app.kubernetes.io/name: zot
+    app.kubernetes.io/instance: zot
+    app.kubernetes.io/version: "v2.1.18"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: zot/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zot-config
+  namespace: registry
+data:
+  config.json: "{\n  \"distSpecVersion\": \"1.1.1\",\n  \"storage\": {\n    \"rootDirectory\": \"/var/lib/registry\",\n    \"dedupe\": false,\n    \"storageDriver\": {\n      \"name\": \"s3\",\n      \"rootdirectory\": \"/zot\",\n      \"region\": \"us-east-1\",\n      \"regionendpoint\": \"${zot_s3_endpoint}\",\n      \"bucket\": \"${zot_s3_bucket}\",\n      \"forcepathstyle\": true,\n      \"secure\": true\n    }\n  },\n  \"http\": {\n    \"address\": \"0.0.0.0\",\n    \"port\": \"5000\",\n    \"compat\": [\"docker2s2\"]\n  },\n  \"log\": {\n    \"level\": \"info\"\n  },\n  \"extensions\": {\n    \"sync\": {\n      \"enable\": true,\n      \"registries\": [\n        {\n          \"urls\": [\"https://index.docker.io\"],\n          \"onDemand\": true,\n          \"preserveDigest\": true,\n          \"tlsVerify\": true,\n          \"content\": [{ \"prefix\": \"**\", \"destination\": \"/docker.io\" }]\n        },\n        {\n          \"urls\": [\"https://quay.io\"],\n          \"onDemand\": true,\n          \"preserveDigest\": true,\n          \"tlsVerify\": true,\n          \"content\": [{ \"prefix\": \"**\", \"destination\": \"/quay.io\" }]\n        },\n        {\n          \"urls\": [\"https://registry.k8s.io\"],\n          \"onDemand\": true,\n          \"preserveDigest\": true,\n          \"tlsVerify\": true,\n          \"content\": [{ \"prefix\": \"**\", \"destination\": \"/registry.k8s.io\" }]\n        },\n        {\n          \"urls\": [\"https://ghcr.io\"],\n          \"onDemand\": true,\n          \"preserveDigest\": true,\n          \"tlsVerify\": true,\n          \"content\": [{ \"prefix\": \"**\", \"destination\": \"/ghcr.io\" }]\n        },\n        {\n          \"urls\": [\"https://docker.gitea.com\"],\n          \"onDemand\": true,\n          \"preserveDigest\": true,\n          \"tlsVerify\": true,\n          \"content\": [{ \"prefix\": \"**\", \"destination\": \"/docker.gitea.com\" }]\n        },\n        {\n          \"urls\": [\"https://codeberg.org\"],\n          \"onDemand\": true,\n          \"preserveDigest\": true,\n          \"tlsVerify\": true,\n          \"content\": [{ \"prefix\": \"**\", \"destination\": \"/codeberg.org\" }]\n        }\n      ]\n    }\n  }\n}\n"
+---
+# Source: zot/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: zot
+  namespace: registry
+  labels:
+    helm.sh/chart: zot-0.1.122
+    app.kubernetes.io/name: zot
+    app.kubernetes.io/instance: zot
+    app.kubernetes.io/version: "v2.1.18"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  clusterIP: 10.96.0.30
+  ports:
+    - port: 5000
+      targetPort: zot
+      protocol: TCP
+      name: zot
+  selector:
+    app.kubernetes.io/name: zot
+    app.kubernetes.io/instance: zot
+---
+# Source: zot/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zot
+  namespace: registry
+  labels:
+    helm.sh/chart: zot-0.1.122
+    app.kubernetes.io/name: zot
+    app.kubernetes.io/instance: zot
+    app.kubernetes.io/version: "v2.1.18"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: zot
+      app.kubernetes.io/instance: zot
+  template:
+    metadata:
+      annotations:
+        checksum/config: 1ae3012c8ef819278998848ef37a980756e732aaefbad7e6adecce3e48fc43f2
+      labels:
+        app.kubernetes.io/name: zot
+        app.kubernetes.io/instance: zot
+    spec:
+      serviceAccountName: zot
+      securityContext:
+        null
+      containers:
+        - name: zot
+          securityContext:
+            null
+          image: "ghcr.io/project-zot/zot-linux-amd64:v2.1.20@sha256:95a837a0afacf5b7edc0c92493f04beee6891989b8d2fd50a00cf65a1e6d4fd5"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: s3_access_key_id
+                  name: zot-s3
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: s3_access_key_secret
+                  name: zot-s3
+          ports:
+            - name: zot
+              containerPort: 5000
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/registry
+            - mountPath: '/etc/zot'
+              name: zot-config
+          livenessProbe:
+            initialDelaySeconds: 5
+            httpGet:
+              path: /livez
+              port: 5000
+              scheme: HTTP
+          readinessProbe:
+            initialDelaySeconds: 5
+            httpGet:
+              path: /readyz
+              port: 5000
+              scheme: HTTP
+          startupProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+            httpGet:
+              path: /startupz
+              port: 5000
+              scheme: HTTP
+          resources:
+            null
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: zot-config
+          configMap:
+            name: zot-config
+      dnsPolicy: ClusterFirst

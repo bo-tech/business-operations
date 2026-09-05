@@ -1,0 +1,73 @@
+{
+  "distSpecVersion": "1.1.1",
+  "storage": {
+    "rootDirectory": "/var/lib/registry",
+    "dedupe": false,
+    "storageDriver": {
+      "name": "s3",
+      "rootdirectory": "/zot",
+      "region": "us-east-1",
+      "regionendpoint": "${zot_s3_endpoint}",
+      "bucket": "${zot_s3_bucket}",
+      "forcepathstyle": true,
+      "secure": true
+    }
+  },
+  "http": {
+    "address": "0.0.0.0",
+    "port": "5000",
+    "compat": ["docker2s2"]
+  },
+  "log": {
+    "level": "info"
+  },
+  "extensions": {
+    "sync": {
+      "enable": true,
+      "registries": [
+        {
+          "urls": ["https://index.docker.io"],
+          "onDemand": true,
+          "preserveDigest": true,
+          "tlsVerify": true,
+          "content": [{ "prefix": "**", "destination": "/docker.io" }]
+        },
+        {
+          "urls": ["https://quay.io"],
+          "onDemand": true,
+          "preserveDigest": true,
+          "tlsVerify": true,
+          "content": [{ "prefix": "**", "destination": "/quay.io" }]
+        },
+        {
+          "urls": ["https://registry.k8s.io"],
+          "onDemand": true,
+          "preserveDigest": true,
+          "tlsVerify": true,
+          "content": [{ "prefix": "**", "destination": "/registry.k8s.io" }]
+        },
+        {
+          "urls": ["https://ghcr.io"],
+          "onDemand": true,
+          "preserveDigest": true,
+          "tlsVerify": true,
+          "content": [{ "prefix": "**", "destination": "/ghcr.io" }]
+        },
+        {
+          "urls": ["https://docker.gitea.com"],
+          "onDemand": true,
+          "preserveDigest": true,
+          "tlsVerify": true,
+          "content": [{ "prefix": "**", "destination": "/docker.gitea.com" }]
+        },
+        {
+          "urls": ["https://codeberg.org"],
+          "onDemand": true,
+          "preserveDigest": true,
+          "tlsVerify": true,
+          "content": [{ "prefix": "**", "destination": "/codeberg.org" }]
+        }
+      ]
+    }
+  }
+}
