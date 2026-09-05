@@ -1,0 +1,21 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: taiga
+spec:
+  parentRefs:
+    - name: internal
+      namespace: network
+  hostnames:
+    - "taiga.${cluster_domain}"
+  rules:
+    - filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: authelia-forwardauth
+      backendRefs:
+        - name: taiga-gateway
+          port: 80

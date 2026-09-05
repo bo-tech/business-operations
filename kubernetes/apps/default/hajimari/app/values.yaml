@@ -27,6 +27,8 @@ hajimari:
   customApps:
     - group: default
       apps:
+        - name: Taiga
+          url: https://taiga.${cluster_domain}
         - name: Tryton
           url: https://tryton.${cluster_domain}
     - group: security
