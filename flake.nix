@@ -11,7 +11,13 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, k0s-nix }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+      k0s-nix,
+    }:
     {
       nixosModules = {
         nix-flakes = import ./nixos/modules/nix/flakes.nix;
@@ -30,8 +36,7 @@
         profile-oci-container = import ./nixos/profiles/oci-container.nix;
         profile-k0s-node = import ./nixos/profiles/k0s-node.nix;
 
-        business-operations =
-          import ./nixos/modules/business-operations.nix;
+        business-operations = import ./nixos/modules/business-operations.nix;
       };
 
       lib.ansible = {
@@ -40,89 +45,95 @@
       };
     }
     //
-    flake-utils.lib.eachSystem [
-      "x86_64-linux"
-      "aarch64-linux"
-    ] (system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [ k0s-nix.overlays.default ];
-        };
-        lib = nixpkgs.lib;
-        ansiblePackages = [
-          pkgs.ansible
-          pkgs.sops
-          pkgs.kubectl
-          pkgs.kubernetes-helm
-          pkgs.openssh
-          pkgs.yq
-        ];
-        testNames = map (name: lib.strings.removePrefix "test-" (lib.strings.removeSuffix ".nix" name))
-          (builtins.filter (lib.hasPrefix "test-")
-            (builtins.attrNames (builtins.readDir ./tests)));
-      in {
-        checks = lib.genAttrs testNames (test:
-          pkgs.testers.runNixOSTest {
-            imports = [ ./tests/test-${test}.nix ];
-            defaults = {
-              imports = [ k0s-nix.nixosModules.default ];
+      flake-utils.lib.eachSystem
+        [
+          "x86_64-linux"
+          "aarch64-linux"
+        ]
+        (
+          system:
+          let
+            pkgs = import nixpkgs {
+              inherit system;
+              overlays = [ k0s-nix.overlays.default ];
+            };
+            lib = nixpkgs.lib;
+            ansiblePackages = [
+              pkgs.ansible
+              pkgs.sops
+              pkgs.kubectl
+              pkgs.kubernetes-helm
+              pkgs.openssh
+              pkgs.yq
+            ];
+            testNames = map (name: lib.strings.removePrefix "test-" (lib.strings.removeSuffix ".nix" name)) (
+              builtins.filter (lib.hasPrefix "test-") (builtins.attrNames (builtins.readDir ./tests))
+            );
+          in
+          {
+            checks =
+              lib.genAttrs testNames (
+                test:
+                pkgs.testers.runNixOSTest {
+                  imports = [ ./tests/test-${test}.nix ];
+                  defaults = {
+                    imports = [ k0s-nix.nixosModules.default ];
 
-              # Useful during interactive debugging
-              services.getty.autologinUser = "root";
+                    # Useful during interactive debugging
+                    services.getty.autologinUser = "root";
 
-              # QEMU's slirp interface, needed for network access
-              networking.interfaces.eth0.useDHCP = true;
+                    # QEMU's slirp interface, needed for network access
+                    networking.interfaces.eth0.useDHCP = true;
 
-              virtualisation.diskSize = 4096;
+                    virtualisation.diskSize = 4096;
 
-              # TODO: Cilium is not yet installed, use defaults interim
-              services.k0s.spec = {
-                network.kubeProxy.disabled = lib.mkForce false;
-                network.provider = lib.mkForce "kuberouter";
+                    # TODO: Cilium is not yet installed, use defaults interim
+                    services.k0s.spec = {
+                      network.kubeProxy.disabled = lib.mkForce false;
+                      network.provider = lib.mkForce "kuberouter";
+                    };
+                  };
+                }
+              )
+              // {
+                etcd-peer-address = import ./tests/check-etcd-peer-address.nix {
+                  inherit pkgs nixpkgs k0s-nix;
+                  modules = self.nixosModules;
+                };
+                cache-proxy = import ./tests/check-cache-proxy.nix {
+                  inherit pkgs nixpkgs k0s-nix;
+                  modules = self.nixosModules;
+                };
+                registry-mirror = import ./tests/check-registry-mirror.nix {
+                  inherit pkgs nixpkgs k0s-nix;
+                  modules = self.nixosModules;
+                };
+                node-local-load-balancing = import ./tests/check-node-local-load-balancing.nix {
+                  inherit pkgs nixpkgs k0s-nix;
+                  modules = self.nixosModules;
+                };
               };
+
+            formatter = pkgs.nixfmt-tree;
+
+            devShells.ansible = pkgs.mkShell {
+              packages = ansiblePackages;
+              shellHook = ''
+                export ANSIBLE_ROLES_PATH="${self}/ansible/roles"
+                export BO_PLAYBOOKS="${self}/ansible/playbooks"
+                echo "Ansible shell for business-operations"
+                echo "Roles: $ANSIBLE_ROLES_PATH"
+                echo "Playbooks: $BO_PLAYBOOKS"
+              '';
+            };
+
+            devShells.release = pkgs.mkShell {
+              packages = [
+                pkgs.cocogitto
+                pkgs.just
+                pkgs.python3Packages.towncrier
+              ];
             };
           }
-        ) // {
-          etcd-peer-address = import ./tests/check-etcd-peer-address.nix {
-            inherit pkgs nixpkgs k0s-nix;
-            modules = self.nixosModules;
-          };
-          cache-proxy = import ./tests/check-cache-proxy.nix {
-            inherit pkgs nixpkgs k0s-nix;
-            modules = self.nixosModules;
-          };
-          registry-mirror = import ./tests/check-registry-mirror.nix {
-            inherit pkgs nixpkgs k0s-nix;
-            modules = self.nixosModules;
-          };
-          node-local-load-balancing =
-            import ./tests/check-node-local-load-balancing.nix {
-              inherit pkgs nixpkgs k0s-nix;
-              modules = self.nixosModules;
-            };
-        };
-
-        formatter = pkgs.nixfmt-tree;
-
-        devShells.ansible = pkgs.mkShell {
-          packages = ansiblePackages;
-          shellHook = ''
-            export ANSIBLE_ROLES_PATH="${self}/ansible/roles"
-            export BO_PLAYBOOKS="${self}/ansible/playbooks"
-            echo "Ansible shell for business-operations"
-            echo "Roles: $ANSIBLE_ROLES_PATH"
-            echo "Playbooks: $BO_PLAYBOOKS"
-          '';
-        };
-
-        devShells.release = pkgs.mkShell {
-          packages = [
-            pkgs.cocogitto
-            pkgs.just
-            pkgs.python3Packages.towncrier
-          ];
-        };
-      }
-    );
+        );
 }
