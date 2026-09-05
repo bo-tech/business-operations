@@ -145,17 +145,6 @@ spec:
     imageRenderer:
       enabled: true
 
-    ingress:
-      enabled: true
-      annotations:
-        hajimari.io/enable: "true"
-      ingressClassName: nginx
-      hosts:
-        - &host grafana.${cluster_domain}
-      tls:
-        - hosts:
-            - *host
-
     persistence:
       enabled: false
 
