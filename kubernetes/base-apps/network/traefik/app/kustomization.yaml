@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: network
 resources:
   - ./helmrelease.yaml
-  - ./middleware-forwardauth.yaml
   - ./gateway-git-pages.yaml
 
 configMapGenerator:

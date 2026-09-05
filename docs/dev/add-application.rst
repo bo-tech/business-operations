@@ -15,6 +15,17 @@ A route on the internal Traefik reaches Authelia through a ForwardAuth
 middleware, added to the ``HTTPRoute`` as a filter. See :ref:`app-traefik`
 for the pattern.
 
+The middleware must exist in the application's own namespace: Traefik
+resolves the filter there and nowhere else. A namespace whose ``ns``
+directory does not yet include ``kubernetes/shared/authelia-forwardauth``
+gets a route that returns ``404``. See :ref:`adr-0039`.
+
+Write the ``HTTPRoute`` beside the ``HelmRelease`` rather than enabling a
+route through chart values, so every application expresses its route the
+same way — several of the charts used here cannot produce one at all.
+Note that the ``backendRef`` then names a Service the chart derives from
+the release name, and nothing checks the two still agree.
+
 
 Add to Hajimari
 ================

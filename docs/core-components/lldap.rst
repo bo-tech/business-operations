@@ -8,8 +8,7 @@ LLDAP is used as the authentication backend for :doc:`authelia`. It
 does provide a Web UI to manage the users in the system.
 
 Only Authelia is intended to use LLDAP as its backend. Other systems should be
-integrated only via the SSO mechanisms through the Ingress configuration or via
-OIDC.
+integrated only via the SSO mechanisms on their route, or via OIDC.
 
 
 Secrets handling

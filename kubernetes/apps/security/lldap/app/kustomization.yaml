@@ -5,6 +5,7 @@ namespace: security
 resources:
   - ./externalsecret.yaml
   - ./helmrelease.yaml
+  - ./httproute.yaml
 commonLabels:
   app.kubernetes.io/name: lldap
   app.kubernetes.io/instance: lldap

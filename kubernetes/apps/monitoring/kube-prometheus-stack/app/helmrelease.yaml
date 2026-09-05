@@ -123,19 +123,6 @@ spec:
     ### Prometheus instance values
     ###
     prometheus:
-      ingress:
-        enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-          hajimari.io/appName: Prometheus
-        ingressClassName: nginx
-        pathType: Prefix
-        hosts:
-          - &host_prometheus prometheus.${cluster_domain}
-        tls:
-          - hosts:
-              - *host_prometheus
-
       prometheusSpec:
 
         enableAdminAPI: true

@@ -45,21 +45,6 @@ spec:
             enabled: true
             port: *ldapPort
 
-    ingress:
-      main:
-        enabled: true
-        annotations:
-          hajimari.io/enable: "true"
-        ingressClassName: "nginx"
-        hosts:
-          - host: &host "lldap.${cluster_domain}"
-            paths:
-              - path: /
-                pathType: Prefix
-        tls:
-          - hosts:
-              - *host
-
     persistence:
       data:
         enabled: true
