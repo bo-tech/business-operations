@@ -25,6 +25,10 @@ hajimari:
   # Hajimari discovers from Ingress only, so an app on an HTTPRoute is
   # listed here instead. See ADR-0038.
   customApps:
+    - group: default
+      apps:
+        - name: Tryton
+          url: https://tryton.${cluster_domain}
     - group: security
       apps:
         - name: Authelia

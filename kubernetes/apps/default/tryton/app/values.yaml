@@ -14,14 +14,4 @@ persistence:
   existingClaim: data-tryton
 
 ingress:
-  annotations:
-    hajimari.io/enable: "true"
-  hosts:
-    - host: "tryton.${cluster_domain}"
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: ""
-      hosts:
-        - "tryton.${cluster_domain}"
+  enabled: false
