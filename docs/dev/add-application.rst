@@ -36,6 +36,14 @@ application on an ``HTTPRoute`` is invisible to it. List it in Hajimari's
 The group is the namespace the application runs in, which is what discovery
 used. ``icon`` and ``info`` are optional.
 
+Restart Hajimari afterwards::
+
+   kubectl -n default rollout restart deploy hajimari
+
+The chart mounts its settings with ``subPath``, and the kubelet never
+updates a ``subPath`` mount. The file the pod reads is therefore fixed at
+pod creation, and Hajimari's own config watch can never see the change.
+
 .. seealso::
 
    :ref:`adr-0038`
