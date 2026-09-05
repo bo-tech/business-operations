@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: monitoring
 resources:
   - ./helmrelease.yaml
+  - ./httproute.yaml
   # TODO: Authentication for Grafana
   # - ./externalsecret.yaml
   - ./dashboard
