@@ -15,7 +15,7 @@ let
 
   imagesDir = "${config.services.k0s.dataDir}/images";
 
-  image = {
+  imageOptions = {
     options = {
       imageName = lib.mkOption {
         type = lib.types.str;
@@ -34,7 +34,7 @@ let
 
       tag = lib.mkOption {
         type = lib.types.str;
-        description = "Tag recorded in the archive, for reading back.";
+        description = "Tag the archive records, which is how containerd names it.";
       };
     };
   };
@@ -58,7 +58,7 @@ in
     enable = lib.mkEnableOption "seeding the k0s images directory from the node closure";
 
     imagesBase = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.submodule image);
+      type = lib.types.attrsOf (lib.types.submodule imageOptions);
       default = {
         pause = {
           imageName = "quay.io/k0sproject/pause";
@@ -93,7 +93,7 @@ in
     };
 
     images = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.submodule image);
+      type = lib.types.attrsOf (lib.types.submodule imageOptions);
       default = { };
       description = "Site-specific images, in the same shape.";
     };
