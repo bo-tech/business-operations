@@ -29,6 +29,14 @@ hajimari:
       apps:
         - name: Authelia
           url: https://auth.${cluster_domain}
+        - name: LLDAP
+          url: https://lldap.${cluster_domain}
+    - group: monitoring
+      apps:
+        - name: Grafana
+          url: https://grafana.${cluster_domain}
+        - name: Prometheus
+          url: https://prometheus.${cluster_domain}
 
 ingress:
   main:
