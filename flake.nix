@@ -31,6 +31,7 @@
         virtualization = import ./nixos/modules/virtualization.nix;
         cache-proxy = import ./nixos/modules/cache-proxy.nix;
         registry-mirror = import ./nixos/modules/registry-mirror.nix;
+        image-bundle = import ./nixos/modules/image-bundle.nix;
 
         profile-base = import ./nixos/profiles/base.nix;
         profile-oci-container = import ./nixos/profiles/oci-container.nix;
@@ -105,6 +106,10 @@
                   modules = self.nixosModules;
                 };
                 registry-mirror = import ./tests/check-registry-mirror.nix {
+                  inherit pkgs nixpkgs k0s-nix;
+                  modules = self.nixosModules;
+                };
+                image-bundle = import ./tests/check-image-bundle.nix {
                   inherit pkgs nixpkgs k0s-nix;
                   modules = self.nixosModules;
                 };
