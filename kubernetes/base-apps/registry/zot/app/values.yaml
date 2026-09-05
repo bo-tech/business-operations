@@ -16,6 +16,9 @@ mountConfig: true
 
 persistence: false
 
+strategy:
+  type: Recreate
+
 env:
   - name: AWS_ACCESS_KEY_ID
     valueFrom:
