@@ -129,9 +129,11 @@ Authentication
 ==============
 
 The internal Traefik instance uses a ``ForwardAuth`` middleware to
-delegate authentication to :ref:`app-authelia`. The middleware is
-deployed as part of the Traefik base in
-``base-apps/network/traefik/app/middleware-forwardauth.yaml``.
+delegate authentication to :ref:`app-authelia`. It is defined once, in
+``kubernetes/shared/authelia-forwardauth``, and each namespace's ``ns``
+directory includes it — Traefik resolves an ``ExtensionRef`` filter in
+the route's own namespace, so a namespace without its own copy cannot
+serve a protected route. See :ref:`adr-0039`.
 
 Authelia's Traefik-specific endpoint (``/api/authz/forward-auth``)
 handles the redirect flow. Unlike nginx where the proxy constructs
