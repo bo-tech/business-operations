@@ -130,6 +130,12 @@ A site supplies three things:
 A ``zot-s3`` Secret
    With ``s3_access_key_id`` and ``s3_access_key_secret``.
 
+The Service is ClusterIP-only, which reaches the :term:`Node` running
+it and nothing else. A site that wants the mirror reachable from
+elsewhere --- another cluster, a workstation --- takes the ``gateway``
+component, which routes ``mirror.${cluster_domain}`` over the internal
+Gateway. :ref:`ADR-0041 <adr-0041>` records that decision.
+
 The manifests are the upstream chart rendered into the repository;
 ``zot/app/render.sh`` regenerates them.
 
