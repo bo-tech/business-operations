@@ -35,6 +35,9 @@ service:
   type: LoadBalancer
   annotations:
     lbipam.cilium.io/ips: "${cluster_internal_traefik_ip}"
+    # Forgejo's SSH Service takes port 22 on this address. See ADR-0044.
+    lbipam.cilium.io/sharing-key: internal-traefik
+    lbipam.cilium.io/sharing-cross-namespace: code
   labels:
     ip-range: static-pool
   additionalServices:
