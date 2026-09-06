@@ -31,6 +31,9 @@ Two independent Traefik deployments run in the cluster:
 Each instance has its own LoadBalancer IP. The external IP is the
 only one port-forwarded from the public address.
 
+The internal address also carries port 22 for Forgejo's SSH Service,
+which Cilium shares between the two Services. See :ref:`adr-0044`.
+
 Instance isolation
 ==================
 
@@ -106,7 +109,11 @@ with ``sectionName``.
 Adding a route
 ==============
 
-Create an ``HTTPRoute`` in the application's namespace,
+Where the application's chart renders an ``HTTPRoute`` from its values,
+take it from there rather than writing one — the route then names the
+Service the chart built. See :ref:`adr-0043`.
+
+Otherwise create the ``HTTPRoute`` in the application's namespace,
 referencing the appropriate Gateway::
 
    apiVersion: gateway.networking.k8s.io/v1
@@ -149,6 +156,17 @@ Routes that require authentication add the middleware as an
    :start-after: [docs-forwardauth-filter]
    :end-before: [docs-forwardauth-filter]
    :dedent:
+
+Request timeouts
+================
+
+An entrypoint bounds how long a request may take to arrive, body
+included, and the default is 60 seconds. Both internal entrypoints
+raise it to an hour so that a large git push or image upload is not
+cut off. See :ref:`adr-0042`.
+
+The bound belongs to the entrypoint. A route may lower it through its
+own ``timeouts``, but cannot raise it.
 
 Pointers
 ========
