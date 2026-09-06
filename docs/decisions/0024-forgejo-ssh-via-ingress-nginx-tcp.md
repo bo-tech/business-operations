@@ -8,6 +8,8 @@ once internal Traefik is deployed.
 (adr-0024)=
 # ADR-0024 Forgejo SSH via ingress-nginx TCP passthrough
 
+**Status: Superseded by {ref}`ADR-0044 <adr-0044>`**
+
 ## Context and Problem Statement
 
 Forgejo needs SSH access for git operations. The cluster uses a single
