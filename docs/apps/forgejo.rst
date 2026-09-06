@@ -29,7 +29,9 @@ registry and the Actions runners must not meet a login redirect.
 ``DOMAIN`` and ``ROOT_URL`` are set explicitly. With no ingress values
 to derive them from, the chart would fall back to its own default host.
 
-SSH still reaches Forgejo through the ingress-nginx TCP passthrough.
+SSH answers on the same address, which Cilium shares between Traefik and
+Forgejo's own SSH Service (:ref:`adr-0044`). Forgejo announces one
+hostname for both, so they cannot be separated.
 
 
 Access
