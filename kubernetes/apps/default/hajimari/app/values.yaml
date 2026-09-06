@@ -47,6 +47,10 @@ hajimari:
           url: https://grafana.${cluster_domain}
         - name: Prometheus
           url: https://prometheus.${cluster_domain}
+    - group: code
+      apps:
+        - name: Forgejo
+          url: https://code.${cluster_domain}
 
 persistence:
   data:
