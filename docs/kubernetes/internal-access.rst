@@ -40,6 +40,22 @@ Traefik's Kubernetes Ingress provider can be enabled as a
 fallback, avoiding the need to maintain custom HTTPRoute manifests
 alongside upstream charts.
 
+HTTPS backends
+==============
+
+Traefik's Gateway provider always verifies a backend's certificate.
+Port inference uses the default ``ServersTransport``, and
+``BackendTLSPolicy`` offers only system roots or a pinned CA; no
+Service annotation turns verification off. ``ingress-nginx`` did not
+verify at all, so its ``backend-protocol: HTTPS`` covered any
+certificate.
+
+An application serving HTTPS with a certificate nothing trusts
+therefore needs one of three things: a certificate the system roots
+accept, a ``BackendTLSPolicy`` naming its CA, or a sidecar that
+terminates TLS so the route reaches plain HTTP. Unifi took the last
+(:ref:`adr-0040`).
+
 .. seealso::
 
    :ref:`adr-0026` — decision record for the ``ingress-nginx``
