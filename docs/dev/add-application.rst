@@ -20,16 +20,21 @@ resolves the filter there and nowhere else. A namespace whose ``ns``
 directory does not yet include ``kubernetes/shared/authelia-forwardauth``
 gets a route that returns ``404``. See :ref:`adr-0039`.
 
-Write the ``HTTPRoute`` beside the ``HelmRelease`` rather than enabling a
-route through chart values, so every application expresses its route the
-same way — several of the charts used here cannot produce one at all.
-Note that the ``backendRef`` then names a Service the chart derives from
-the release name, and nothing checks the two still agree.
+Let the chart render the ``HTTPRoute`` where it can. The route then
+names the Service that same chart built, and the two cannot drift apart.
+The chart has to be able to set the gateway, the hostnames and any
+filter the application needs; several of the charts used here, among
+them ``app-template``, produce no route at all. Write the route beside
+the ``HelmRelease`` in that case, and keep in mind that its
+``backendRef`` names a Service the chart derives from the release name,
+which nothing checks. See :ref:`adr-0043`.
 
-Set ``ingress.enabled`` to ``false`` rather than deleting the values
-block. Most of the charts used here default it to true, so a block that
-is merely removed leaves an ``Ingress`` behind on whatever host the
-chart defaults to.
+Then turn the chart's ``Ingress`` off. Most of the charts used here
+default ``ingress.enabled`` to true, so a values block that is merely
+removed leaves an ``Ingress`` behind on whatever host the chart defaults
+to — set the flag to ``false`` instead. Read what else the chart takes
+from those values before removing them: some derive the application's
+own public URL from the first ingress host.
 
 
 Add to Hajimari
