@@ -56,11 +56,19 @@ ports:
           to: websecure
           scheme: https
           permanent: true
+    # The 60s default bounds the whole request and cuts off a large
+    # git push. See ADR-0042.
+    transport:
+      respondingTimeouts:
+        readTimeout: 3600s
   websecure:
     port: 8443
     expose:
       default: true
     exposedPort: 443
+    transport:
+      respondingTimeouts:
+        readTimeout: 3600s
 
   git-pages:
     port: 8444
