@@ -17,6 +17,21 @@ Deployment defaults
 :Manifests: ``kubernetes/apps/code/forgejo/``
 
 
+Routing
+=======
+
+HTTP is served by the internal Traefik. The chart renders the
+``HTTPRoute`` from the ``httpRoute`` values (:ref:`adr-0043`), and no
+ForwardAuth filter is attached to it: ``code.<cluster_domain>`` is a
+bypass in the Authelia rules, and git over HTTPS, the API, the container
+registry and the Actions runners must not meet a login redirect.
+
+``DOMAIN`` and ``ROOT_URL`` are set explicitly. With no ingress values
+to derive them from, the chart would fall back to its own default host.
+
+SSH still reaches Forgejo through the ingress-nginx TCP passthrough.
+
+
 Access
 ======
 
@@ -43,8 +58,8 @@ Configuration
 =============
 
 Forgejo is installed via the official :term:`Helm` chart. The site
-overlay should provide instance-specific values such as the domain, admin
-credentials, and ingress settings.
+overlay should provide instance-specific values such as admin
+credentials and the webhook allow list.
 
 Defaults
 --------
