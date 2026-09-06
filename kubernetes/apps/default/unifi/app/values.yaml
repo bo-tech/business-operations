@@ -11,21 +11,6 @@ env:
   JVM_INIT_HEAP_SIZE:
   JVM_MAX_HEAP_SIZE: 1024M
 
-ingress:
-  main:
-    enabled: true
-    annotations:
-      hajimari.io/enable: "true"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    ingressClassName: nginx
-    hosts:
-      - host: &host unifi.${cluster_domain}
-        paths:
-          - path: /
-    tls:
-      - hosts:
-          - *host
-
 service:
   main:
     type: LoadBalancer
