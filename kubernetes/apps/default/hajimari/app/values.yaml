@@ -33,6 +33,8 @@ hajimari:
           url: https://taiga.${cluster_domain}
         - name: Tryton
           url: https://tryton.${cluster_domain}
+        - name: Unifi
+          url: https://unifi.${cluster_domain}
     - group: security
       apps:
         - name: Authelia
