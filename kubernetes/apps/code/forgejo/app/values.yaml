@@ -14,6 +14,9 @@ gitea:
       DEFAULT_REPO_UNITS: "repo.code,repo.releases,repo.pulls,repo.packages,repo.actions"
       DEFAULT_FORK_REPO_UNITS: "repo.code,repo.releases,repo.pulls"
       DEFAULT_MIRROR_REPO_UNITS: "repo.code,repo.releases"
+    server:
+      DOMAIN: code.${cluster_domain}
+      ROOT_URL: https://code.${cluster_domain}
     service:
       DISABLE_REGISTRATION: true
     session:
@@ -29,16 +32,10 @@ persistence:
   create: false
   claimName: forgejo-data
 
-ingress:
+httpRoute:
   enabled: true
-  className: nginx
-  annotations:
-    hajimari.io/enable: "true"
-  hosts:
-    - host: &host code.${cluster_domain}
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - hosts:
-        - *host
+  parentRefs:
+    - name: internal
+      namespace: network
+  hostnames:
+    - code.${cluster_domain}
