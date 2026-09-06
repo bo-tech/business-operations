@@ -76,4 +76,4 @@ Pointers
 ========
 
 - `Forgejo Documentation <https://forgejo.org/docs/latest/>`_
-- :doc:`/decisions/0024-forgejo-ssh-via-ingress-nginx-tcp`
+- :doc:`/decisions/0044-share-the-internal-traefik-address-for-ssh`
