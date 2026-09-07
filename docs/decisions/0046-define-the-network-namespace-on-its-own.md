@@ -40,3 +40,4 @@ have to split a directory before a consumer needs the parts.
 
 - {ref}`ADR-0039 <adr-0039>` — a ForwardAuth middleware in every routed
   namespace
+- {ref}`sec-omitting-a-resource` — how an overlay drops what it inherits

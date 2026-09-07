@@ -3,6 +3,8 @@
 ===========
 
 
+.. _sec-omitting-a-resource:
+
 Omitting a resource
 ====================
 
