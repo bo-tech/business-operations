@@ -29,5 +29,6 @@ spec:
         - name: data
           emptyDir:
             # Sync stages every layer here before it reaches S3, so
-            # without a bound one large image fills the node.
-            sizeLimit: 8Gi
+            # without a bound one large image fills the node. 8Gi
+            # evicted zot mid-sync under concurrent cold pulls.
+            sizeLimit: 25Gi
