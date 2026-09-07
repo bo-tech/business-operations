@@ -68,9 +68,9 @@ in
         };
         zot = {
           imageName = "ghcr.io/project-zot/zot-linux-amd64";
-          imageDigest = "sha256:95a837a0afacf5b7edc0c92493f04beee6891989b8d2fd50a00cf65a1e6d4fd5";
-          hash = "sha256-v2nllOJNywKAkoIwPQ+RFivlimCsQDA2X7QHyWq0kJg=";
-          tag = "v2.1.20";
+          imageDigest = "sha256:8258443838e95989c13c891f78a02bc1c391b5a00591ffef24cb8c17cde28038";
+          hash = "sha256-lupDzT0wrJFhoM3Lm040rkqJ8anseb1tnw7soU+Hies=";
+          tag = "v2.1.21";
         };
         cilium = {
           imageName = "quay.io/cilium/cilium";
