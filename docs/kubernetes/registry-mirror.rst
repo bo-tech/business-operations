@@ -204,3 +204,29 @@ serves and compare the result against the digest that was requested:
 
 A digest-addressed manifest hashes to the digest it was requested by,
 so a mismatch means the mirror altered it.
+
+
+Why a cold pull falls back
+==========================
+
+An image the mirror has never served is usually fetched upstream by the
+Node rather than served, and lands in the store anyway. Two mechanisms
+meet to produce that.
+
+zot's ``onDemand`` sync answers a request for an image it does not hold
+only once it has fetched every platform of the index and written it to
+the store. The manifest request blocks for the whole of that, so all
+the cost of a pull falls on one request rather than being spread over
+the blob requests that follow it.
+
+containerd gives that request 30 seconds. The value is
+``ResponseHeaderTimeout`` in its default registry transport, not
+something ``hosts.toml`` can set, so a mirror has to answer within it or
+not at all. Several images syncing at once comfortably exceed it, and
+the Node logs ``trying next host`` and goes upstream.
+
+zot detaches the sync from the request that triggered it, so abandoning
+the request does not abandon the sync. The image reaches the store and
+every later pull is served from it. The effect is a cache that warms on
+the pull it fails to serve, which makes it worth measuring the second
+deployment of a cluster rather than the first.
