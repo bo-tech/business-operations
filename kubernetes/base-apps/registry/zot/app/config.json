@@ -36,9 +36,6 @@
           "manifestCheckInterval": "10m",
           "preserveDigest": true,
           "tlsVerify": true,
-          "reqConcurrent": 30,
-          "disableHTTP2": true,
-          "maxIdleConnsPerHost": 30,
           "content": [{ "prefix": "**", "destination": "/docker.io" }]
         },
         {
@@ -47,9 +44,6 @@
           "manifestCheckInterval": "10m",
           "preserveDigest": true,
           "tlsVerify": true,
-          "reqConcurrent": 30,
-          "disableHTTP2": true,
-          "maxIdleConnsPerHost": 30,
           "content": [{ "prefix": "**", "destination": "/quay.io" }]
         },
         {
@@ -58,9 +52,6 @@
           "manifestCheckInterval": "10m",
           "preserveDigest": true,
           "tlsVerify": true,
-          "reqConcurrent": 30,
-          "disableHTTP2": true,
-          "maxIdleConnsPerHost": 30,
           "content": [{ "prefix": "**", "destination": "/registry.k8s.io" }]
         },
         {
@@ -69,9 +60,6 @@
           "manifestCheckInterval": "10m",
           "preserveDigest": true,
           "tlsVerify": true,
-          "reqConcurrent": 30,
-          "disableHTTP2": true,
-          "maxIdleConnsPerHost": 30,
           "content": [{ "prefix": "**", "destination": "/ghcr.io" }]
         },
         {
@@ -80,9 +68,6 @@
           "manifestCheckInterval": "10m",
           "preserveDigest": true,
           "tlsVerify": true,
-          "reqConcurrent": 30,
-          "disableHTTP2": true,
-          "maxIdleConnsPerHost": 30,
           "content": [{ "prefix": "**", "destination": "/docker.gitea.com" }]
         },
         {
@@ -91,9 +76,6 @@
           "manifestCheckInterval": "10m",
           "preserveDigest": true,
           "tlsVerify": true,
-          "reqConcurrent": 30,
-          "disableHTTP2": true,
-          "maxIdleConnsPerHost": 30,
           "content": [{ "prefix": "**", "destination": "/codeberg.org" }]
         }
       ]
