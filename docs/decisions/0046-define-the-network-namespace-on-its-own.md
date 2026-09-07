@@ -38,4 +38,5 @@ have to split a directory before a consumer needs the parts.
 
 ## Related
 
-- {ref}`adr-0039` — a ForwardAuth middleware in every routed namespace
+- {ref}`ADR-0039 <adr-0039>` — a ForwardAuth middleware in every routed
+  namespace
