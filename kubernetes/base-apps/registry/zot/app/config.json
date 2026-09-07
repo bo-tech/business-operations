@@ -35,6 +35,9 @@
           "onDemand": true,
           "preserveDigest": true,
           "tlsVerify": true,
+          "reqConcurrent": 30,
+          "disableHTTP2": true,
+          "maxIdleConnsPerHost": 30,
           "content": [{ "prefix": "**", "destination": "/docker.io" }]
         },
         {
@@ -42,6 +45,9 @@
           "onDemand": true,
           "preserveDigest": true,
           "tlsVerify": true,
+          "reqConcurrent": 30,
+          "disableHTTP2": true,
+          "maxIdleConnsPerHost": 30,
           "content": [{ "prefix": "**", "destination": "/quay.io" }]
         },
         {
@@ -49,6 +55,9 @@
           "onDemand": true,
           "preserveDigest": true,
           "tlsVerify": true,
+          "reqConcurrent": 30,
+          "disableHTTP2": true,
+          "maxIdleConnsPerHost": 30,
           "content": [{ "prefix": "**", "destination": "/registry.k8s.io" }]
         },
         {
@@ -56,6 +65,9 @@
           "onDemand": true,
           "preserveDigest": true,
           "tlsVerify": true,
+          "reqConcurrent": 30,
+          "disableHTTP2": true,
+          "maxIdleConnsPerHost": 30,
           "content": [{ "prefix": "**", "destination": "/ghcr.io" }]
         },
         {
@@ -63,6 +75,9 @@
           "onDemand": true,
           "preserveDigest": true,
           "tlsVerify": true,
+          "reqConcurrent": 30,
+          "disableHTTP2": true,
+          "maxIdleConnsPerHost": 30,
           "content": [{ "prefix": "**", "destination": "/docker.gitea.com" }]
         },
         {
@@ -70,6 +85,9 @@
           "onDemand": true,
           "preserveDigest": true,
           "tlsVerify": true,
+          "reqConcurrent": 30,
+          "disableHTTP2": true,
+          "maxIdleConnsPerHost": 30,
           "content": [{ "prefix": "**", "destination": "/codeberg.org" }]
         }
       ]
