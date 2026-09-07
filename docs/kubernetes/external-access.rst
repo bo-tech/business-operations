@@ -17,6 +17,8 @@ traffic:
 
 - Separate namespace, LoadBalancer IP, and :term:`GatewayClass`
 - Only the external IP is port-forwarded from the public address
+- Egress limited to the Kubernetes API, cluster DNS, and the
+  backends a site declares — see :ref:`adr-0045`
 - No :term:`ForwardAuth` — external routes are either public or
   use application-level authentication
 
