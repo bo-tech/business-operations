@@ -168,6 +168,31 @@ cut off. See :ref:`adr-0042`.
 The bound belongs to the entrypoint. A route may lower it through its
 own ``timeouts``, but cannot raise it.
 
+External instance egress
+========================
+
+The external instance may reach the Kubernetes API and cluster DNS, and
+nothing else. That policy ships with the instance. A site adds a second
+``CiliumNetworkPolicy`` in the ``network-external`` namespace listing
+the backends it serves publicly, and Cilium applies the union of the
+two. See :ref:`adr-0045`.
+
+Without a site policy the gateway accepts routes and reaches no
+backend, so every route answers ``502``. That is deliberate — a backend
+is publicly reachable only where a site says so — and it is the first
+thing to check when a new public route does not work::
+
+   hubble observe --pod network-external/traefik-external --verdict DROPPED
+
+A policy enforces nothing for endpoints its ``endpointSelector`` does
+not match, and reports that nowhere. Confirm enforcement directly
+rather than inferring it from working routes::
+
+   kubectl -n kube-system exec ds/cilium -- cilium-dbg endpoint list
+
+The internal instance is unrestricted. It fronts every application in
+the cluster.
+
 Pointers
 ========
 
