@@ -33,6 +33,7 @@
         {
           "urls": ["https://index.docker.io"],
           "onDemand": true,
+          "manifestCheckInterval": "10m",
           "preserveDigest": true,
           "tlsVerify": true,
           "reqConcurrent": 30,
@@ -43,6 +44,7 @@
         {
           "urls": ["https://quay.io"],
           "onDemand": true,
+          "manifestCheckInterval": "10m",
           "preserveDigest": true,
           "tlsVerify": true,
           "reqConcurrent": 30,
@@ -53,6 +55,7 @@
         {
           "urls": ["https://registry.k8s.io"],
           "onDemand": true,
+          "manifestCheckInterval": "10m",
           "preserveDigest": true,
           "tlsVerify": true,
           "reqConcurrent": 30,
@@ -63,6 +66,7 @@
         {
           "urls": ["https://ghcr.io"],
           "onDemand": true,
+          "manifestCheckInterval": "10m",
           "preserveDigest": true,
           "tlsVerify": true,
           "reqConcurrent": 30,
@@ -73,6 +77,7 @@
         {
           "urls": ["https://docker.gitea.com"],
           "onDemand": true,
+          "manifestCheckInterval": "10m",
           "preserveDigest": true,
           "tlsVerify": true,
           "reqConcurrent": 30,
@@ -83,6 +88,7 @@
         {
           "urls": ["https://codeberg.org"],
           "onDemand": true,
+          "manifestCheckInterval": "10m",
           "preserveDigest": true,
           "tlsVerify": true,
           "reqConcurrent": 30,
