@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: network-external
 resources:
   - ./helmrelease.yaml
+  - ./ciliumnetworkpolicy.yaml
 
 configMapGenerator:
   - name: traefik-external-values
