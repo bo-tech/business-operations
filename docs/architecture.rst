@@ -17,6 +17,7 @@ of applications all arrive from whichever repository consumes it.
    architecture/quality
    architecture/constraints
    architecture/deployment
+   architecture/principles/platform-layers
    architecture/principles/attached-storage
    architecture/principles/deployment-axes
    architecture/principles/certificate-trust
