@@ -51,6 +51,14 @@ hajimari:
       apps:
         - name: Forgejo
           url: https://code.${cluster_domain}
+    - group: rook-ceph
+      apps:
+        - name: Rook Ceph
+          url: https://rook-main.${cluster_domain}
+    - group: secrets
+      apps:
+        - name: Vault
+          url: https://vault.${cluster_domain}
 
 persistence:
   data:
