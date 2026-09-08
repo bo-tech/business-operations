@@ -24,7 +24,6 @@ spec:
         patches:
           - target:
               kind: HTTPRoute
-              name: rook-ceph-dashboard
             patch: |
               - op: add
                 path: /spec/rules/0/filters
