@@ -14,3 +14,13 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    - name: git-pages-secure
+      port: 8444
+      protocol: HTTPS
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        certificateRefs:
+          - name: wildcard-tls-secret
+            namespace: cert-manager
