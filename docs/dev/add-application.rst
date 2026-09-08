@@ -22,12 +22,34 @@ gets a route that returns ``404``. See :ref:`adr-0039`.
 
 Let the chart render the ``HTTPRoute`` where it can. The route then
 names the Service that same chart built, and the two cannot drift apart.
-The chart has to be able to set the gateway, the hostnames and any
-filter the application needs; several of the charts used here, among
-them ``app-template``, produce no route at all. Write the route beside
-the ``HelmRelease`` in that case, and keep in mind that its
-``backendRef`` names a Service the chart derives from the release name,
-which nothing checks. See :ref:`adr-0043`.
+The chart has to be able to set the gateway and the hostnames; several
+of the charts used here, among them ``app-template``, produce no route
+at all. Write the route beside the ``HelmRelease`` in that case, and
+keep in mind that its ``backendRef`` names a Service the chart derives
+from the release name, which nothing checks. See :ref:`adr-0043`.
+
+A chart that renders a route without offering a filter still counts.
+Add the ``ExtensionRef`` with a kustomize ``postRenderer`` on the
+``HelmRelease`` rather than abandoning the chart's route for a
+hand-written one — ``rook-ceph-cluster`` is the worked example:
+
+.. code-block:: yaml
+
+   postRenderers:
+     - kustomize:
+         patches:
+           - target:
+               kind: HTTPRoute
+               name: rook-ceph-dashboard
+             patch: |
+               - op: add
+                 path: /spec/rules/0/filters
+                 value:
+                   - type: ExtensionRef
+                     extensionRef:
+                       group: traefik.io
+                       kind: Middleware
+                       name: authelia-forwardauth
 
 Then turn the chart's ``Ingress`` off. Most of the charts used here
 default ``ingress.enabled`` to true, so a values block that is merely
