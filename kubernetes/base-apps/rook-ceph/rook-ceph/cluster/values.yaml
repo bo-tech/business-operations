@@ -174,13 +174,3 @@ cephObjectStores:
       volumeBindingMode: Immediate
       parameters:
         region: us-east-1
-    ingress:
-      # TODO: Ingress handling
-      enabled: false
-      annotations:
-        nginx.ingress.kubernetes.io/proxy-body-size: "0"
-        nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
-      ingressClassName: nginx
-      host:
-        name: rook-s3.${cluster_domain}
-        path: "/"
