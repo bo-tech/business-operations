@@ -23,6 +23,14 @@ gateway:
       protocol: HTTP
       namespacePolicy:
         from: All
+    websecure:
+      port: 8443
+      protocol: HTTPS
+      namespacePolicy:
+        from: All
+      certificateRefs:
+        - name: wildcard-tls-secret
+          namespace: cert-manager
 
 ingressClass:
   enabled: false
@@ -40,12 +48,6 @@ service:
     lbipam.cilium.io/sharing-cross-namespace: code
   labels:
     ip-range: static-pool
-  additionalServices:
-    git-pages:
-      annotations:
-        lbipam.cilium.io/ips: "${cluster_git_pages_ip}"
-      labels:
-        ip-range: static-pool
 
 ports:
   web:
@@ -72,13 +74,6 @@ ports:
     transport:
       respondingTimeouts:
         readTimeout: 3600s
-
-  git-pages:
-    port: 8444
-    expose:
-      default: false
-      git-pages: true
-    exposedPort: 443
 
 logs:
   general:

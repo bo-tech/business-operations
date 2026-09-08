@@ -70,6 +70,11 @@ from the ``cert-manager`` namespace. Gateway API requires a
 grant is scoped to allow only Gateways in the ``network``
 namespace to reference Secrets in ``cert-manager``.
 
+The grant is in ``kubernetes/shared/gateway-tls-referencegrant``; a
+site includes it beside its wildcard certificate. Without it the
+Gateway never becomes ``Programmed``, and nothing in its status names
+the grant as the reason.
+
 The external instance avoids this by keeping its certificates
 in its own namespace.
 
