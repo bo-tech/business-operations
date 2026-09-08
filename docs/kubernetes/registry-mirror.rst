@@ -206,6 +206,33 @@ A digest-addressed manifest hashes to the digest it was requested by,
 so a mismatch means the mirror altered it.
 
 
+Verifying a signature through the mirror
+========================================
+
+A signature still verifies through the mirror. ``cosign verify`` gives
+the same verdict for a mirrored reference as for the upstream one,
+measured on ``quay.io/cilium/cilium`` at ``v1.18.4``.
+:ref:`ADR-0035 <adr-0035>` left that open.
+
+.. code-block:: bash
+
+   cosign verify \
+     --certificate-identity <subjectAltName from the certificate> \
+     --certificate-oidc-issuer <issuer from the certificate> \
+     mirror.internal.example:5000/quay.io/cilium/cilium@sha256:...
+
+A project publishes the identity it signs with. Failing that, run the
+command with a wrong one: cosign reports the identity it found.
+
+Check where the signature lives before reading a failure. cosign either
+writes a ``sha256-<digest>.sig`` tag beside the image, or attaches the
+signature through the referrers API at
+``/v2/<repository>/referrers/<digest>``. Cilium uses the referrers API
+and publishes no ``.sig`` tag, so a 404 on that tag is the mirror
+reproducing the upstream rather than losing the signature. Ask the
+upstream the same question before blaming the mirror.
+
+
 Why a cold pull falls back
 ==========================
 
