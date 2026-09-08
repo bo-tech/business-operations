@@ -3,6 +3,6 @@ monitoring:
   enabled: false
   createPrometheusRules: false
 
-ingress:
+route:
   dashboard:
     host: null
