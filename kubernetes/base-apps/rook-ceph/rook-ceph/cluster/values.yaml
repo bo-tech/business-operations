@@ -1,18 +1,14 @@
 monitoring:
   enabled: true
   createPrometheusRules: true
-ingress:
+route:
   dashboard:
-    annotations:
-      hajimari.io/enable: "true"
-    ingressClassName: "nginx"
     host:
       name: rook-main.${cluster_domain}
       path: "/"
-    tls:
-      - secretName: ""
-        hosts:
-          - rook-main.${cluster_domain}
+    parentRefs:
+      - name: internal
+        namespace: network
 toolbox:
   enabled: false
 configOverride: |

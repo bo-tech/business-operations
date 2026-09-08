@@ -43,4 +43,3 @@ spec:
   dependsOn:
     - name: rook-ceph
     - name: cluster-base-apps-snapshot-controller
-    - name: cluster-base-apps-ingress-nginx

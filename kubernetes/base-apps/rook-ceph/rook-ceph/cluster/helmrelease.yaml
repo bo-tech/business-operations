@@ -18,3 +18,19 @@ spec:
   valuesFrom:
     - kind: ConfigMap
       name: rook-ceph-cluster-values
+
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: HTTPRoute
+              name: rook-ceph-dashboard
+            patch: |
+              - op: add
+                path: /spec/rules/0/filters
+                value:
+                  - type: ExtensionRef
+                    extensionRef:
+                      group: traefik.io
+                      kind: Middleware
+                      name: authelia-forwardauth
