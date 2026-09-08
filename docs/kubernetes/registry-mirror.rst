@@ -221,6 +221,9 @@ measured on ``quay.io/cilium/cilium`` at ``v1.18.4``.
      --certificate-oidc-issuer <issuer from the certificate> \
      mirror.internal.example:5000/quay.io/cilium/cilium@sha256:...
 
+A project publishes the identity it signs with. Failing that, run the
+command with a wrong one: cosign reports the identity it found.
+
 Check where the signature lives before reading a failure. cosign either
 writes a ``sha256-<digest>.sig`` tag beside the image, or attaches the
 signature through the referrers API at
