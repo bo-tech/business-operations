@@ -143,10 +143,16 @@ The manifests are the upstream chart rendered into the repository;
 Seeding a Node before the mirror answers
 ========================================
 
-The mirror runs in the cluster, on a ClusterIP that Cilium translates
-on the consuming :term:`Node`. So it cannot serve that Node's own
-Cilium pull: the thing being fetched is the thing that would do the
-fetching. :ref:`ADR-0037 <adr-0037>` records the decision.
+This applies where the mirror runs in the cluster it serves, on a
+ClusterIP that Cilium translates on the consuming :term:`Node`. Such a
+mirror cannot serve that Node's own Cilium pull: the thing being fetched
+is the thing that would do the fetching. :ref:`ADR-0037 <adr-0037>`
+records the decision.
+
+A Node whose mirror runs elsewhere has no such cycle. It reaches the
+mirror by name over the network it is already on, before any cluster
+networking exists, and so pulls even its pre-CNI images through the
+mirror. Seeding buys it nothing.
 
 The images that precede the mirror ride in the Node's nix closure
 instead. k0s imports every file in ``/var/lib/k0s/images/`` into
