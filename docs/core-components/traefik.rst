@@ -111,7 +111,11 @@ Adding a route
 
 Where the application's chart renders an ``HTTPRoute`` from its values,
 take it from there rather than writing one — the route then names the
-Service the chart built. See :ref:`adr-0043`.
+Service the chart built. See :ref:`adr-0043`. A chart that renders a
+route but offers no filter still counts: add the ``ExtensionRef`` with
+a kustomize ``postRenderer`` on the ``HelmRelease``, as
+``rook-ceph-cluster`` does. :doc:`/dev/add-application` carries the
+worked example.
 
 Otherwise create the ``HTTPRoute`` in the application's namespace,
 referencing the appropriate Gateway::
