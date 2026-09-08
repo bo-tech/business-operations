@@ -23,6 +23,14 @@ gateway:
       protocol: HTTP
       namespacePolicy:
         from: All
+    websecure:
+      port: 8443
+      protocol: HTTPS
+      namespacePolicy:
+        from: All
+      certificateRefs:
+        - name: wildcard-tls-secret
+          namespace: cert-manager
 
 ingressClass:
   enabled: false
