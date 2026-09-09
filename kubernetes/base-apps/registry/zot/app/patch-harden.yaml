@@ -28,7 +28,6 @@ spec:
       volumes:
         - name: data
           emptyDir:
-            # Sync stages every layer here before it reaches S3, so
-            # without a bound one large image fills the node. 8Gi
-            # evicted zot mid-sync under concurrent cold pulls.
+            # Staging holds every platform of every image syncing at
+            # once, and an overrun evicts the pod (ADR-0048).
             sizeLimit: 25Gi
