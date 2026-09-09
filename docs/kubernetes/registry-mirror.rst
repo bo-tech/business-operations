@@ -212,6 +212,32 @@ A digest-addressed manifest hashes to the digest it was requested by,
 so a mismatch means the mirror altered it.
 
 
+.. _sec-registry-mirror-ctr:
+
+A ``ctr`` pull does not use the mirror
+--------------------------------------
+
+``k0s ctr images pull`` fetches from the upstream. containerd 2 runs
+the fetch in its transfer service, which resolves registries through a
+``config_path`` of its own under
+``plugins."io.containerd.transfer.v1.local"``. The drop-in above sets
+the CRI plugin's, and k0s sets no other, so the ``hosts.toml`` files
+are invisible to ``ctr``.
+
+Name the directory to make one pull use them:
+
+.. code-block:: bash
+
+   k0s ctr -n k8s.io images pull \
+     --hosts-dir /etc/k0s/containerd.d/certs.d \
+     docker.io/library/alpine:3.22
+
+This bears on the check above, which reads the Node's image list
+against the mirror's log. An image pulled by ``ctr`` without the flag
+lands in that list having never reached the mirror, so it reads as a
+bypass by a :term:`Node` that never made one.
+
+
 Verifying a signature through the mirror
 ========================================
 
