@@ -1,0 +1,44 @@
+---
+# Both alerts are checked twice: once while the condition is absent and
+# once while it holds. An alert expression that matches nothing is
+# silently true of a healthy cluster, so only the pair says the rule
+# discriminates.
+rule_files:
+  - rules.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: kube_pod_status_reason{namespace="registry", pod="zot-1", reason="Evicted"}
+        values: 0+0x60 1+0x60
+      - series: kube_pod_container_status_restarts_total{namespace="registry", container="zot", pod="zot-1"}
+        values: 0+0x60 1+0x60
+    alert_rule_test:
+      - alertname: RegistryMirrorEvicted
+        eval_time: 30m
+        exp_alerts: []
+      - alertname: RegistryMirrorEvicted
+        eval_time: 90m
+        exp_alerts:
+          - exp_labels:
+              namespace: registry
+              pod: zot-1
+              reason: Evicted
+              severity: critical
+            exp_annotations:
+              summary: Registry mirror zot-1 was evicted, losing syncs in flight
+      - alertname: RegistryMirrorRestarted
+        eval_time: 30m
+        exp_alerts: []
+      - alertname: RegistryMirrorRestarted
+        eval_time: 90m
+        exp_alerts:
+          - exp_labels:
+              namespace: registry
+              container: zot
+              pod: zot-1
+              severity: warning
+            exp_annotations:
+              summary: Registry mirror zot-1 restarted, losing syncs in flight
