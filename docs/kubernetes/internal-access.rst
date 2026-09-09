@@ -27,18 +27,19 @@ This differs from ``ingress-nginx`` where authentication was
 global by default and individual Ingresses opted out. With
 Gateway API, authentication is explicit per route.
 
-Migration from ingress-nginx
-============================
+No Ingress controller
+=====================
 
-The platform is migrating from ``ingress-nginx`` to
-:term:`Gateway API` (HTTPRoute) as the primary routing mechanism.
-The migration is incremental — ``ingress-nginx`` remains
-operational until all applications are moved.
+The platform ships none, and the internal Traefik runs with
+``providers.kubernetesIngress`` disabled, so an ``Ingress`` resource
+is not served — it is ignored. Routing is :term:`Gateway API` only.
 
-For third-party Helm charts that only produce Ingress resources,
-Traefik's Kubernetes Ingress provider can be enabled as a
-fallback, avoiding the need to maintain custom HTTPRoute manifests
-alongside upstream charts.
+A third-party chart that emits only an ``Ingress`` therefore needs a
+route written for it, or the chart's own if it renders one
+(:ref:`ADR-0043 <adr-0043>`). A cluster that wants an Ingress
+controller of its own deploys one outside the baseline; the
+``ingress-nginx`` HelmRepository is still on offer under
+``flux/repositories/helm``.
 
 HTTPS backends
 ==============
