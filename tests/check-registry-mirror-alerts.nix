@@ -1,18 +1,9 @@
-# The mirror's alerting rules, run against synthetic series.
-#
-# An alert expression that matches nothing is silently true of a healthy
-# cluster, so the rules are checked both while the condition is absent
-# and while it holds. Neither case can be produced on a real cluster
-# without evicting the mirror.
+# The mirror's alerting rules, run against the synthetic series in
+# `fixtures/kubernetes/registry-mirror-alerts.test.yaml`.
 #
 # Deliberately not a "test-" file: flake.nix wraps those in
 # runNixOSTest, which needs a disabled sandbox and registry access.
-{
-  pkgs,
-  nixpkgs,
-  k0s-nix,
-  modules,
-}:
+{ pkgs, ... }:
 let
   rule = ../kubernetes/apps/monitoring/kube-prometheus-stack/addons/alerts/registry-mirror.yaml;
 

@@ -7,10 +7,6 @@ spec:
   groups:
     - name: registry-mirror
       rules:
-        # Losing the pod kills every sync in flight, and zot does not
-        # retry them. The images it was fetching stay missing from the
-        # store until something pulls them again, which is why this is
-        # worth an alert rather than a restart count (ADR-0048).
         - alert: RegistryMirrorEvicted
           annotations:
             summary: Registry mirror {{ $labels.pod }} was evicted, losing syncs in flight
