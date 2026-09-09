@@ -92,6 +92,27 @@ Pending
 
 
 
+Running the bootstrap
+=====================
+
+Two commands, with ``KUBECONFIG`` pointing at the cluster:
+
+.. code-block:: shell
+
+   kluctl deploy -t <target>
+   ansible-playbook -i ./inventory.yaml \
+     $BO_PLAYBOOKS/git-push-into-cluster.yaml
+
+`Kluctl` applies the ``bootstrap`` folder, the cluster's SOPS secrets
+and the `FluxCD` configuration. Ansible keeps the push, which needs a
+working tree and a port-forward.
+
+This is a transitional state: `FluxCD` and the in-cluster `Gitea` are
+still there and still reconcile every application. Only the bootstrap
+has moved. Later steps move applications across as well, and this
+section changes with each of them.
+
+
 Gitea bootstrapping
 ===================
 

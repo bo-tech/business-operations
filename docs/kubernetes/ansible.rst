@@ -50,14 +50,17 @@ Re-create the machines and provide a fresh cluster:
 
    ansible-playbook -i ./inventory.yaml $BO_PLAYBOOKS/re-create-machines.yaml
 
-Bootstrap cluster
------------------
+Push the repository into the cluster
+------------------------------------
 
-Bootstrap up to FluxCD activation:
+The bootstrap up to FluxCD activation is a Kluctl deployment rather
+than a playbook, described in :doc:`bootstrap-overview`. Ansible keeps
+only the push, which needs a working tree and a port-forward:
 
 .. code-block:: shell
 
-   ansible-playbook -i ./inventory.yaml $BO_PLAYBOOKS/bootstrap-cluster.yaml
+   ansible-playbook -i ./inventory.yaml \
+     $BO_PLAYBOOKS/git-push-into-cluster.yaml
 
 Rebuild NixOS
 -------------

@@ -149,10 +149,12 @@ Kick off FluxCD
 
 .. code-block:: bash
 
-   ansible-playbook -i $INVENTORY $BO_PLAYBOOKS/bootstrap-cluster.yaml
+   kluctl deploy -t <target>
+   ansible-playbook -i $INVENTORY $BO_PLAYBOOKS/git-push-into-cluster.yaml
 
-Deploys the in-cluster Gitea, pushes the repository, applies
-cluster settings and secrets, and starts Flux reconciliation.
+The first command deploys the in-cluster Gitea, applies cluster
+settings and secrets and starts Flux reconciliation; the second pushes
+the repository Flux reconciles from. See :doc:`bootstrap-overview`.
 
 Other lifecycle playbooks
 --------------------------
