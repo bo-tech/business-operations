@@ -232,10 +232,10 @@ Name the directory to make one pull use them:
      --hosts-dir /etc/k0s/containerd.d/certs.d \
      docker.io/library/alpine:3.22
 
-This bears on the check above, which reads the Node's image list
+This bears on the check above, which reads a :term:`Node`'s image list
 against the mirror's log. An image pulled by ``ctr`` without the flag
-lands in that list having never reached the mirror, so it reads as a
-bypass by a :term:`Node` that never made one.
+lands in that list having never reached the mirror, and so reads as a
+bypass that never happened.
 
 
 Verifying a signature through the mirror
