@@ -113,6 +113,10 @@
                   inherit pkgs nixpkgs k0s-nix;
                   modules = self.nixosModules;
                 };
+                registry-mirror-alerts = import ./tests/check-registry-mirror-alerts.nix {
+                  inherit pkgs nixpkgs k0s-nix;
+                  modules = self.nixosModules;
+                };
                 zot-image-pin = import ./tests/check-zot-image-pin.nix {
                   inherit pkgs nixpkgs k0s-nix;
                   modules = self.nixosModules;
