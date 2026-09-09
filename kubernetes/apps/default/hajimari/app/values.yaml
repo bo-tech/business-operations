@@ -59,6 +59,10 @@ hajimari:
       apps:
         - name: Vault
           url: https://vault.${cluster_domain}
+    - group: kube-system
+      apps:
+        - name: Hubble UI
+          url: https://hubble.${cluster_domain}
 
 persistence:
   data:
