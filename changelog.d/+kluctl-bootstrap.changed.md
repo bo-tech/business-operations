@@ -6,6 +6,8 @@ tree and a port-forward. `kubernetes/bootstrap` and
 `kubernetes/flux/config` are Kluctl libraries now, taking
 `git_repo_name` and `cluster_path` as declared arguments, so a
 consumer's `flux/config` overlay and its `spec.path` patch go away.
+`flux/config` stays readable by both tools during the transition: its
+only template is the `spec.path` a consumer already patches.
 
 Because the manifests are templated, `kubectl apply --kustomize` no
 longer renders them — the commit that bumps a consumer's pin past this

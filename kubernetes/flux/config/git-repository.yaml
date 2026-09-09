@@ -9,7 +9,7 @@ spec:
   recurseSubmodules: true
   ref:
     branch: main
-  url: "http://gitea-http.flux-bootstrap.svc.cluster.local/bootstrap/{{ args.git_repo_name }}.git"
+  url: http://gitea-http.flux-bootstrap.svc.cluster.local/bootstrap/b-ops.git
   ignore: |
     # exclude all
     /*

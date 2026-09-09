@@ -1,5 +1,3 @@
 ---
 args:
   - name: cluster_path
-  - name: git_repo_name
-    default: b-ops
