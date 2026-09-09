@@ -11,9 +11,11 @@ the platform already knows.
 Core platform
 =============
 
-What makes a cluster this platform's cluster: :term:`k0s` on NixOS,
-Cilium for the pod network, rook-ceph for storage, the backup and
-restore concept, certificate handling, and central authentication.
+What makes a :term:`Cluster` this platform's rather than any other:
+:term:`k0s` on NixOS, Cilium for the pod network, rook-ceph for
+storage, :term:`Gateway API` through :term:`Traefik` for routing, the
+backup and restore concept, certificate handling, and central
+authentication.
 
 The platform is opinionated here and offers no second choice. A consumer
 does not select from this layer — it supplies **settings**: addresses,
@@ -22,9 +24,10 @@ host names, network ranges, the domain.
 Components
 ==========
 
-Infrastructure a cluster may run and may equally do without — the
-pull-through registry mirror, the caches. They serve the cluster rather
-than the people using it, and a cluster without them still works.
+Infrastructure a :term:`Cluster` may run and may equally do without —
+the pull-through registry mirror, the caches. They serve the cluster
+rather than the people using it, and a cluster without them still
+works.
 
 A consumer turns each one **on or off**.
 
@@ -56,15 +59,15 @@ Capabilities and their providers
 
 The core layer requires capabilities rather than implementations: block
 and file storage, a service address, a pod network, a backup target.
-rook-ceph and Cilium are what provide them on the substrates the
-platform deploys to today, where every capability is the platform's own.
+rook-ceph and Cilium are what provide them on every :term:`Substrate`
+the platform deploys to today, where each capability is its own.
 
-A cluster the platform did not build already provides some of them, and
-binding a capability to what is there rather than deploying a provider
-for it is a substrate decision — the axis :ref:`sec-deployment-axes`
-names, carried up from a machine to a cluster. Keeping each capability
-distinct in the core layer is what leaves room for that. No provider
-mechanism exists yet.
+A :term:`Cluster` the platform did not build already provides some of
+them, and binding a capability to what is there rather than deploying a
+provider for it is the same kind of decision one level up — the axis
+:ref:`sec-deployment-axes` names for a machine, asked of a cluster.
+Keeping each capability distinct in the core layer is what leaves room
+for that. No provider mechanism exists yet.
 
 Layers are interfaces, not directories
 ======================================
