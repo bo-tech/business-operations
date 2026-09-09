@@ -5,8 +5,7 @@
 =========
 
 Traefik is the :term:`Gateway API` controller for both external
-and internal traffic. It replaced ``ingress-nginx``, which the
-platform no longer ships.
+and internal traffic, and the only one the platform ships.
 
 Instances
 =========
