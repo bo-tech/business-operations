@@ -39,12 +39,19 @@ A path to a deployable cluster
    (:ref:`ADR-0008 <adr-0008>`).
 
 Kubernetes manifests
-   The components a cluster needs before it can carry anything, and the
-   applications a consumer selects from.
+   Three layers, each met differently by a consumer: a core platform it
+   supplies settings for, components it switches on or off, and an
+   application catalog it selects from. See
+   :ref:`sec-platform-layers`.
 
 What the consumer provides
 ==========================
 
 Addresses, host names and the network layout. Credentials. Which
-applications are deployed and how they are configured. The machines
-themselves, as NixOS configurations built from the platform's modules.
+components run, which applications are deployed, and how each is
+configured. The machines themselves, as NixOS configurations built from
+the platform's modules.
+
+It does not provide composition or ordering. Those belong to the
+platform, which is what makes the core layer a matter of settings rather
+than assembly.
