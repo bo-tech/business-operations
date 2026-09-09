@@ -4,5 +4,4 @@ kind: Kustomization
 resources:
   - ./ns
   - ./coredns
-  - ./ingress-nginx
   - ./traefik

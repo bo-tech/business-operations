@@ -3,23 +3,6 @@ Known issues and limitations
 ==============================
 
 
-Admission webhook of ingress-nginx
-===================================
-
-There seems to be a problem around the FluxCD controller for ``HelmRelease``
-resources when it comes to the admission webhook of ``ingress-nginx``.
-
-It seems that an update of ``ingress-nginx`` can lead to a situation where the
-FluxCD controller has to be restarted in order for new certificates to be picked
-up.
-
-This might also affect other controllers.
-
-The exact cause is not yet clear.
-
-As a workaround a restart of the controller does help.
-
-
 External IP address of Service not working
 ===========================================
 

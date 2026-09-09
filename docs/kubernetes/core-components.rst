@@ -18,9 +18,6 @@
 
 - :doc:`/core-components/gitea`: Cluster internal Git server.
 
-- `ingress-nginx <https://github.com/kubernetes/ingress-nginx/>`_: Legacy
-  ingress controller, being replaced by :doc:`/core-components/traefik`.
-
 - :doc:`/core-components/traefik`: :term:`Gateway API` controller for
   external and internal traffic.
 

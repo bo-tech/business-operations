@@ -38,15 +38,7 @@ hubble:
     enabled: true
     rollOutPods: true
     ingress:
-      enabled: true
-      className: nginx
-      annotations:
-        hajimari.io/enable: "true"
-      hosts:
-        - &host hubble.${cluster_domain}
-      tls:
-        - hosts:
-            - *host
+      enabled: false
 
 # Required to be able to use "l2announcements"
 k8sServiceHost: "${cluster_service_host}"
