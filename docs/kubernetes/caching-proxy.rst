@@ -139,19 +139,22 @@ Or the job can leave the proxy alone:
 Confirming that a pull used the proxy
 =====================================
 
-Two things make a working proxy look like one that was never used.
-
-``k0s ctr images pull`` does not use the proxy. On containerd 1.7 the
-fetch runs in the ``ctr`` client rather than in the daemon, so it takes
-the environment of the invoking shell instead of the unit's. Pull
-through the CRI so that the daemon fetches, or set the proxy variables
-in the shell before invoking ``ctr``.
-
 Cilium translates the source address of traffic arriving at a
 ``LoadBalancer`` Service. A proxy behind one therefore logs a
 cluster-internal address for a request rather than the address of the
 :term:`Node` that made it, and filtering its log by the Node's own
-address returns nothing.
+address returns nothing. That is what makes a working proxy look like
+one that was never used.
+
+``k0s ctr images pull`` is not a second such case. On containerd 2 the
+fetch runs in the daemon, which carries the ``k0s`` unit's environment,
+so the pull goes through the proxy. ``--local`` fetches in the ``ctr``
+client instead, where the invoking shell's environment applies --- that
+was containerd 1.7's default, and the reason older advice says ``ctr``
+misses the proxy.
+
+A ``ctr`` pull does miss the :ref:`registry mirror
+<sec-registry-mirror-ctr>`, which containerd configures separately.
 
 
 .. _sec-caching-proxy-truncation:
