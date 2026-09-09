@@ -31,9 +31,17 @@ What the proxy covers
 =====================
 
 The proxy environment reaches the ``k0s`` systemd unit and nothing else
-on the machine. containerd runs under that unit, so container image
-pulls made by the Kubernetes runtime go through the proxy. That is the
-whole of what the option covers.
+on the machine. That unit's whole process tree inherits it — etcd, the
+API server, the scheduler, the controller manager, kubelet, the
+konnectivity server, and containerd with its shims. Read the tree back
+on a :term:`Node` with ``/proc/<pid>/environ``.
+
+Container image pulls are the bulk of what that reaches, since
+containerd runs under the unit, but they are not all of it. A
+controller also polls ``updates.k0sproject.io`` for update
+availability, attaching cluster inventory as request headers; it is
+k0s's ``update-prober`` component and it goes through the proxy like
+everything else in the tree. Anything else k0s grows will too.
 
 Nix is not covered: the nix daemon runs under its own unit, so
 substitutions and flake fetches go direct. On the deployment path this
@@ -196,3 +204,11 @@ system-wide, so the proxy can read and alter any proxied TLS traffic
 from that Node.
 Where the proxy runs, and who can reach it, are part of the platform's
 trust boundary rather than an operational detail.
+
+A :term:`Node` that pulls through a
+:ref:`registry mirror <sec-registry-mirror>` can be taken off the proxy
+altogether, which withdraws that position. The CA is not separable from
+the proxy — it is what lets the proxy cache HTTPS at all — so this
+means removing ``cache-proxy`` rather than clearing ``caCertificate``.
+Read what the ``k0s`` tree still fetches before doing it, per the
+section above.
