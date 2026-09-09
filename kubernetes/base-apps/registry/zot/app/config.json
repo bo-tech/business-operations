@@ -34,6 +34,7 @@
           "urls": ["https://index.docker.io"],
           "onDemand": true,
           "manifestCheckInterval": "10m",
+          "syncTimeout": "30m",
           "preserveDigest": true,
           "tlsVerify": true,
           "content": [{ "prefix": "**", "destination": "/docker.io" }]
@@ -42,6 +43,7 @@
           "urls": ["https://quay.io"],
           "onDemand": true,
           "manifestCheckInterval": "10m",
+          "syncTimeout": "30m",
           "preserveDigest": true,
           "tlsVerify": true,
           "content": [{ "prefix": "**", "destination": "/quay.io" }]
@@ -50,6 +52,7 @@
           "urls": ["https://registry.k8s.io"],
           "onDemand": true,
           "manifestCheckInterval": "10m",
+          "syncTimeout": "30m",
           "preserveDigest": true,
           "tlsVerify": true,
           "content": [{ "prefix": "**", "destination": "/registry.k8s.io" }]
@@ -58,6 +61,7 @@
           "urls": ["https://ghcr.io"],
           "onDemand": true,
           "manifestCheckInterval": "10m",
+          "syncTimeout": "30m",
           "preserveDigest": true,
           "tlsVerify": true,
           "content": [{ "prefix": "**", "destination": "/ghcr.io" }]
@@ -66,6 +70,7 @@
           "urls": ["https://docker.gitea.com"],
           "onDemand": true,
           "manifestCheckInterval": "10m",
+          "syncTimeout": "30m",
           "preserveDigest": true,
           "tlsVerify": true,
           "content": [{ "prefix": "**", "destination": "/docker.gitea.com" }]
@@ -74,6 +79,7 @@
           "urls": ["https://codeberg.org"],
           "onDemand": true,
           "manifestCheckInterval": "10m",
+          "syncTimeout": "30m",
           "preserveDigest": true,
           "tlsVerify": true,
           "content": [{ "prefix": "**", "destination": "/codeberg.org" }]
