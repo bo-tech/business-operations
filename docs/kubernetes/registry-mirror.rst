@@ -289,3 +289,8 @@ the request does not abandon the sync. The image reaches the store and
 every later pull is served from it. The effect is a cache that warms on
 the pull it fails to serve, which makes it worth measuring the second
 deployment of a cluster rather than the first.
+
+That sync is not unbounded. ``syncTimeout`` gives it 30 minutes, after
+which it is abandoned and the image does not reach the store. Losing the
+Pod has the same effect and no timeout is involved --- see
+:ref:`ADR-0048 <adr-0048>`.
