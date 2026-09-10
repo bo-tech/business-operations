@@ -25,7 +25,37 @@ spec:
     ### Component values
     ###
     alertmanager:
-      enabled: false
+      enabled: true
+
+      alertmanagerSpec:
+        externalUrl: https://alertmanager.${cluster_domain}
+        storage:
+          volumeClaimTemplate:
+            spec:
+              resources:
+                requests:
+                  storage: 1Gi
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64M
+          limits:
+            memory: 128M
+
+      route:
+        main:
+          enabled: true
+          hostnames:
+            - "alertmanager.${cluster_domain}"
+          parentRefs:
+            - name: internal
+              namespace: network
+          filters:
+            - type: ExtensionRef
+              extensionRef:
+                group: traefik.io
+                kind: Middleware
+                name: authelia-forwardauth
 
     kubeApiServer:
       enabled: true
@@ -128,12 +158,13 @@ spec:
         enableAdminAPI: true
         externalLabels:
           cluster: cluster-0
+        externalUrl: https://prometheus.${cluster_domain}
         podMonitorSelector:
           matchLabels: null
         probeSelector:
           matchLabels: null
         replicas: 1
-        replicaExternalLabelName: "__replica__" # must match with thanos value `.query.replicaLabel[0]`
+        replicaExternalLabelNameClear: true
         resources:
           requests:
             cpu: 257m
