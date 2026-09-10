@@ -63,6 +63,10 @@ hajimari:
       apps:
         - name: Hubble UI
           url: https://hubble.${cluster_domain}
+    - group: flux-system
+      apps:
+        - name: Weave GitOps
+          url: https://gitops.${cluster_domain}
 
 persistence:
   data:
