@@ -79,6 +79,12 @@ application on an ``HTTPRoute`` is invisible to it. List it in Hajimari's
 The group is the namespace the application runs in, which is what discovery
 used. ``icon`` and ``info`` are optional.
 
+Discovery now reaches nothing at all. The platform ships no ``Ingress``, so
+it sets no ``namespaceSelector``, and the chart's own default names a
+namespace the platform does not create. An application that still carries an
+``Ingress`` of its own is listed here like every other one — an annotation
+on it has no effect.
+
 Helm replaces a list rather than merging it, so a site overlay that sets
 ``customApps`` discards every entry from the values above. An application
 only one cluster runs is listed in that overlay instead, which then has
