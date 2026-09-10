@@ -157,7 +157,7 @@ spec:
 
         enableAdminAPI: true
         externalLabels:
-          cluster: cluster-0
+          cluster: ${cluster_name}
         externalUrl: https://prometheus.${cluster_domain}
         podMonitorSelector:
           matchLabels: null

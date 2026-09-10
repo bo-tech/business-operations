@@ -33,6 +33,8 @@ hajimari:
           url: https://lldap.${cluster_domain}
     - group: monitoring
       apps:
+        - name: Alertmanager
+          url: https://alertmanager.${cluster_domain}
         - name: Grafana
           url: https://grafana.${cluster_domain}
         - name: Prometheus
