@@ -57,6 +57,10 @@ hajimari:
       apps:
         - name: Weave GitOps
           url: https://gitops.${cluster_domain}
+    - group: gitlab
+      apps:
+        - name: GitLab
+          url: https://gitlab.gitlab.${cluster_domain}
 
 persistence:
   data:
