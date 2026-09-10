@@ -164,7 +164,7 @@ spec:
         probeSelector:
           matchLabels: null
         replicas: 1
-        replicaExternalLabelName: "__replica__" # must match with thanos value `.query.replicaLabel[0]`
+        replicaExternalLabelName: "__replica__"
         resources:
           requests:
             cpu: 257m
