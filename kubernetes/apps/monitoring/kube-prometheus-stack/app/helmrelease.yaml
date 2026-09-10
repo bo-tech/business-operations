@@ -164,7 +164,7 @@ spec:
         probeSelector:
           matchLabels: null
         replicas: 1
-        replicaExternalLabelName: "__replica__"
+        replicaExternalLabelNameClear: true
         resources:
           requests:
             cpu: 257m
