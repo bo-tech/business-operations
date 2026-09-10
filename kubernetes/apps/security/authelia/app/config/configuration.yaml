@@ -1,4 +1,14 @@
 ---
+server:
+  endpoints:
+    authz:
+      # Cookie only: the default also claims the Authorization header,
+      # which rejects any app that uses it for a scheme of its own.
+      forward-auth:
+        implementation: 'ForwardAuth'
+        authn_strategies:
+          - name: 'CookieSession'
+
 storage:
   local:
     path: /config/db.sqlite3
