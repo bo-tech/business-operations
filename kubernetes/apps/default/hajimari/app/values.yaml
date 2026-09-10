@@ -12,16 +12,6 @@ hajimari:
   showGlobalBookmarks: false
   showAppUrls: false
   defaultEnable: false
-  namespaceSelector:
-    matchNames:
-      - default
-      - flux-system
-      - kube-system
-      - monitoring
-      - network
-      - rook-ceph
-      - secrets
-      - security
   # Hajimari discovers from Ingress only, so an app on an HTTPRoute is
   # listed here instead. See ADR-0038.
   customApps:
