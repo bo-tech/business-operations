@@ -25,7 +25,37 @@ spec:
     ### Component values
     ###
     alertmanager:
-      enabled: false
+      enabled: true
+
+      alertmanagerSpec:
+        externalUrl: https://alertmanager.${cluster_domain}
+        storage:
+          volumeClaimTemplate:
+            spec:
+              resources:
+                requests:
+                  storage: 1Gi
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64M
+          limits:
+            memory: 128M
+
+      route:
+        main:
+          enabled: true
+          hostnames:
+            - "alertmanager.${cluster_domain}"
+          parentRefs:
+            - name: internal
+              namespace: network
+          filters:
+            - type: ExtensionRef
+              extensionRef:
+                group: traefik.io
+                kind: Middleware
+                name: authelia-forwardauth
 
     kubeApiServer:
       enabled: true
