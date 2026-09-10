@@ -7,4 +7,5 @@
 
    forgejo
    git-pages
+   monitoring
    renovate-bot
