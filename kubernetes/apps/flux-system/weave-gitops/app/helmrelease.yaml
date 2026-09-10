@@ -41,20 +41,6 @@ spec:
             - "list"
             - "patch"
 
-    ingress:
-      enabled: true
-      annotations:
-        hajimari.io/enable: "true"
-      className: nginx
-      hosts:
-        - host: &host "gitops.${cluster_domain}"
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - hosts:
-            - *host
-
   valuesFrom:
     - kind: Secret
       name: weave-gitops-secrets
